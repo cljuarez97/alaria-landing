@@ -14,7 +14,7 @@ Landing page de Alaria Medicina Estética (Dra. Katherine González V.). Sitio e
 - Tipografías: Playfair Display (`font-serif`) y Plus Jakarta Sans (`font-sans`) desde Google Fonts.
 - Iconos: Lucide desde unpkg.
 - Formulario de citas: Web3Forms (`#appointment-form`).
-- CTA y botón flotante a WhatsApp (`wa.me`).
+- CTA y botón flotante a WhatsApp: `wa.me/50236038581` (dos enlaces en `index.html`).
 - Estilo visual: "vintage" — doble borde dorado (`.border-vintage-double`), sombras vino (`.vintage-shadow`).
 
 ## Desarrollo local
@@ -28,7 +28,6 @@ Cada push a `main` publica en producción. Revisa en local antes de hacer push.
 
 ## Pendientes conocidos
 
-- El número de WhatsApp `50212345678` parece de prueba; confirmar el real antes de lanzar.
 - Las imágenes de hero y doctora son de Unsplash; reemplazar por fotos reales de la clínica.
 - Tailwind Play CDN no está pensado para producción (más peso y parpadeo de estilos); migrar a Tailwind compilado si el sitio crece.
 - Lucide se carga como `@latest`; fijar una versión para evitar cambios inesperados.
