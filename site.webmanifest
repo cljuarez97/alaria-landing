@@ -1,0 +1,10 @@
+{
+  "name": "Alaria Medicina Estética",
+  "short_name": "Alaria",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#7A3B4C",
+  "background_color": "#FAF4F0",
+  "display": "browser"
+}
