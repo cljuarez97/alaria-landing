@@ -125,12 +125,12 @@ const jsonLd = {
         <h2 id="doctor-title" class="t-h2 mt-4">{home.doctorTeaser.title}</h2>
         <p class="t-lead mt-6"><Rich text={home.doctorTeaser.text} /></p>
 
-        <details class="more mt-8">
+        <details class="more details-reveal mt-8">
           <summary class="link">
             {home.doctorTeaser.cta}
             <Icon name="plus" class="more-icon" />
           </summary>
-          <div class="more-body">
+          <div class="more-body details-reveal-body">
             <div class="grid gap-4 pt-4">
               {
                 site.doctor.bioLong.map((para) => (
@@ -203,19 +203,5 @@ const jsonLd = {
   }
   .more[open] :global(.more-icon) {
     transform: rotate(45deg);
-  }
-  .more::details-content {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition:
-      grid-template-rows 320ms var(--ease-out-quart),
-      content-visibility 320ms allow-discrete;
-  }
-  .more[open]::details-content {
-    grid-template-rows: 1fr;
-  }
-  .more-body {
-    min-height: 0;
-    overflow: hidden;
   }
 </style>

@@ -12,8 +12,10 @@ import { href } from '../lib/url';
 interface Props {
   /** Nivel de los títulos de cada tratamiento. */
   level?: 2 | 3;
+  /** Solo cuando el destacado queda arriba del pliegue (índice de tratamientos): es el LCP. */
+  priority?: boolean;
 }
-const { level = 3 } = Astro.props;
+const { level = 3, priority = false } = Astro.props;
 const H = level === 2 ? 'h2' : 'h3';
 const [featured, ...rest] = treatments;
 ---
@@ -29,6 +31,7 @@ const [featured, ...rest] = treatments;
             sizes="(min-width: 1024px) 40rem, calc(100vw - 2.5rem - 8px)"
             transitionName={`tx-img-${featured.slug}`}
             mediaClass="zoom"
+            priority={priority}
           />
           <div class="mt-8 flex items-start gap-5">
             <span class="numeral text-[clamp(3rem,2.4rem+2.4vw,4.5rem)]" data-n={featured.number} aria-hidden="true"></span>

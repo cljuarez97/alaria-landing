@@ -49,8 +49,8 @@ const fontFaces = `
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
 
+    <!-- Solo la fuente del h1 (LCP móvil); la itálica es acento y carga con swap. -->
     <link rel="preload" href={playfairNormal} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={playfairItalic} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaces}></style>
 
     <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />

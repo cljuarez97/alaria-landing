@@ -47,7 +47,7 @@ const { treatment: t, prev, next } = Astro.props;
       <FramedPicture
         src={treatmentImage(t.slug)}
         alt=""
-        widths={[480, 720, 960, 1280]}
+        widths={[480, 720, 960, 1100]}
         sizes="(min-width: 1024px) 34rem, calc(100vw - 2.5rem - 8px)"
         priority
         transitionName={`tx-img-${t.slug}`}

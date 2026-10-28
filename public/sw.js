@@ -1,5 +1,5 @@
 // Service worker de Alaria. Sube VERSION al cambiar PRECACHE para invalidar cachés viejas.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const BASE = '/alaria-landing/';
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
@@ -7,9 +7,17 @@ const IMAGES = `images-${VERSION}`;
 const OFFLINE_URL = `${BASE}offline/`;
 const PRECACHE = [BASE, OFFLINE_URL, `${BASE}manifest.webmanifest`, `${BASE}icon-192.png`];
 const MAX_IMAGES = 40;
+const MAX_ASSETS = 30; // los de despliegues anteriores se van descartando
 
+// Se activa sin esperar a cerrar pestañas: el HTML va por red primero y CSS/JS llevan hash,
+// así que una página abierta no queda apuntando a recursos de otra versión.
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(PAGES).then((cache) => cache.addAll(PRECACHE)));
+  event.waitUntil(
+    caches
+      .open(PAGES)
+      .then((cache) => cache.addAll(PRECACHE))
+      .then(() => self.skipWaiting()),
+  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -20,11 +28,6 @@ self.addEventListener('activate', (event) => {
       .then((keys) => Promise.all(keys.filter((k) => !keep.has(k)).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
-});
-
-// La página pide activar la versión nueva cuando el usuario acepta actualizar.
-self.addEventListener('message', (event) => {
-  if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
 
 async function trimCache(name, max) {
@@ -71,6 +74,6 @@ self.addEventListener('fetch', (event) => {
     // Antes que la regla de /_astro/: las imágenes optimizadas viven ahí y deben respetar el límite.
     event.respondWith(cacheFirst(request, IMAGES, MAX_IMAGES));
   } else if (url.pathname.startsWith(`${BASE}_astro/`)) {
-    event.respondWith(cacheFirst(request, ASSETS)); // CSS/JS con hash: inmutables
+    event.respondWith(cacheFirst(request, ASSETS, MAX_ASSETS)); // CSS/JS con hash: inmutables
   }
 });
