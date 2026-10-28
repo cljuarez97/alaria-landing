@@ -23,8 +23,8 @@ describe('parseCalLink', () => {
 });
 
 describe('calPublicUrl', () => {
-  it('construye la URL pública', () => {
-    expect(calPublicUrl('alaria/valoracion')).toBe('https://cal.com/alaria/valoracion');
+  it('construye la URL pública con el teléfono en Guatemala', () => {
+    expect(calPublicUrl('alaria/valoracion')).toBe('https://cal.com/alaria/valoracion?attendeePhoneNumber=%2B502');
   });
 });
 

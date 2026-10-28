@@ -159,7 +159,7 @@ const messages = {
 </BaseLayout>
 
 <script>
-  import { CAL_ORIGIN, calCssVars, ensureCal } from '../lib/cal';
+  import { CAL_ORIGIN, CAL_PREFILL, calCssVars, ensureCal } from '../lib/cal';
   import { isBot, normalizePhone, submitBooking, validateBooking, type BookingFields, type FieldError } from '../scripts/booking';
 
   type Messages = {
@@ -318,7 +318,7 @@ const messages = {
     api('inline', {
       elementOrSelector: frame.querySelector<HTMLElement>('.cal-inline'),
       calLink: frame.dataset.cal,
-      config: { layout: 'month_view', theme: 'light' },
+      config: { layout: 'month_view', theme: 'light', ...CAL_PREFILL },
     });
   }
 

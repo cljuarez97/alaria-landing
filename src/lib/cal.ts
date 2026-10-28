@@ -29,8 +29,14 @@ export function parseCalLink(raw: string): string | null {
   return segments.join('/');
 }
 
+/**
+ * Prellenado del formulario de Cal.com. Solo con el código de país, el teléfono arranca en
+ * Guatemala (+502) en vez de Estados Unidos y queda vacío y editable.
+ */
+export const CAL_PREFILL = { attendeePhoneNumber: '+502' } as const;
+
 export function calPublicUrl(link: string): string {
-  return `${CAL_ORIGIN}/${link}`;
+  return `${CAL_ORIGIN}/${link}?${new URLSearchParams(CAL_PREFILL)}`;
 }
 
 /** Token del sitio (sin `--color-`) que alimenta cada variable del embed de Cal.com. */
