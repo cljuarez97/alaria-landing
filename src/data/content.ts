@@ -420,6 +420,15 @@ export const booking = {
     phone: 'Escribe un número de 8 dígitos, por ejemplo 5555 5555.',
   },
   whatsappAlt: '¿Prefieres hablar primero? Escríbenos por WhatsApp.',
+  // Calendario de Cal.com: `usuario/evento` o la URL pública del evento. Vacío = se muestra el formulario.
+  // Horario, zona horaria, SMS, correos y .ics se configuran en Cal.com, no aquí.
+  calendar: {
+    link: '',
+    intro:
+      'Elige el día y la hora que te queden mejor. Al reservar te llega la confirmación con un archivo para agregar la cita a tu calendario.',
+    timezone: 'Los horarios están en hora de Guatemala.',
+    fallback: '¿No carga el calendario? Ábrelo en Cal.com.',
+  },
 };
 
 export const footer = {

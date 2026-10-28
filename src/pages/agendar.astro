@@ -7,8 +7,10 @@ import { booking, site, treatments } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { whatsappUrl } from '../lib/url';
+import { calPublicUrl, parseCalLink } from '../lib/cal';
 
 const f = booking.form;
+const calLink = parseCalLink(booking.calendar.link);
 const fields = [
   { id: 'name', label: f.name, type: 'text', autocomplete: 'name', required: true },
   { id: 'phone', label: f.phone, type: 'tel', autocomplete: 'tel', required: true, inputmode: 'tel' },
@@ -29,92 +31,99 @@ const messages = {
 };
 ---
 <BaseLayout title={booking.title} description={booking.intro}>
-  <section class="container-x grid gap-x-16 gap-y-12 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
+  <section
+    class:list={[
+      'container-x grid gap-x-16 gap-y-12 pt-8 lg:grid-cols-12 lg:pt-14',
+      calLink ? 'pb-12' : 'pb-[var(--section)]',
+    ]}
+  >
     <div class="lg:col-span-7">
       <h1 class="t-display">{booking.title}</h1>
-      <p class="t-lead mt-6">{booking.intro}</p>
+      <p class="t-lead mt-6">{calLink ? booking.calendar.intro : booking.intro}</p>
       <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link mt-4">
         <Icon name="message-circle" />
         {booking.whatsappAlt}
         <span class="sr-only">{ui.newTab}</span>
       </a>
 
-      <form
-        id="appointment-form"
-        class="booking mt-12 grid gap-6"
-        novalidate
-        data-booking
-        data-messages={JSON.stringify(messages)}
-      >
-        {
-          fields.map((field) => (
-            <div>
-              <label for={field.id} class="field-label">
-                {field.label}
-                {field.required && (
-                  <span class="text-wine" aria-hidden="true">
-                    {' '}
-                    *
-                  </span>
-                )}
-              </label>
-              <input
-                id={field.id}
-                name={field.id}
-                type={field.type}
-                autocomplete={field.autocomplete}
-                inputmode={'inputmode' in field ? field.inputmode : undefined}
-                aria-required={field.required ? 'true' : undefined}
-                aria-describedby={`${field.id}-error`}
-                class="field"
-              />
-              <p id={`${field.id}-error`} class="field-error" hidden>
-                <Icon name="circle-alert" />
-                <span data-error-text />
-              </p>
-            </div>
-          ))
-        }
+      {!calLink && (
+        <form
+          id="appointment-form"
+          class="booking mt-12 grid gap-6"
+          novalidate
+          data-booking
+          data-messages={JSON.stringify(messages)}
+        >
+          {
+            fields.map((field) => (
+              <div>
+                <label for={field.id} class="field-label">
+                  {field.label}
+                  {field.required && (
+                    <span class="text-wine" aria-hidden="true">
+                      {' '}
+                      *
+                    </span>
+                  )}
+                </label>
+                <input
+                  id={field.id}
+                  name={field.id}
+                  type={field.type}
+                  autocomplete={field.autocomplete}
+                  inputmode={'inputmode' in field ? field.inputmode : undefined}
+                  aria-required={field.required ? 'true' : undefined}
+                  aria-describedby={`${field.id}-error`}
+                  class="field"
+                />
+                <p id={`${field.id}-error`} class="field-error" hidden>
+                  <Icon name="circle-alert" />
+                  <span data-error-text />
+                </p>
+              </div>
+            ))
+          }
 
-        <div>
-          <label for="treatment" class="field-label">{f.treatment}</label>
-          <select id="treatment" name="treatment" class="field">
-            <option value="">{ui.selectPlaceholder}</option>
-            <option value={ui.generalAssessment}>{ui.generalAssessment}</option>
-            {treatments.map((t) => <option value={t.name}>{t.name}</option>)}
-          </select>
-        </div>
+          <div>
+            <label for="treatment" class="field-label">{f.treatment}</label>
+            <select id="treatment" name="treatment" class="field">
+              <option value="">{ui.selectPlaceholder}</option>
+              <option value={ui.generalAssessment}>{ui.generalAssessment}</option>
+              {treatments.map((t) => <option value={t.name}>{t.name}</option>)}
+            </select>
+          </div>
 
-        <div>
-          <label for="message" class="field-label">{f.message}</label>
-          <textarea id="message" name="message" rows="4" class="field"></textarea>
-        </div>
+          <div>
+            <label for="message" class="field-label">{f.message}</label>
+            <textarea id="message" name="message" rows="4" class="field"></textarea>
+          </div>
 
-        <!-- Honeypot: invisible y fuera del orden de tabulación. -->
-        <div class="honeypot" aria-hidden="true">
-          <label for="botcheck">No llenar</label>
-          <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
-        </div>
+          <!-- Honeypot: invisible y fuera del orden de tabulación. -->
+          <div class="honeypot" aria-hidden="true">
+            <label for="botcheck">No llenar</label>
+            <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
+          </div>
 
-        <div class="grid gap-4 pt-2">
-          <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
-            <span class="submit-icon" aria-hidden="true">
-              <Icon name="loader-circle" class="spin" />
+          <div class="grid gap-4 pt-2">
+            <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
+              <span class="submit-icon" aria-hidden="true">
+                <Icon name="loader-circle" class="spin" />
+              </span>
+              <span data-submit-label>{f.submit}</span>
+            </button>
+            <p class="t-small text-muted"><Rich text={f.privacy} /></p>
+          </div>
+
+          <div role="status" aria-live="polite" class="status" data-status data-kind="none">
+            <span class="status-icon" aria-hidden="true">
+              <span data-icon="success"><Icon name="check" /></span>
+              <span data-icon="error"><Icon name="circle-alert" /></span>
+              <span data-icon="offline"><Icon name="wifi-off" /></span>
             </span>
-            <span data-submit-label>{f.submit}</span>
-          </button>
-          <p class="t-small text-muted"><Rich text={f.privacy} /></p>
-        </div>
-
-        <div role="status" aria-live="polite" class="status" data-status data-kind="none">
-          <span class="status-icon" aria-hidden="true">
-            <span data-icon="success"><Icon name="check" /></span>
-            <span data-icon="error"><Icon name="circle-alert" /></span>
-            <span data-icon="offline"><Icon name="wifi-off" /></span>
-          </span>
-          <span data-status-text></span>
-        </div>
-      </form>
+            <span data-status-text></span>
+          </div>
+        </form>
+      )}
     </div>
 
     <aside class="hidden lg:col-span-5 lg:block">
@@ -129,9 +138,28 @@ const messages = {
       </div>
     </aside>
   </section>
+
+  {
+    calLink && (
+      <section class="container-x pb-[var(--section)]" aria-labelledby="calendar-title">
+        <h2 id="calendar-title" class="sr-only">{ui.calendarRegion}</h2>
+        <p class="t-small text-muted">{booking.calendar.timezone}</p>
+        <div class="cal-frame mt-4" data-cal={calLink} data-title={ui.calendarRegion} data-state="loading">
+          <p class="cal-loading t-small text-muted" role="status">{ui.calendarLoading}</p>
+          <div id="cal-inline" class="cal-inline"></div>
+        </div>
+        <a href={calPublicUrl(calLink)} target="_blank" rel="noopener" class="link mt-4">
+          <Icon name="calendar-check" />
+          {booking.calendar.fallback}
+          <span class="sr-only">{ui.newTab}</span>
+        </a>
+      </section>
+    )
+  }
 </BaseLayout>
 
 <script>
+  import { CAL_ORIGIN, calCssVars, ensureCal } from '../lib/cal';
   import { isBot, normalizePhone, submitBooking, validateBooking, type BookingFields, type FieldError } from '../scripts/booking';
 
   type Messages = {
@@ -259,12 +287,60 @@ const messages = {
     });
   }
 
+  const CAL_NS = 'alaria';
+
+  function setupCalendar(frame: HTMLElement) {
+    if (frame.dataset.ready) return;
+    frame.dataset.ready = 'true';
+    const root = getComputedStyle(document.documentElement);
+    const cal = ensureCal(window);
+    if (!cal.ns[CAL_NS]) cal('init', CAL_NS, { origin: CAL_ORIGIN });
+    const api = cal.ns[CAL_NS];
+    api('ui', {
+      theme: 'light',
+      hideEventTypeDetails: true,
+      cssVarsPerTheme: { light: calCssVars((token) => root.getPropertyValue(`--color-${token}`)) },
+    });
+    api('on', {
+      action: 'linkReady',
+      callback: () => {
+        frame.dataset.state = 'ready';
+        // Cal.com titula el iframe en inglés ("Book a call"); WCAG 4.1.2 pide un nombre comprensible.
+        frame.querySelector('iframe')?.setAttribute('title', frame.dataset.title ?? '');
+      },
+    });
+    api('on', {
+      action: 'linkFailed',
+      callback: () => {
+        frame.dataset.state = 'failed';
+      },
+    });
+    api('inline', {
+      elementOrSelector: frame.querySelector<HTMLElement>('.cal-inline'),
+      calLink: frame.dataset.cal,
+      config: { layout: 'month_view', theme: 'light' },
+    });
+  }
+
   document.addEventListener('astro:page-load', () => {
     document.querySelectorAll<HTMLFormElement>('form[data-booking]').forEach(setup);
+    document.querySelectorAll<HTMLElement>('[data-cal]').forEach(setupCalendar);
   });
 </script>
 
 <style>
+  .cal-frame {
+    position: relative;
+    /* Reserva el alto del calendario mientras carga para no mover el pie de página (CLS). */
+    min-height: 34rem;
+  }
+  .cal-loading {
+    position: absolute;
+    inset: 0 auto auto 0;
+  }
+  .cal-frame:not([data-state='loading']) .cal-loading {
+    display: none;
+  }
   .honeypot {
     position: absolute;
     left: -10000px;
