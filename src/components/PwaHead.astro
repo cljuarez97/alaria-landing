@@ -1,0 +1,18 @@
+---
+// Manifest + registro del service worker. Va dentro de <head> en el layout base.
+const base = import.meta.env.BASE_URL;
+// En `astro dev` no se registra: cachearía módulos de desarrollo.
+const register = import.meta.env.PROD;
+---
+<link rel="manifest" href={`${base}manifest.webmanifest`} />
+<meta name="theme-color" content="#7A3B4C" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Alaria" />
+<script is:inline define:vars={{ base, register }}>
+  if (register && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register(`${base}sw.js`, { scope: base });
+    });
+  }
+</script>
