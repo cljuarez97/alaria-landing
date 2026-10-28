@@ -423,7 +423,7 @@ export const booking = {
   // Calendario de Cal.com: `usuario/evento` o la URL pública del evento. Vacío = se muestra el formulario.
   // Horario, zona horaria, SMS, correos y .ics se configuran en Cal.com, no aquí.
   calendar: {
-    link: '',
+    link: 'alaria-hb0huy/valoracion',
     intro:
       'Elige el día y la hora que te queden mejor. Al reservar te llega la confirmación con un archivo para agregar la cita a tu calendario.',
     timezone: 'Los horarios están en hora de Guatemala.',
