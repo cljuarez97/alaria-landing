@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alaria | Medicina Estética - Dra. Katherine González V.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        alaria: {
+                            bg: '#FDFBF7',
+                            card: '#F5EFE6',
+                            accent: '#C5A880',
+                            accentHover: '#B09168',
+                            dark: '#2A2725',
+                            muted: '#6B6560'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-alaria-bg text-alaria-dark font-sans antialiased selection:bg-alaria-accent selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-alaria-bg/90 backdrop-blur-md border-b border-alaria-accent/20 transition-all">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2">
+                <span class="font-serif text-2xl font-bold tracking-wider text-alaria-dark">ALARIA</span>
+                <span class="text-xs tracking-widest text-alaria-accent uppercase font-medium border-l border-alaria-accent/40 pl-2">Medicina Estética</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-alaria-muted">
+                <a href="#inicio" class="hover:text-alaria-dark transition">Inicio</a>
+                <a href="#doctora" class="hover:text-alaria-dark transition">Dra. Katherine</a>
+                <a href="#tratamientos" class="hover:text-alaria-dark transition">Tratamientos</a>
+                <a href="#faq" class="hover:text-alaria-dark transition">Preguntas Frecuentes</a>
+            </nav>
+
+            <a href="#agendar" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs font-semibold tracking-wider text-white uppercase bg-alaria-dark hover:bg-alaria-accent transition-all duration-300 rounded-full shadow-sm">
+                Agendar Cita
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative py-20 lg:py-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-alaria-card border border-alaria-accent/30 text-xs font-semibold tracking-wide text-alaria-accent uppercase">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Medicina Estética Avanzada
+                </div>
+                <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal leading-tight text-alaria-dark">
+                    Realza tu belleza natural con la precisión de la medicina estética.
+                </h1>
+                <p class="text-lg text-alaria-muted max-w-2xl font-light leading-relaxed">
+                    Tratamientos faciales y corporales personalizados por la <strong class="font-semibold text-alaria-dark">Dra. Katherine González V.</strong> Ciencia, armonía y seguridad diseñadas para resaltar tu mejor versión sin perder tu esencia.
+                </p>
+                <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <a href="#agendar" class="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold tracking-wider text-white uppercase bg-alaria-dark hover:bg-alaria-accent transition-all duration-300 rounded-full shadow-md text-center">
+                        Agendar Cita de Valoración
+                    </a>
+                    <a href="https://wa.me/50212345678?text=%C2%A1Hola%2C%20Alaria%21%20Quisiera%20agendar%20una%20cita%20de%20valoraci%C3%B3n%20con%20la%20Dra.%20Katherine%20Gonz%C3%A1lez%20V.%20Me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-semibold text-alaria-dark bg-alaria-card hover:bg-alaria-accent/20 transition rounded-full border border-alaria-accent/30">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i> WhatsApp Directo
+                    </a>
+                </div>
+                <div class="pt-4 flex items-center gap-6 text-xs text-alaria-muted border-t border-alaria-accent/20">
+                    <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-alaria-accent"></i> Atención médica especializada</span>
+                    <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-alaria-accent"></i> Productos de grado médico</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 relative">
+                <div class="relative mx-auto max-w-md lg:max-w-none">
+                    <div class="aspect-[4/5] rounded-3xl bg-alaria-card overflow-hidden shadow-2xl border border-alaria-accent/30 relative">
+                        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Clínica Alaria - Medicina Estética" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-alaria-dark/60 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6 text-white p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+                            <p class="font-serif font-medium text-lg">Dra. Katherine González V.</p>
+                            <p class="text-xs text-white/80">Especialista en Armonización Facial & Rejuvenecimiento</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dra. Katherine Section -->
+    <section id="doctora" class="py-20 bg-alaria-card/50 border-y border-alaria-accent/20">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 order-2 lg:order-1">
+                <div class="aspect-square rounded-3xl overflow-hidden shadow-lg border border-alaria-accent/30">
+                    <img src="https://images.unsplash.com/photo-1594824813566-888242a48b6d?auto=format&fit=crop&w=800&q=80" alt="Dra. Katherine González V." class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div class="lg:col-span-7 order-1 lg:order-2 space-y-6">
+                <span class="text-xs font-semibold tracking-widest text-alaria-accent uppercase">Ciencia, Arte y Seguridad Médica</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-normal text-alaria-dark">Conoce a la Dra. Katherine González V.</h2>
+                <blockquote class="italic text-lg text-alaria-dark font-serif border-l-2 border-alaria-accent pl-4 py-1">
+                    "La medicina estética no busca cambiar quién eres, sino devolverle a tu rostro la frescura, armonía y vitalidad que el tiempo o el estrés le han restado."
+                </blockquote>
+                <p class="text-alaria-muted leading-relaxed font-light">
+                    Como médica especialista en medicina estética y fundadora de <strong class="font-medium text-alaria-dark">Alaria</strong>, la Dra. Katherine combina precisión médica, criterio anatómico y un fino sentido estético para ofrecer resultados visibles, seguros y completamente naturales.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div class="p-4 bg-white/80 rounded-2xl border border-alaria-accent/20">
+                        <i data-lucide="stethoscope" class="w-5 h-5 text-alaria-accent mb-2"></i>
+                        <h3 class="text-sm font-semibold text-alaria-dark">Atención Médica</h3>
+                        <p class="text-xs text-alaria-muted mt-1">Estrictos protocolos de bioseguridad.</p>
+                    </div>
+                    <div class="p-4 bg-white/80 rounded-2xl border border-alaria-accent/20">
+                        <i data-lucide="sparkle" class="w-5 h-5 text-alaria-accent mb-2"></i>
+                        <h3 class="text
