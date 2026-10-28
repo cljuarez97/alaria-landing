@@ -19,7 +19,7 @@ Landing page de Alaria Medicina Estética (Dra. Katherine González V.). Sitio e
 
 ## Desarrollo local
 
-Herd sirve la carpeta en http://alaria-landing.test. También sirve abrir `index.html` directo.
+`python3 -m http.server 8765` y abre http://localhost:8765 (config en `.claude/launch.json`, no versionada). También sirve abrir `index.html` directo.
 
 ## Despliegue
 
