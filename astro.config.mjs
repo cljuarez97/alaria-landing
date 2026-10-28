@@ -7,7 +7,7 @@ export default defineConfig({
   site: 'https://cljuarez97.github.io',
   base: '/alaria-landing',
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !/\/(offline|404)\/?$/.test(page) })],
   vite: {
     plugins: [tailwindcss()],
   },

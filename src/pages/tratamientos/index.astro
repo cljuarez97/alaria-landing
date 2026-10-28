@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TreatmentShowcase from '../../components/TreatmentShowcase.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { home, treatments } from '../../data/content';
+
+const description = `${home.treatmentsTeaser.intro} ${treatments.map((t) => t.name).join(', ')}.`;
+---
+<BaseLayout title={home.treatmentsTeaser.title} description={description}>
+  <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
+    <header class="mb-14 max-w-3xl lg:mb-20">
+      <p class="t-eyebrow">{home.eyebrow}</p>
+      <h1 class="t-display mt-5">{home.treatmentsTeaser.title}</h1>
+      <p class="t-lead mt-6">{home.treatmentsTeaser.intro}</p>
+    </header>
+    <TreatmentShowcase level={2} />
+  </section>
+  <CtaBand />
+</BaseLayout>

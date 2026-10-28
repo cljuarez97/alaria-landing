@@ -1,0 +1,26 @@
+---
+// Icono Lucide inline: trazo 1.5, 20px, decorativo salvo que se pase `label`.
+import { icons, type IconName } from './icons/icons';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+  label?: string;
+}
+
+const { name, size = 20, class: className = '', label } = Astro.props;
+
+const svg = icons[name]
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\s+class="[^"]*"/, '')
+  .replace(/width="24"/, `width="${size}"`)
+  .replace(/height="24"/, `height="${size}"`)
+  .replace(/stroke-width="2"/, 'stroke-width="1.5"')
+  .replace(
+    '<svg',
+    `<svg class="icon ${className}" ${label ? `role="img" aria-label="${label.replace(/"/g, "&quot;")}"` : 'aria-hidden="true"'} focusable="false"`,
+  )
+  .trim();
+---
+<Fragment set:html={svg} />

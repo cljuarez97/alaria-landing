@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import Rich from './Rich.astro';
+
+interface Props {
+  items: { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+---
+<div class="faq">
+  {
+    items.map((item) => (
+      <details class="faq-item">
+        <summary>
+          <span>{item.q}</span>
+          <span class="faq-icon" aria-hidden="true">
+            <Icon name="plus" />
+          </span>
+        </summary>
+        <div class="faq-body">
+          <div>
+            <p>
+              <Rich text={item.a} />
+            </p>
+          </div>
+        </div>
+      </details>
+    ))
+  }
+</div>

@@ -1,0 +1,204 @@
+---
+// Comparador antes/después accesible: <input type="range"> nativo (teclado y lector de pantalla)
+// sobre dos imágenes; la de "después" se recorta con clip-path. Solo transform/clip-path, sin layout.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+import { ui } from '../data/ui';
+
+interface Props {
+  before: ImageMetadata;
+  after: ImageMetadata;
+  beforeAlt: string;
+  afterAlt: string;
+  caption?: string;
+}
+const { before, after, beforeAlt, afterAlt, caption } = Astro.props;
+const pic = {
+  widths: [480, 720, 960, 1280],
+  sizes: '(min-width: 1024px) 46rem, calc(100vw - 2.5rem - 8px)',
+  formats: ['avif', 'webp'] as ('avif' | 'webp')[],
+  loading: 'lazy' as const,
+  decoding: 'async' as const,
+};
+---
+<figure class="ba" data-ba>
+  <div class="frame">
+  <div class="ba-stage frame-media" style="aspect-ratio:3/2">
+    <div class="ba-layer">
+      <Picture src={before} alt={beforeAlt} {...pic} />
+    </div>
+    <div class="ba-layer ba-after">
+      <Picture src={after} alt={afterAlt} {...pic} />
+    </div>
+    <span class="ba-tag ba-tag-before" aria-hidden="true">{ui.before}</span>
+    <span class="ba-tag ba-tag-after" aria-hidden="true">{ui.after}</span>
+    <div class="ba-handle" aria-hidden="true">
+      <span class="ba-line"></span>
+      <span class="ba-knob"><Icon name="move-horizontal" /></span>
+    </div>
+    <input
+      class="ba-range"
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      value="50"
+      aria-label={ui.compareLabel}
+      aria-valuetext={`${ui.before} 50 %, ${ui.after.toLowerCase()} 50 %`}
+      data-before={ui.before}
+      data-after={ui.after.toLowerCase()}
+    />
+  </div>
+  </div>
+  {caption && <figcaption class="t-small mt-5 text-muted">{caption}</figcaption>}
+</figure>
+
+<script>
+  const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setup(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = 'true';
+    const stage = root.querySelector<HTMLElement>('.ba-stage');
+    const range = root.querySelector<HTMLInputElement>('.ba-range');
+    if (!stage || !range) return;
+
+    const update = () => {
+      const v = Number(range.value);
+      stage.style.setProperty('--p', String(v / 100));
+      range.setAttribute(
+        'aria-valuetext',
+        `${range.dataset.before} ${v} %, ${range.dataset.after} ${100 - v} %`,
+      );
+    };
+    const stopNudge = () => stage.classList.remove('is-nudging');
+    range.addEventListener('input', () => {
+      stopNudge();
+      update();
+    });
+    range.addEventListener('pointerdown', stopNudge);
+    stage.addEventListener('animationend', stopNudge);
+    update();
+
+    // Empujón inicial al entrar en vista: enseña que se puede deslizar.
+    if (reduce() || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          stage.classList.add('is-nudging');
+        }
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(stage);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-ba]').forEach(setup);
+  });
+</script>
+
+<style>
+  .ba-stage {
+    --knob: 48px;
+    --x: calc(var(--knob) / 2 + (100% - var(--knob)) * var(--p));
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .ba-stage.is-nudging {
+    animation: alaria-nudge 1200ms var(--ease-out-quart);
+  }
+  .ba-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .ba-layer :global(picture),
+  .ba-layer :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ba-after {
+    clip-path: inset(0 0 0 var(--x));
+  }
+  .ba-tag {
+    position: absolute;
+    top: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 2px;
+    background: var(--color-paper);
+    color: var(--color-charcoal);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .ba-tag-before {
+    left: 0.75rem;
+  }
+  .ba-tag-after {
+    right: 0.75rem;
+  }
+  .ba-handle {
+    position: absolute;
+    inset: 0;
+    transform: translateX(var(--x));
+    pointer-events: none;
+  }
+  .ba-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -0.5px;
+    width: 1px;
+    background: var(--color-paper);
+    box-shadow: 0 0 0 0.5px color-mix(in oklab, var(--color-gold) 70%, transparent);
+  }
+  .ba-knob {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: var(--knob);
+    height: var(--knob);
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: var(--color-wine);
+    box-shadow:
+      0 0 0 1px var(--color-gold),
+      0 6px 16px -8px color-mix(in oklab, var(--color-wine-deep) 60%, transparent);
+    transform: translate(-50%, -50%);
+  }
+  .ba-stage:has(.ba-range:focus-visible) .ba-knob {
+    outline: 2px solid var(--color-wine);
+    outline-offset: 3px;
+  }
+  /* El range nativo cubre la imagen; su "thumb" mide lo mismo que el knob visual. */
+  .ba-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    touch-action: pan-y;
+  }
+  .ba-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: var(--knob);
+    height: 100vh;
+  }
+  .ba-range::-moz-range-thumb {
+    width: var(--knob);
+    height: 100vh;
+    border: 0;
+  }
+</style>

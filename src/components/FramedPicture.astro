@@ -1,0 +1,56 @@
+---
+// Marco firma: radio 2px + línea fina de oro desplazada 8px.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  /** Proporción CSS, p. ej. "3 / 2". Por defecto la de la imagen. */
+  ratio?: string;
+  priority?: boolean;
+  class?: string;
+  mediaClass?: string;
+  transitionName?: string;
+}
+
+const {
+  src,
+  alt,
+  widths,
+  sizes,
+  ratio = `${src.width} / ${src.height}`,
+  priority = false,
+  class: className,
+  mediaClass,
+  transitionName,
+} = Astro.props;
+
+const pic = {
+  src,
+  alt,
+  widths,
+  sizes,
+  formats: ['avif', 'webp'] as ('avif' | 'webp')[],
+  loading: priority ? ('eager' as const) : ('lazy' as const),
+  fetchpriority: priority ? ('high' as const) : ('auto' as const),
+  decoding: priority ? ('sync' as const) : ('async' as const),
+};
+---
+{
+  transitionName ? (
+    <div class:list={['frame', className]} transition:name={transitionName}>
+      <div class:list={['frame-media', mediaClass]} style={`aspect-ratio:${ratio}`}>
+        <Picture {...pic} />
+      </div>
+    </div>
+  ) : (
+    <div class:list={['frame', className]}>
+      <div class:list={['frame-media', mediaClass]} style={`aspect-ratio:${ratio}`}>
+        <Picture {...pic} />
+      </div>
+    </div>
+  )
+}

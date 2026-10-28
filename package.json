@@ -19,7 +19,9 @@
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.12",
     "lucide-static": "1.62.0",
+    "typescript": "^6.0.3",
     "vitest": "5.0.5"
   }
 }

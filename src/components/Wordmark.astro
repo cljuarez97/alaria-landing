@@ -1,0 +1,25 @@
+---
+import { href } from '../lib/url';
+import { site } from '../data/content';
+
+interface Props {
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
+---
+<a
+  href={href('/')}
+  class:list={[
+    'press inline-flex min-h-11 flex-col justify-center no-underline',
+    tone === 'dark' ? 'text-wine' : 'text-paper',
+  ]}
+  aria-label={`${site.name}, inicio`}
+>
+  <span class="font-serif text-[1.75rem] leading-none font-medium italic">Alaria</span>
+  <span
+    class:list={[
+      'mt-1 text-[0.6875rem] font-semibold tracking-[0.16em] uppercase',
+      tone === 'dark' ? 'text-gold-ink' : 'text-mist',
+    ]}>Medicina Estética</span
+  >
+</a>

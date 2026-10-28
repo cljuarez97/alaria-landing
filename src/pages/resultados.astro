@@ -1,0 +1,218 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import Rich from '../components/Rich.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { home, results } from '../data/content';
+import { images } from '../data/images';
+import { ui } from '../data/ui';
+import { href } from '../lib/url';
+
+const tabs = [
+  { id: 'antes-despues', label: results.beforeAfter.title },
+  { id: 'opiniones', label: results.testimonials.title },
+];
+---
+<BaseLayout title={results.title} description={results.intro}>
+  <section class="container-x pt-8 lg:pt-14">
+    <div class="frame-media" style="aspect-ratio:21/9">
+      <Picture
+        src={images['resultados-cortina']}
+        alt=""
+        widths={[640, 960, 1280, 1600]}
+        sizes="(min-width: 1232px) 72rem, calc(100vw - 2.5rem)"
+        formats={['avif', 'webp']}
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full object-cover"
+      />
+    </div>
+    <header class="mt-10 grid gap-6 lg:mt-14 lg:grid-cols-12">
+      <h1 class="t-display lg:col-span-5">{results.title}</h1>
+      <p class="t-lead lg:col-span-7 lg:pt-3">{results.intro}</p>
+    </header>
+  </section>
+
+  <section class="container-x section pt-12 lg:pt-16" data-tabs>
+    <!-- Control segmentado: sin JS se ven ambos paneles con su título. -->
+    <div class="seg" role="tablist" aria-label={results.title} hidden data-tablist>
+      <span class="seg-pill" aria-hidden="true"></span>
+      {
+        tabs.map((tab, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-controls={`panel-${tab.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            class="seg-tab"
+          >
+            {tab.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div id="panel-antes-despues" class="tab-panel mt-12" data-panel>
+      <h2 class="t-h2 panel-title">{results.beforeAfter.title}</h2>
+      <div class="mt-8 grid gap-12 lg:grid-cols-12 lg:items-start">
+        <div class="lg:col-span-8">
+          <BeforeAfter
+            before={images['calidad-de-piel']}
+            after={images['bioestimuladores']}
+            beforeAlt={`${ui.examplePlaceholder} (${ui.before.toLowerCase()})`}
+            afterAlt={`${ui.examplePlaceholder} (${ui.after.toLowerCase()})`}
+            caption={ui.compareHint}
+          />
+        </div>
+        <div class="grid gap-6 lg:col-span-4 lg:pt-2">
+          <p class="font-serif text-2xl leading-snug text-wine italic">{results.beforeAfter.emptyState}</p>
+          <p class="t-small text-muted">{results.beforeAfter.consentNote}</p>
+          <a href={href('/agendar/')} class="link">
+            {home.ctaPrimary}
+            <Icon name="arrow-right" class="icon-forward" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-opiniones" class="tab-panel mt-12" data-panel>
+      <h2 class="t-h2 panel-title">{results.testimonials.title}</h2>
+      <div class="empty mt-8 grid items-center gap-10 border-y border-line py-12 lg:grid-cols-12">
+        <span class="numeral text-center text-[6rem] lg:col-span-3" aria-hidden="true">“</span>
+        <div class="grid gap-5 lg:col-span-9">
+          <p class="font-serif text-2xl leading-snug text-wine italic">{results.testimonials.emptyState}</p>
+          <p class="t-small text-muted"><Rich text={results.testimonials.googleCta} /></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<script>
+  function setupTabs(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = 'true';
+    const list = root.querySelector<HTMLElement>('[data-tablist]');
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    if (!list || tabs.length !== panels.length) return;
+
+    // Con JS: el control sustituye a los títulos visibles de cada panel.
+    list.hidden = false;
+    root.classList.add('has-tabs');
+    panels.forEach((panel, i) => {
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', tabs[i]!.id);
+      panel.tabIndex = 0;
+    });
+
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        panels[i]!.hidden = !on;
+      });
+      list.style.setProperty('--i', String(index));
+      if (focus) tabs[index]!.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        const last = tabs.length - 1;
+        const map: Record<string, number> = {
+          ArrowRight: i === last ? 0 : i + 1,
+          ArrowLeft: i === 0 ? last : i - 1,
+          Home: 0,
+          End: last,
+        };
+        const next = map[e.key];
+        if (next === undefined) return;
+        e.preventDefault();
+        select(next, true);
+      });
+    });
+    select(0);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(setupTabs);
+  });
+</script>
+
+<style>
+  .seg {
+    --pad: 4px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    max-width: 30rem;
+    padding: var(--pad);
+    border-radius: 999px;
+    background: var(--color-card);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+  .seg[hidden] {
+    display: none;
+  }
+  .seg-pill {
+    position: absolute;
+    top: var(--pad);
+    bottom: var(--pad);
+    left: var(--pad);
+    width: calc((100% - var(--pad) * 2) / 2);
+    border-radius: 999px;
+    background: var(--color-paper);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-gold) 60%, transparent),
+      0 4px 12px -6px color-mix(in oklab, var(--color-wine-deep) 40%, transparent);
+    transform: translateX(calc(var(--i, 0) * 100%));
+    transition: transform 320ms var(--ease-out-expo);
+  }
+  .seg-tab {
+    position: relative;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition:
+      color var(--dur-state) var(--ease-out-quart),
+      transform var(--dur-press) var(--ease-out-quart);
+  }
+  .seg-tab:active {
+    transform: scale(0.98);
+  }
+  .seg-tab[aria-selected='true'] {
+    color: var(--color-wine);
+  }
+  .seg-tab:focus-visible {
+    outline-offset: -2px;
+    border-radius: 999px;
+  }
+  .has-tabs .panel-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .has-tabs .tab-panel .mt-8:first-of-type {
+    margin-top: 0;
+  }
+  .tab-panel:focus-visible {
+    outline-offset: 8px;
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import Wordmark from './Wordmark.astro';
+import Rich from './Rich.astro';
+import Icon from './Icon.astro';
+import { footer, nav, site, home } from '../data/content';
+import { ui } from '../data/ui';
+import { href, whatsappUrl } from '../lib/url';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<footer class="on-dark mt-0 bg-charcoal text-paper">
+  <div class="container-x grid gap-12 py-16 lg:grid-cols-[1.2fr_1fr_1fr] lg:py-20">
+    <div class="grid content-start gap-4">
+      <Wordmark tone="light" />
+      <p class="t-small max-w-[34ch] text-mist">{footer.note}</p>
+    </div>
+    <nav aria-label={ui.footerNav}>
+      <ul class="grid gap-1">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={href(item.href)} class="inline-flex min-h-11 items-center text-paper underline-offset-4 hover:underline">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="grid content-start gap-4">
+      <a
+        href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex min-h-11 items-center gap-2 font-semibold text-paper underline-offset-4 hover:underline"
+      >
+        <Icon name="message-circle" />
+        {home.ctaSecondary}
+        <span class="sr-only">{ui.newTab}</span>
+      </a>
+    </div>
+  </div>
+  <div class="container-x">
+    <div class="flex flex-col gap-6 border-t border-paper/15 py-8 sm:flex-row sm:items-center sm:justify-between">
+      <p class="t-small text-mist"><Rich text={footer.legal} /></p>
+      <div class="flex items-center gap-3">
+        <img src={`${base}/bichitech-logo.webp`} alt="" width="38" height="40" loading="lazy" decoding="async" class="h-10 w-auto opacity-90" />
+        <span class="text-[0.8125rem] text-mist">{ui.developedBy}</span>
+      </div>
+    </div>
+  </div>
+</footer>

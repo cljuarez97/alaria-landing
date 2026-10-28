@@ -1,0 +1,11 @@
+---
+// Pinta un texto de content.ts marcando los tramos [pendientes] con <mark class="pending">.
+import { splitPending } from '../lib/pending';
+
+interface Props {
+  text: string;
+}
+
+const segments = splitPending(Astro.props.text);
+---
+{segments.map((s) => (s.pending ? <mark class="pending">{s.text}</mark> : s.text))}

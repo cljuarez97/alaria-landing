@@ -1,0 +1,333 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FramedPicture from '../components/FramedPicture.astro';
+import Rich from '../components/Rich.astro';
+import Icon from '../components/Icon.astro';
+import { booking, site, treatments } from '../data/content';
+import { images } from '../data/images';
+import { ui } from '../data/ui';
+import { whatsappUrl } from '../lib/url';
+
+const f = booking.form;
+const fields = [
+  { id: 'name', label: f.name, type: 'text', autocomplete: 'name', required: true },
+  { id: 'phone', label: f.phone, type: 'tel', autocomplete: 'tel', required: true, inputmode: 'tel' },
+  { id: 'email', label: f.email, type: 'email', autocomplete: 'email', required: false },
+] as const;
+
+// Mensajes para el script del cliente (sin duplicar textos en el JS).
+const messages = {
+  validation: booking.validation,
+  submit: f.submit,
+  sending: f.sending,
+  success: f.success,
+  error: f.error,
+  offline: f.offline,
+  endpoint: booking.endpoint,
+  accessKey: booking.web3formsKey,
+  subject: `Solicitud de valoración · ${site.name}`,
+};
+---
+<BaseLayout title={booking.title} description={booking.intro}>
+  <section class="container-x grid gap-x-16 gap-y-12 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
+    <div class="lg:col-span-7">
+      <h1 class="t-display">{booking.title}</h1>
+      <p class="t-lead mt-6">{booking.intro}</p>
+      <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link mt-4">
+        <Icon name="message-circle" />
+        {booking.whatsappAlt}
+        <span class="sr-only">{ui.newTab}</span>
+      </a>
+
+      <form
+        id="appointment-form"
+        class="booking mt-12 grid gap-6"
+        novalidate
+        data-booking
+        data-messages={JSON.stringify(messages)}
+      >
+        {
+          fields.map((field) => (
+            <div>
+              <label for={field.id} class="field-label">
+                {field.label}
+                {field.required && (
+                  <span class="text-wine" aria-hidden="true">
+                    {' '}
+                    *
+                  </span>
+                )}
+              </label>
+              <input
+                id={field.id}
+                name={field.id}
+                type={field.type}
+                autocomplete={field.autocomplete}
+                inputmode={'inputmode' in field ? field.inputmode : undefined}
+                aria-required={field.required ? 'true' : undefined}
+                aria-describedby={`${field.id}-error`}
+                class="field"
+              />
+              <p id={`${field.id}-error`} class="field-error" hidden>
+                <Icon name="circle-alert" />
+                <span data-error-text />
+              </p>
+            </div>
+          ))
+        }
+
+        <div>
+          <label for="treatment" class="field-label">{f.treatment}</label>
+          <select id="treatment" name="treatment" class="field">
+            <option value="">{ui.selectPlaceholder}</option>
+            <option value={ui.generalAssessment}>{ui.generalAssessment}</option>
+            {treatments.map((t) => <option value={t.name}>{t.name}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label for="message" class="field-label">{f.message}</label>
+          <textarea id="message" name="message" rows="4" class="field"></textarea>
+        </div>
+
+        <!-- Honeypot: invisible y fuera del orden de tabulación. -->
+        <div class="honeypot" aria-hidden="true">
+          <label for="botcheck">No llenar</label>
+          <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="grid gap-4 pt-2">
+          <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
+            <span class="submit-icon" aria-hidden="true">
+              <Icon name="loader-circle" class="spin" />
+            </span>
+            <span data-submit-label>{f.submit}</span>
+          </button>
+          <p class="t-small text-muted"><Rich text={f.privacy} /></p>
+        </div>
+
+        <div role="status" aria-live="polite" class="status" data-status data-kind="none">
+          <span class="status-icon" aria-hidden="true">
+            <span data-icon="success"><Icon name="check" /></span>
+            <span data-icon="error"><Icon name="circle-alert" /></span>
+            <span data-icon="offline"><Icon name="wifi-off" /></span>
+          </span>
+          <span data-status-text></span>
+        </div>
+      </form>
+    </div>
+
+    <aside class="hidden lg:col-span-5 lg:block">
+      <div class="lg:sticky lg:top-10">
+        <FramedPicture
+          src={images['agendar-escritorio']}
+          alt=""
+          widths={[400, 600, 800]}
+          sizes="26rem"
+        />
+      </div>
+    </aside>
+  </section>
+</BaseLayout>
+
+<script>
+  import { isBot, normalizePhone, submitBooking, validateBooking, type BookingFields, type FieldError } from '../scripts/booking';
+
+  type Messages = {
+    validation: Record<FieldError['code'], string>;
+    submit: string;
+    sending: string;
+    success: string;
+    error: string;
+    offline: string;
+    endpoint: string;
+    accessKey: string;
+    subject: string;
+  };
+
+  const VALIDATED = ['name', 'phone', 'email'] as const;
+
+  function setup(form: HTMLFormElement) {
+    if (form.dataset.ready) return;
+    form.dataset.ready = 'true';
+    const msg = JSON.parse(form.dataset.messages ?? '{}') as Messages;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const label = button.querySelector<HTMLElement>('[data-submit-label]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
+    const touched = new Set<string>();
+
+    const read = (): BookingFields => {
+      const data = new FormData(form);
+      const get = (k: string) => String(data.get(k) ?? '');
+      return {
+        name: get('name'),
+        phone: get('phone'),
+        email: get('email'),
+        treatment: get('treatment'),
+        message: get('message'),
+        botcheck: get('botcheck'),
+      };
+    };
+
+    const showErrors = (errors: FieldError[], only?: Set<string>) => {
+      for (const field of VALIDATED) {
+        if (only && !only.has(field)) continue;
+        const input = form.elements.namedItem(field) as HTMLInputElement | null;
+        const box = form.querySelector<HTMLElement>(`#${field}-error`);
+        if (!input || !box) continue;
+        const err = errors.find((e) => e.field === field);
+        input.setAttribute('aria-invalid', err ? 'true' : 'false');
+        box.hidden = !err;
+        box.querySelector<HTMLElement>('[data-error-text]')!.textContent = err ? msg.validation[err.code] : '';
+      }
+    };
+
+    const setStatus = (kind: 'none' | 'success' | 'error' | 'offline', text = '') => {
+      status.dataset.kind = kind;
+      statusText.textContent = text;
+    };
+
+    // Valida al salir de un campo ya tocado, no a cada tecla.
+    for (const field of VALIDATED) {
+      const input = form.elements.namedItem(field) as HTMLInputElement | null;
+      input?.addEventListener('blur', () => {
+        if (!input.value.trim() && !touched.has(field)) return;
+        touched.add(field);
+        showErrors(validateBooking(read()), new Set([field]));
+      });
+      input?.addEventListener('input', () => {
+        if (input.getAttribute('aria-invalid') === 'true') showErrors(validateBooking(read()), new Set([field]));
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (button.dataset.state === 'sending') return;
+      setStatus('none');
+      const fields = read();
+
+      // Un bot recibe "éxito" y no se envía nada.
+      if (isBot(fields)) {
+        form.reset();
+        setStatus('success', msg.success);
+        return;
+      }
+
+      const errors = validateBooking(fields);
+      VALIDATED.forEach((f) => touched.add(f));
+      showErrors(errors);
+      if (errors.length) {
+        const first = VALIDATED.find((f) => errors.some((e) => e.field === f));
+        (form.elements.namedItem(first!) as HTMLInputElement).focus();
+        return;
+      }
+
+      button.dataset.state = 'sending';
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      label.textContent = msg.sending;
+
+      const result = await submitBooking(msg.endpoint, {
+        access_key: msg.accessKey,
+        subject: msg.subject,
+        from_name: fields.name.trim(),
+        name: fields.name.trim(),
+        phone: normalizePhone(fields.phone),
+        email: fields.email.trim(),
+        treatment: fields.treatment,
+        message: (fields.message ?? '').trim(),
+      });
+
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      label.textContent = msg.submit;
+      button.dataset.state = result === 'success' ? 'success' : 'idle';
+
+      if (result === 'success') {
+        form.reset();
+        touched.clear();
+        showErrors([]);
+        setStatus('success', msg.success);
+        window.setTimeout(() => {
+          if (button.dataset.state === 'success') button.dataset.state = 'idle';
+        }, 2400);
+      } else {
+        setStatus(result, result === 'offline' ? msg.offline : msg.error);
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLFormElement>('form[data-booking]').forEach(setup);
+  });
+</script>
+
+<style>
+  .honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .submit {
+    position: relative;
+  }
+  .submit-icon {
+    display: none;
+  }
+  .submit[data-state='sending'] .submit-icon {
+    display: inline-grid;
+  }
+  .submit :global(.spin) {
+    animation: spin 900ms linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .status {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    padding: 1rem 1.125rem;
+    border-radius: 2px;
+    background: var(--color-paper);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+    line-height: 1.5;
+  }
+  .status[data-kind='none'] {
+    /* Vacío pero presente en el DOM para que aria-live funcione. */
+    padding: 0;
+    box-shadow: none;
+    background: none;
+  }
+  .status-icon > span {
+    display: none;
+  }
+  .status-icon :global(.icon) {
+    margin-top: 0.15em;
+  }
+  .status[data-kind='success'] {
+    color: var(--color-success);
+    animation: rise 280ms var(--ease-out-quart);
+  }
+  .status[data-kind='success'] [data-icon='success'],
+  .status[data-kind='error'] [data-icon='error'],
+  .status[data-kind='offline'] [data-icon='offline'] {
+    display: inline-flex;
+  }
+  .status[data-kind='error'],
+  .status[data-kind='offline'] {
+    color: var(--color-danger);
+    animation: rise 280ms var(--ease-out-quart);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+</style>

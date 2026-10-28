@@ -1,0 +1,56 @@
+---
+import Wordmark from './Wordmark.astro';
+import { nav } from '../data/content';
+import { ui } from '../data/ui';
+import { href, isActive, routeOf } from '../lib/url';
+
+const route = routeOf(Astro.url.pathname);
+const links = nav.slice(0, -1);
+const cta = nav[nav.length - 1]!;
+---
+<header class="container-x flex items-center justify-between gap-6 pt-5 pb-2 lg:pt-7">
+  <Wordmark />
+  <nav aria-label={ui.mainNav} class="hidden lg:block">
+    <ul class="flex items-center gap-1">
+      {
+        links.map((item) => {
+          const active = isActive(item.href, route);
+          return (
+            <li>
+              <a
+                href={href(item.href)}
+                aria-current={active ? 'page' : undefined}
+                class:list={[
+                  'nav-link press relative inline-flex min-h-11 items-center px-3.5 text-[0.9375rem] font-medium no-underline',
+                  active ? 'text-wine' : 'text-charcoal hover:text-wine',
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })
+      }
+      <li class="ml-4">
+        <a
+          href={href(cta.href)}
+          class="btn btn-primary min-h-11 px-5 text-[0.9375rem]"
+          aria-current={isActive(cta.href, route) ? 'page' : undefined}>{cta.label}</a
+        >
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  /* Página actual: hilo de oro bajo el enlace (no solo color). */
+  .nav-link[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0.875rem;
+    right: 0.875rem;
+    bottom: 0.4rem;
+    height: 1px;
+    background: var(--color-gold);
+  }
+</style>

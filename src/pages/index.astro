@@ -1,3 +1,223 @@
 ---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Rich from '../components/Rich.astro';
+import FaqList from '../components/FaqList.astro';
+import PhotoPending from '../components/PhotoPending.astro';
+import TreatmentShowcase from '../components/TreatmentShowcase.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faq, home, site, treatments } from '../data/content';
+import { images } from '../data/images';
+import { ui } from '../data/ui';
+import { href, whatsappUrl } from '../lib/url';
+
+// Acento en itálica dentro del h1 sin tocar el texto de content.ts.
+const accent = 'criterio médico';
+const [h1Before, h1After] = home.h1.includes(accent) ? home.h1.split(accent) : [home.h1, ''];
+const hasAccent = home.h1.includes(accent);
+
+const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: site.name,
+  description: site.description,
+  url: siteUrl,
+  logo: new URL('icon-512.png', siteUrl).href,
+  image: new URL('icon-512.png', siteUrl).href,
+  telephone: `+${site.whatsapp}`,
+  areaServed: { '@type': 'Country', name: 'Guatemala' },
+  availableService: treatments.map((t) => ({
+    '@type': 'MedicalProcedure',
+    name: t.name,
+    url: new URL(`tratamientos/${t.slug}/`, siteUrl).href,
+  })),
+  employee: { '@type': 'Physician', name: site.doctor.name },
+};
 ---
-<html lang="es"><head><meta charset="utf-8" /><title>Alaria</title></head><body><h1>Alaria</h1></body></html>
+<BaseLayout jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="container-x hero grid items-center gap-x-12 gap-y-14 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
+    <div class="lg:col-span-7">
+      <p class="t-eyebrow">{home.eyebrow}</p>
+      <h1 class="t-display mt-5 max-w-[14ch] text-charcoal">
+        {
+          hasAccent ? (
+            <Fragment>
+              {h1Before}
+              <em class="t-accent text-wine">{accent}</em>
+              {h1After}
+            </Fragment>
+          ) : (
+            home.h1
+          )
+        }
+      </h1>
+      <p class="t-lead mt-6 text-charcoal/85">{home.lead}</p>
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <a href={href('/agendar/')} class="btn btn-primary">
+          {home.ctaPrimary}
+          <Icon name="arrow-right" />
+        </a>
+        <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost">
+          <Icon name="message-circle" />
+          {home.ctaSecondary}
+          <span class="sr-only">{ui.newTab}</span>
+        </a>
+      </div>
+      <a href={href('/tratamientos/')} class="link mt-4">
+        {home.ctaTertiary}
+        <Icon name="arrow-right" class="icon-forward" />
+      </a>
+    </div>
+
+    <figure class="hero-figure mx-auto w-full max-w-[22rem] sm:max-w-[26rem] lg:col-span-5 lg:max-w-none">
+      <div class="arch">
+        <div class="arch-media" style="aspect-ratio:4/5">
+          <Picture
+            src={images['hero-arch']}
+            alt=""
+            widths={[360, 540, 720, 960]}
+            sizes="(min-width: 1024px) 28rem, (min-width: 640px) 26rem, 22rem"
+            formats={['avif', 'webp']}
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+          />
+        </div>
+      </div>
+      <figcaption class="mt-8 text-center font-serif text-2xl text-gold-ink italic">{site.tagline}</figcaption>
+    </figure>
+  </section>
+
+  <!-- Cómo trabajamos -->
+  <section class="section border-t border-line" aria-labelledby="approach-title">
+    <div class="container-x grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <div class="lg:sticky lg:top-10">
+          <h2 id="approach-title" class="t-h2">{home.approach.title}</h2>
+          <p class="t-body mt-5 text-muted">{home.approach.intro}</p>
+        </div>
+      </div>
+      <ol class="grid gap-0 lg:col-span-7" role="list">
+        {
+          home.approach.pillars.map((p, i) => (
+            <li class="grid grid-cols-[4.5rem_1fr] gap-x-4 border-t border-line py-8 first:border-t-0 first:pt-0 sm:grid-cols-[6rem_1fr]">
+              <span class="numeral text-[clamp(2.75rem,2.2rem+2vw,4rem)]" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="t-h3">{p.title}</h3>
+                <p class="t-body mt-3">{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Doctora -->
+  <section id="doctora" class="section bg-card" aria-labelledby="doctor-title">
+    <div class="container-x grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+      <PhotoPending label={ui.doctorPhotoPending} class="mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none" />
+      <div class="lg:col-span-7 lg:pt-6">
+        <p class="t-eyebrow">{site.doctor.title}</p>
+        <h2 id="doctor-title" class="t-h2 mt-4">{home.doctorTeaser.title}</h2>
+        <p class="t-lead mt-6"><Rich text={home.doctorTeaser.text} /></p>
+
+        <details class="more mt-8">
+          <summary class="link">
+            {home.doctorTeaser.cta}
+            <Icon name="plus" class="more-icon" />
+          </summary>
+          <div class="more-body">
+            <div class="grid gap-4 pt-4">
+              {
+                site.doctor.bioLong.map((para) => (
+                  <p class="t-body">
+                    <Rich text={para} />
+                  </p>
+                ))
+              }
+              <h3 class="t-h3 mt-6">{ui.credentials}</h3>
+              <ul class="grid gap-2" role="list">
+                {
+                  site.doctor.credentials.map((c) => (
+                    <li class="flex gap-3">
+                      <span class="mt-[0.7em] h-px w-4 flex-none bg-gold" aria-hidden="true" />
+                      <span>
+                        <Rich text={c} />
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tratamientos -->
+  <section class="section" aria-labelledby="treatments-title">
+    <div class="container-x">
+      <div class="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h2 id="treatments-title" class="t-h2">{home.treatmentsTeaser.title}</h2>
+          <p class="t-body mt-4 text-muted">{home.treatmentsTeaser.intro}</p>
+        </div>
+        <a href={href('/tratamientos/')} class="link">
+          {home.ctaTertiary}
+          <Icon name="arrow-right" class="icon-forward" />
+        </a>
+      </div>
+      <TreatmentShowcase level={3} />
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <section class="section border-t border-line" aria-labelledby="faq-title">
+    <div class="container-x grid gap-10 lg:grid-cols-12">
+      <h2 id="faq-title" class="t-h2 lg:col-span-4">{home.faqTeaser.title}</h2>
+      <div class="lg:col-span-8">
+        <FaqList items={faq} />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .more summary {
+    list-style: none;
+    cursor: pointer;
+    width: fit-content;
+  }
+  .more summary::-webkit-details-marker {
+    display: none;
+  }
+  .more :global(.more-icon) {
+    transition: transform var(--dur-state) var(--ease-out-quart);
+  }
+  .more[open] :global(.more-icon) {
+    transform: rotate(45deg);
+  }
+  .more::details-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition:
+      grid-template-rows 320ms var(--ease-out-quart),
+      content-visibility 320ms allow-discrete;
+  }
+  .more[open]::details-content {
+    grid-template-rows: 1fr;
+  }
+  .more-body {
+    min-height: 0;
+    overflow: hidden;
+  }
+</style>

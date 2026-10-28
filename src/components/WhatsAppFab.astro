@@ -1,0 +1,31 @@
+---
+// Solo ≥1024px: en móvil chocaría con la barra inferior (ahí WhatsApp vive en los CTA).
+import Icon from './Icon.astro';
+import { site } from '../data/content';
+import { ui } from '../data/ui';
+import { whatsappUrl } from '../lib/url';
+---
+<a
+  href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+  target="_blank"
+  rel="noopener"
+  class="wa-fab press fixed right-6 bottom-6 z-30 hidden size-14 items-center justify-center rounded-full bg-wine text-paper lg:flex"
+  aria-label={`${ui.whatsappFab} ${ui.newTab}`}
+  transition:persist="wa-fab"
+>
+  <Icon name="message-circle" size={24} />
+</a>
+
+<style>
+  .wa-fab {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-gold) 55%, transparent),
+      0 10px 24px -10px color-mix(in oklab, var(--color-wine-deep) 70%, transparent);
+    transition:
+      transform var(--dur-press) var(--ease-out-quart),
+      background-color var(--dur-state) var(--ease-out-quart);
+  }
+  .wa-fab:hover {
+    background: var(--color-wine-deep);
+  }
+</style>

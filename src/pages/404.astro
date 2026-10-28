@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { home } from '../data/content';
+import { ui } from '../data/ui';
+import { href } from '../lib/url';
+---
+<BaseLayout title={ui.notFound.title} description={ui.notFound.text} noindex>
+  <section class="container-x grid min-h-[60dvh] content-center gap-6 py-[var(--section)]">
+    <span class="numeral text-[clamp(5rem,4rem+6vw,9rem)]" aria-hidden="true">404</span>
+    <h1 class="t-display max-w-[16ch]">{ui.notFound.title}</h1>
+    <p class="t-lead">{ui.notFound.text}</p>
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <a href={href('/')} class="btn btn-primary">
+        <Icon name="arrow-left" />
+        {ui.notFound.cta}
+      </a>
+      <a href={href('/agendar/')} class="btn btn-ghost">{home.ctaPrimary}</a>
+    </div>
+  </section>
+</BaseLayout>

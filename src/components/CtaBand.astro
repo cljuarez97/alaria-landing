@@ -1,0 +1,56 @@
+---
+// Cierre de página: reservar + alternativa por WhatsApp, sobre vino.
+import Icon from './Icon.astro';
+import { booking, home, site } from '../data/content';
+import { ui } from '../data/ui';
+import { href, whatsappUrl } from '../lib/url';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const { title = booking.title, text = booking.intro } = Astro.props;
+---
+<section class="cta-band on-dark bg-wine text-paper" aria-labelledby="cta-band-title">
+  <div class="container-x grid gap-10 py-[clamp(3.5rem,2.5rem+4vw,6rem)] lg:grid-cols-[1.4fr_1fr] lg:items-end">
+    <div>
+      <h2 id="cta-band-title" class="t-h2 max-w-[18ch]">{title}</h2>
+      <p class="t-body mt-5 text-card">{text}</p>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-start">
+      <a href={href('/agendar/')} class="btn btn-light">
+        {home.ctaPrimary}
+        <Icon name="arrow-right" />
+      </a>
+      <a
+        href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+        target="_blank"
+        rel="noopener"
+        class="link text-paper decoration-paper/40 hover:decoration-paper"
+      >
+        <Icon name="message-circle" />
+        {home.ctaSecondary}
+        <span class="sr-only">{ui.newTab}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    overflow: clip;
+  }
+  /* Arco de oro como eco del hero, puramente decorativo. */
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    right: -6rem;
+    top: 2.5rem;
+    width: 22rem;
+    height: 32rem;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+</style>
