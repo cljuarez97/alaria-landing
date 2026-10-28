@@ -5,6 +5,7 @@ Landing page de Alaria Medicina Estética (Dra. Katherine González V.). Sitio e
 ## Estructura
 
 - `index.html`: todo el sitio. Secciones: `#inicio`, `#doctora`, `#tratamientos`, `#faq`, `#agendar`.
+- `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`, `icon-512.png`, `site.webmanifest`: favicon ("A" Playfair dorada sobre vino).
 - `bichitech-logo.webp`: logo del desarrollador en el footer (blanco con transparencia, 76×80 = 2x de 40 px).
 - Sin build, sin `package.json`, sin tests.
 
