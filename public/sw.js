@@ -1,5 +1,5 @@
 // Service worker de Alaria. Sube VERSION al cambiar PRECACHE para invalidar cachés viejas.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const BASE = '/alaria-landing/';
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
@@ -62,11 +62,15 @@ self.addEventListener('fetch', (event) => {
   // Solo GET del propio sitio: nunca el POST a Web3Forms ni enlaces externos (wa.me, mapas).
   if (request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return;
 
-  if (request.mode === 'navigate') {
+  // El ClientRouter pide las páginas con fetch() (modo cors), no como navegación.
+  const wantsHtml = (request.headers.get('accept') || '').includes('text/html');
+
+  if (request.mode === 'navigate' || wantsHtml) {
     event.respondWith(networkFirst(request));
-  } else if (url.pathname.startsWith(`${BASE}_astro/`)) {
-    event.respondWith(cacheFirst(request, ASSETS)); // nombres con hash: inmutables
   } else if (request.destination === 'image' || request.destination === 'font') {
+    // Antes que la regla de /_astro/: las imágenes optimizadas viven ahí y deben respetar el límite.
     event.respondWith(cacheFirst(request, IMAGES, MAX_IMAGES));
+  } else if (url.pathname.startsWith(`${BASE}_astro/`)) {
+    event.respondWith(cacheFirst(request, ASSETS)); // CSS/JS con hash: inmutables
   }
 });

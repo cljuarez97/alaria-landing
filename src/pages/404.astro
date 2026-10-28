@@ -7,7 +7,7 @@ import { href } from '../lib/url';
 ---
 <BaseLayout title={ui.notFound.title} description={ui.notFound.text} noindex>
   <section class="container-x grid min-h-[60dvh] content-center gap-6 py-[var(--section)]">
-    <span class="numeral text-[clamp(5rem,4rem+6vw,9rem)]" aria-hidden="true">404</span>
+    <span class="numeral text-[clamp(5rem,4rem+6vw,9rem)]" data-n={"404"} aria-hidden="true"></span>
     <h1 class="t-display max-w-[16ch]">{ui.notFound.title}</h1>
     <p class="t-lead">{ui.notFound.text}</p>
     <div class="flex flex-col gap-3 sm:flex-row">

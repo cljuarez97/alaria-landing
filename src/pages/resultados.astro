@@ -82,7 +82,7 @@ const tabs = [
     <div id="panel-opiniones" class="tab-panel mt-12" data-panel>
       <h2 class="t-h2 panel-title">{results.testimonials.title}</h2>
       <div class="empty mt-8 grid items-center gap-10 border-y border-line py-12 lg:grid-cols-12">
-        <span class="numeral text-center text-[6rem] lg:col-span-3" aria-hidden="true">“</span>
+        <span class="numeral text-center text-[6rem] lg:col-span-3" data-n={"“"} aria-hidden="true"></span>
         <div class="grid gap-5 lg:col-span-9">
           <p class="font-serif text-2xl leading-snug text-wine italic">{results.testimonials.emptyState}</p>
           <p class="t-small text-muted"><Rich text={results.testimonials.googleCta} /></p>

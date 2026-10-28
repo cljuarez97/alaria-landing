@@ -81,6 +81,10 @@
     outline-offset: 3px;
     border-radius: 2px;
   }
+  /* Sobre vino o carbón el anillo vino desaparece (1:1 y 1.8:1). */
+  .on-dark :focus-visible {
+    outline-color: var(--color-paper);
+  }
   h1,
   h2,
   h3 {
@@ -154,7 +158,9 @@
   .t-accent {
     font-style: italic;
   }
-  /* Numerales firma: Playfair itálica en oro, decorativos (aria-hidden). */
+  /* Numerales firma: Playfair itálica en oro, decorativos (aria-hidden).
+     El texto va en data-n y se pinta con ::before: es ornamento, no contenido,
+     así que no participa en el árbol de accesibilidad ni en el cálculo de contraste. */
   .numeral {
     font-family: var(--font-serif);
     font-style: italic;
@@ -162,6 +168,9 @@
     color: var(--color-gold);
     line-height: 1;
     font-variant-numeric: lining-nums;
+  }
+  .numeral::before {
+    content: attr(data-n);
   }
 
   /* Datos pendientes: visibles para la clínica, discretos para el visitante. */
@@ -519,12 +528,15 @@
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
-  *::after,
-  *::details-content {
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Regla aparte: un navegador que no conozca ::details-content invalidaría la de arriba. */
+  *::details-content {
+    transition-duration: 0.01ms !important;
   }
   ::view-transition-group(*),
   ::view-transition-old(*),

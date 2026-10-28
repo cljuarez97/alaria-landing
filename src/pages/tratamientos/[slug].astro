@@ -38,7 +38,7 @@ const { treatment: t, prev, next } = Astro.props;
           <Icon name="arrow-left" />
           {ui.backToTreatments}
         </a>
-        <span class="numeral mt-8 block text-[clamp(3.5rem,2.8rem+3vw,5.5rem)]" aria-hidden="true">{t.number}</span>
+        <span class="numeral mt-8 block text-[clamp(3.5rem,2.8rem+3vw,5.5rem)]" data-n={t.number} aria-hidden="true"></span>
         <h1 class="t-display mt-3">
           <span class="block" transition:name={`tx-title-${t.slug}`}>{t.name}</span>
         </h1>
@@ -93,9 +93,7 @@ const { treatment: t, prev, next } = Astro.props;
             {
               t.whatToExpect.map((s, i) => (
                 <li class="grid grid-cols-[3.5rem_1fr] gap-x-4 border-t border-line py-6">
-                  <span class="numeral text-[2.25rem]" aria-hidden="true">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                  <span class="numeral text-[2.25rem]" data-n={String(i + 1).padStart(2, '0')} aria-hidden="true"></span>
                   <div>
                     <h3 class="t-h3">{s.step}</h3>
                     <p class="t-body mt-2">
