@@ -315,6 +315,15 @@ const messages = {
         frame.querySelector('iframe')?.setAttribute('title', frame.dataset.title ?? '');
       },
     });
+    // Tras confirmar, Cal.com muestra el resumen arriba del iframe mientras la página sigue
+    // desplazada donde estaba el botón: sin esto la persona no ve que la cita quedó hecha.
+    api('on', {
+      action: 'bookingSuccessfulV2',
+      callback: () => {
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        frame.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      },
+    });
     api('on', {
       action: 'linkFailed',
       callback: () => {
@@ -339,6 +348,7 @@ const messages = {
     position: relative;
     /* Reserva el alto del calendario mientras carga para no mover el pie de página (CLS). */
     min-height: 34rem;
+    scroll-margin-top: 1.5rem;
   }
   .cal-loading {
     position: absolute;
