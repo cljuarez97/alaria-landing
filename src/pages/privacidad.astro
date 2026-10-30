@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Rich from '../components/Rich.astro';
+import Ornament from '../components/Ornament.astro';
+import { privacy, site } from '../data/content';
+---
+<BaseLayout title={privacy.title} description={`${privacy.intro} ${site.name}.`}>
+  <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
+    <header class="max-w-[48rem]">
+      <Ornament class="hero-in" />
+      <h1 class="t-display mt-5">{privacy.title}</h1>
+      <p class="t-lead hero-in mt-6" style="--d:1">{privacy.intro}</p>
+      <p class="t-small mt-4 text-muted"><Rich text={privacy.updated} /></p>
+    </header>
+
+    <div class="mt-14 grid max-w-[48rem] gap-12 lg:mt-20">
+      {
+        privacy.sections.map((section) => (
+          <section class="grid gap-4">
+            <h2 class="t-h3">{section.title}</h2>
+            {section.paragraphs.map((text) => (
+              <p class="t-body">
+                <Rich text={text} />
+              </p>
+            ))}
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

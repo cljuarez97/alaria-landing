@@ -42,7 +42,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </div>
   <div class="container-x">
     <div class="flex flex-col gap-6 border-t border-paper/15 py-8 sm:flex-row sm:items-center sm:justify-between">
-      <p class="t-small text-mist"><Rich text={footer.legal} /></p>
+      <div class="grid gap-2">
+        <p class="t-small text-mist">
+          {footer.legal}
+          <a href={href('/privacidad/')} class="ml-1 text-paper underline underline-offset-4">{footer.privacyLink}</a>
+        </p>
+        <p class="t-small text-mist"><Rich text={footer.credentials} /></p>
+      </div>
       <div class="flex items-center gap-3">
         <img src={`${base}/bichitech-logo.webp`} alt="" width="38" height="40" loading="lazy" decoding="async" class="h-10 w-auto opacity-90" />
         <span class="text-[0.8125rem] text-mist">{ui.developedBy}</span>

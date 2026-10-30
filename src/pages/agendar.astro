@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FramedPicture from '../components/FramedPicture.astro';
-import Rich from '../components/Rich.astro';
 import Icon from '../components/Icon.astro';
-import { booking, site, treatments } from '../data/content';
+import { booking, footer, site, treatments } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
-import { whatsappUrl } from '../lib/url';
+import { href, whatsappUrl } from '../lib/url';
 import Ornament from '../components/Ornament.astro';
 import { calPublicUrl, parseCalLink } from '../lib/cal';
 
@@ -113,7 +112,9 @@ const messages = {
               </span>
               <span data-submit-label>{f.submit}</span>
             </button>
-            <p class="t-small text-muted"><Rich text={f.privacy} /></p>
+            <p class="t-small text-muted">
+              {f.privacy} <a href={href('/privacidad/')} class="underline underline-offset-4">{footer.privacyLink}</a>
+            </p>
           </div>
 
           <div role="status" aria-live="polite" class="status" data-status data-kind="none">
@@ -155,6 +156,9 @@ const messages = {
           {booking.calendar.fallback}
           <span class="sr-only">{ui.newTab}</span>
         </a>
+        <p class="t-small mt-6 text-muted">
+          {f.privacy} <a href={href('/privacidad/')} class="underline underline-offset-4">{footer.privacyLink}</a>
+        </p>
       </section>
     )
   }

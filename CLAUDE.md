@@ -18,7 +18,7 @@ Sitio de Alaria Clínica Estética. El nombre de la médica no debe aparecer en 
 - `src/data/images.ts`: mapa de imágenes de ambiente (`src/assets/ambient/`). Para reemplazar una, sobrescribe el archivo con el mismo nombre. Prompts en `docs/nano-banana-prompts.md`.
 - `src/layouts/BaseLayout.astro`: head (SEO, canonical, OG, PWA, fuentes), skip link, `ClientRouter`, header, footer, barra inferior, botón de WhatsApp, foco al h1 tras navegar.
 - `src/components/`: `SiteHeader` (nav ≥1024px), `BottomNav` (<1024px, `transition:persist`), `WhatsAppFab` (solo ≥1024px), `SiteFooter`, `TreatmentShowcase` (destacado + lista numerada con `transition:name`), `FramedPicture` (marco firma), `PhotoPending` (fotos reales pendientes), `FaqList` (`<details>` animado), `BeforeAfter` (comparador con `input range`), `CtaBand`, `Rich`, `Icon`, `PwaHead`.
-- `src/pages/`: `/`, `/tratamientos/`, `/tratamientos/[slug]/`, `/resultados/`, `/visitanos/`, `/agendar/` (formulario Web3Forms con `src/scripts/booking.ts`), `/offline/` (lo precachea `public/sw.js`), `404`.
+- `src/pages/`: `/`, `/tratamientos/`, `/tratamientos/[slug]/`, `/resultados/`, `/visitanos/`, `/agendar/` (formulario Web3Forms con `src/scripts/booking.ts`), `/privacidad/` (aviso de privacidad, borrador pendiente de revisión legal), `/offline/` (lo precachea `public/sw.js`), `404`.
 - `src/lib/`: `url.ts` (`href()` respeta `BASE_URL`; úsalo en todo enlace interno), `pending.ts`, `transitions.ts` (animación de página).
 - `public/`: favicons, manifest, `sw.js` (sube `VERSION` si cambias el precache), `bichitech-logo.webp`.
 
@@ -46,4 +46,5 @@ Revisa `pnpm build`, `pnpm check` y `pnpm test` antes de hacer push.
 
 - Imágenes de ambiente son placeholders; faltan fotos reales del equipo y del consultorio (`PhotoPending`).
 - Datos `[pendiente…]` en `content.ts` (dirección, horario, datos médicos, enlace a Google, aviso legal).
+- Colegiado del médico responsable y licencia sanitaria MSPAS (pie de página), costo de la valoración y revisión legal del aviso de privacidad.
 - El comparador de `/resultados/` usa dos imágenes de ejemplo hasta tener casos con consentimiento.

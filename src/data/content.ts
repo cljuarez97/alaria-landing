@@ -346,7 +346,7 @@ export const faq = [
   },
   {
     q: '¿Cuál es el precio de cada tratamiento?',
-    a: 'El costo depende del tratamiento indicado, las áreas a tratar y las necesidades individuales de cada paciente. Después de tu valoración, te proporcionaremos un presupuesto personalizado y transparente.',
+    a: 'El costo depende del tratamiento indicado, las áreas a tratar y las necesidades individuales de cada paciente. Después de tu valoración, te proporcionaremos un presupuesto personalizado y transparente. [pendiente: costo de la valoración o si es gratuita]',
   },
 ];
 
@@ -358,7 +358,7 @@ export const results = {
     title: 'Antes y después',
     emptyState: 'Pronto compartiremos casos con autorización de cada paciente.',
     consentNote:
-      'Solo publicamos fotografías con consentimiento escrito. Puedes pedir que retiremos la tuya en cualquier momento.',
+      'Solo publicamos fotografías con consentimiento escrito y sin rasgos que permitan identificarte. Puedes pedir que retiremos la tuya en cualquier momento.',
   },
   testimonials: {
     title: 'Opiniones de pacientes',
@@ -399,7 +399,7 @@ export const booking = {
       'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp.',
     offline:
       'Sin conexión. Tu solicitud no se envió. Intenta de nuevo cuando vuelvas a estar en línea o escríbenos por WhatsApp.',
-    privacy: 'Usamos tus datos para agendar tu valoración. [pendiente: texto legal del aviso de privacidad]',
+    privacy: 'Usamos tus datos solo para agendar y preparar tu valoración.',
   },
   validation: {
     required: 'Este campo es obligatorio.',
@@ -420,5 +420,57 @@ export const booking = {
 
 export const footer = {
   note: 'Alaria Clínica Estética. Medicina estética con criterio médico.',
-  legal: '© 2026 Alaria Clínica Estética. [pendiente: aviso legal y número de colegiado]',
+  legal: '© 2026 Alaria Clínica Estética.',
+  credentials:
+    'Médico responsable: colegiado activo n.º [pendiente: número de colegiado]. Licencia sanitaria MSPAS n.º [pendiente: número de licencia sanitaria].',
+  privacyLink: 'Aviso de privacidad',
+};
+
+// Borrador de aviso de privacidad. Guatemala no tiene aún ley general de protección de datos
+// (iniciativa 6464 en trámite, 2026); este texto debe revisarlo un abogado antes de darlo por final.
+export const privacy = {
+  title: 'Aviso de privacidad',
+  intro:
+    'Te explicamos qué datos pedimos, para qué los usamos y cómo puedes pedir que los corrijamos o los borremos.',
+  updated: 'Última actualización: octubre de 2026. [pendiente: revisión legal]',
+  sections: [
+    {
+      title: 'Quién es responsable de tus datos',
+      paragraphs: [
+        'Alaria Clínica Estética, con domicilio en [pendiente: dirección completa del consultorio]. Para cualquier asunto sobre tus datos escríbenos a [pendiente: correo de contacto] o por WhatsApp.',
+      ],
+    },
+    {
+      title: 'Qué datos pedimos',
+      paragraphs: [
+        'Al reservar tu valoración te pedimos nombre, teléfono o WhatsApp y, si quieres, correo electrónico, el tratamiento que te interesa y un comentario. Te recomendamos no escribir información médica detallada en el formulario: la revisamos contigo en consulta.',
+        'Este sitio no usa herramientas de analítica ni cookies publicitarias.',
+      ],
+    },
+    {
+      title: 'Para qué los usamos',
+      paragraphs: [
+        'Solo para confirmar, cambiar o recordarte tu cita y preparar tu valoración. No vendemos ni cedemos tus datos, y no te enviaremos publicidad sin tu permiso.',
+      ],
+    },
+    {
+      title: 'Servicios que nos ayudan',
+      paragraphs: [
+        'Para recibir tus solicitudes usamos servicios externos que pueden guardar los datos fuera de Guatemala: Cal.com (calendario de citas), Web3Forms (envío del formulario) y WhatsApp (mensajes). El proveedor que aloja este sitio puede registrar datos técnicos, como la dirección IP, para su funcionamiento y seguridad.',
+      ],
+    },
+    {
+      title: 'Cuánto tiempo los guardamos',
+      paragraphs: [
+        'Los datos de una reserva se conservan mientras sean necesarios para atenderte. [pendiente: plazo de conservación]',
+        'Tu expediente clínico se maneja aparte, con la confidencialidad y el secreto profesional que exige la práctica médica.',
+      ],
+    },
+    {
+      title: 'Tus derechos',
+      paragraphs: [
+        'Puedes pedirnos en cualquier momento ver, corregir o borrar tus datos de reserva, o retirar el permiso para publicar una fotografía tuya. Respondemos tu solicitud por el mismo medio por el que nos escribas.',
+      ],
+    },
+  ],
 };
