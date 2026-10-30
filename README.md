@@ -1,2 +1,2 @@
 # alaria-landing
-Landing page oficial para Alaria Medicina Estética - Dra. Katherine González V.
+Landing page oficial para Alaria Clínica Estética

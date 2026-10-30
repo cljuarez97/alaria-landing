@@ -31,7 +31,7 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 ## Material real (no usar IA)
 
 Estas imágenes deben ser fotos reales; mientras tanto el sitio muestra un placeholder marcado:
-- Retrato de la Dra. Katherine González V.
+- Foto del equipo médico (sin nombres)
 - Fotos de la clínica (recepción, consultorio).
 - Antes y después: solo con consentimiento escrito de cada paciente.
 - Testimonios: solo reseñas reales y autorizadas.

@@ -1,25 +1,24 @@
-// Contenido del sitio. Los textos entre [corchetes] son datos pendientes de confirmar con la clínica o la Dra.
+// Contenido del sitio. Los textos entre [corchetes] son datos pendientes de confirmar con la clínica.
 
 export const site = {
   name: 'Alaria Clínica Estética',
   tagline: 'Primero valoración, después decisión.',
   description:
-    'Medicina estética con criterio médico en Guatemala. La Dra. Katherine González V. evalúa tu caso y define contigo el tratamiento adecuado. Reserva tu cita.',
+    'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Reserva tu cita.',
   whatsapp: '50236038581',
   whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Clínica Estética.',
   doctor: {
-    name: 'Dra. Katherine González V.',
-    title: 'Médica con enfoque en medicina estética',
+    title: 'Equipo médico',
     bioShort:
-      'Atiende cada caso con criterio médico: evalúa primero, propone después y acompaña el seguimiento. [pendiente: años de experiencia]',
+      'Cada caso se atiende con criterio médico: primero se evalúa, después se propone y se acompaña el seguimiento. [pendiente: años de experiencia del equipo]',
     bioLong: [
-      'La Dra. Katherine González V. atiende en Alaria Clínica Estética.',
+      'La atención en Alaria Clínica Estética está a cargo de nuestro equipo médico.',
       'Cada consulta empieza con tu historial, tus objetivos y una revisión de contraindicaciones. Solo después se decide si un tratamiento tiene sentido en tu caso.',
-      '[dato médico pendiente: trayectoria clínica y áreas de especial interés]',
+      '[dato médico pendiente: trayectoria del equipo y áreas de especial interés]',
     ],
     credentials: [
-      '[dato médico pendiente: título de médica, universidad y año de graduación]',
-      '[dato médico pendiente: número de colegiado]',
+      '[dato médico pendiente: títulos y universidad del profesional médico responsable]',
+      '[dato médico pendiente: número de colegiado del profesional responsable]',
       '[dato médico pendiente: certificaciones en medicina estética]',
       '[dato médico pendiente: formación en procedimientos específicos]',
     ],
@@ -38,7 +37,7 @@ export const nav = [
 export const home = {
   eyebrow: 'Alaria Clínica Estética · Guatemala',
   h1: 'Medicina estética con criterio médico en Guatemala',
-  lead: 'La Dra. Katherine González V. evalúa tu caso y define contigo qué tratamiento tiene sentido. Empiezas con una valoración, no con un procedimiento.',
+  lead: 'Nuestro equipo médico evalúa tu caso y define contigo qué tratamiento tiene sentido. Empiezas con una valoración, no con un procedimiento.',
   ctaPrimary: 'Reservar mi valoración',
   ctaSecondary: 'Escribir por WhatsApp',
   ctaTertiary: 'Ver tratamientos',
@@ -61,9 +60,9 @@ export const home = {
     ],
   },
   doctorTeaser: {
-    title: 'Dra. Katherine González V.',
-    text: 'Evaluamos primero y proponemos después. Conoce su formación y su forma de trabajar. [dato médico pendiente: años de experiencia]',
-    cta: 'Leer más sobre la doctora',
+    title: 'Quién te atiende',
+    text: 'Evaluamos primero y proponemos después. Conoce la formación de nuestro equipo médico y cómo trabajamos. [dato médico pendiente: años de experiencia]',
+    cta: 'Leer más sobre el equipo',
   },
   treatmentsTeaser: {
     title: 'Tratamientos',

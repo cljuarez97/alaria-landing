@@ -14,7 +14,7 @@ export const ui = {
   whatToExpect: 'Qué esperar',
   treatmentFaq: 'Preguntas sobre este tratamiento',
   readMore: 'Ver tratamiento',
-  doctorPhotoPending: 'Foto pendiente: retrato de la Dra.',
+  doctorPhotoPending: 'Foto pendiente: consultorio y equipo médico',
   clinicPhotoPending: 'Foto pendiente: consultorio',
   credentials: 'Formación',
   before: 'Antes',

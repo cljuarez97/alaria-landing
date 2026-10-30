@@ -35,7 +35,6 @@ const jsonLd = {
     name: t.name,
     url: new URL(`tratamientos/${t.slug}/`, siteUrl).href,
   })),
-  employee: { '@type': 'Physician', name: site.doctor.name },
 };
 ---
 <BaseLayout jsonLd={jsonLd}>
@@ -132,8 +131,8 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- Doctora: la sección oscura del ritmo, en wine-deep con oro. -->
-  <section id="doctora" class="section doctor surface-dark on-dark relative isolate overflow-clip" aria-labelledby="doctor-title">
+  <!-- Equipo médico: la sección oscura del ritmo, en wine-deep con oro. -->
+  <section id="equipo" class="section doctor surface-dark on-dark relative isolate overflow-clip" aria-labelledby="doctor-title">
     <div class="container-x grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
       <div class="mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none" data-reveal>
         <PhotoPending label={ui.doctorPhotoPending} />

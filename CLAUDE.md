@@ -1,6 +1,6 @@
 # alaria-landing
 
-Sitio de Alaria Medicina Estética (Dra. Katherine González V.). Astro estático multipágina con experiencia tipo app (ClientRouter + barra inferior en móvil) y PWA.
+Sitio de Alaria Clínica Estética. El nombre de la médica no debe aparecer en el sitio (decisión de la clínica). Astro estático multipágina con experiencia tipo app (ClientRouter + barra inferior en móvil) y PWA.
 
 ## Stack
 
@@ -44,6 +44,6 @@ Revisa `pnpm build`, `pnpm check` y `pnpm test` antes de hacer push.
 
 ## Pendientes conocidos
 
-- Imágenes de ambiente son placeholders; faltan fotos reales de la doctora y del consultorio (`PhotoPending`).
+- Imágenes de ambiente son placeholders; faltan fotos reales del equipo y del consultorio (`PhotoPending`).
 - Datos `[pendiente…]` en `content.ts` (dirección, horario, datos médicos, enlace a Google, aviso legal).
 - El comparador de `/resultados/` usa dos imágenes de ejemplo hasta tener casos con consentimiento.
