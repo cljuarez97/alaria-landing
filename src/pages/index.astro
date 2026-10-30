@@ -40,6 +40,7 @@ const jsonLd = {
   logo: new URL('icon-512.png', siteUrl).href,
   image: new URL('icon-512.png', siteUrl).href,
   telephone: `+${site.whatsapp}`,
+  sameAs: [site.instagram],
   areaServed: { '@type': 'Country', name: 'Guatemala' },
   availableService: treatments.map((t) => ({
     '@type': 'MedicalProcedure',

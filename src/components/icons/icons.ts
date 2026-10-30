@@ -20,6 +20,7 @@ import receiptText from 'lucide-static/icons/receipt-text.svg?raw';
 import shieldCheck from 'lucide-static/icons/shield-check.svg?raw';
 import history from 'lucide-static/icons/history.svg?raw';
 import calendarClock from 'lucide-static/icons/calendar-clock.svg?raw';
+import instagram from './instagram.svg?raw';
 
 export const icons = {
   house,
@@ -43,6 +44,7 @@ export const icons = {
   'shield-check': shieldCheck,
   history,
   'calendar-clock': calendarClock,
+  instagram,
 } as const;
 
 export type IconName = keyof typeof icons;

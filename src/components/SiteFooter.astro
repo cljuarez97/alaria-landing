@@ -31,16 +31,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             }
           </ul>
         </nav>
-        <a
-          href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
-          target="_blank"
-          rel="noopener"
-          class="press inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-paper/25 px-5 font-semibold text-paper transition-colors hover:border-gold"
-        >
-          <Icon name="message-circle" />
-          {home.ctaSecondary}
-          <span class="sr-only">{ui.newTab}</span>
-        </a>
+        <div class="flex flex-wrap items-center gap-3">
+          <a
+            href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+            target="_blank"
+            rel="noopener"
+            class="press inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-paper/25 px-5 font-semibold text-paper transition-colors hover:border-gold"
+          >
+            <Icon name="message-circle" />
+            {home.ctaSecondary}
+            <span class="sr-only">{ui.newTab}</span>
+          </a>
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noopener"
+            class="press inline-flex size-11 items-center justify-center rounded-full border border-paper/25 text-paper transition-colors hover:border-gold"
+          >
+            <Icon name="instagram" />
+            <span class="sr-only">{site.instagramHandle} {ui.instagram} {ui.newTab}</span>
+          </a>
+        </div>
       </div>
     </div>
 

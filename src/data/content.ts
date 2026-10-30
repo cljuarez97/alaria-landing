@@ -7,6 +7,8 @@ export const site = {
     'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Reserva tu cita.',
   whatsapp: '50236038581',
   whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Clínica Estética.',
+  instagram: 'https://www.instagram.com/alaria_gt/',
+  instagramHandle: '@alaria_gt',
   doctor: {
     title: 'Equipo médico',
     bioShort:

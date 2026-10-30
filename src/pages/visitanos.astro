@@ -71,11 +71,18 @@ const mapsUrl = isPending(visit.mapsQuery)
 
         <div class="grid gap-4">
           <p class="t-body text-muted"><Rich text={visit.contactNote} /></p>
-          <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost w-fit">
-            <Icon name="message-circle" />
-            {home.ctaSecondary}
-            <span class="sr-only">{ui.newTab}</span>
-          </a>
+          <div class="flex flex-wrap gap-3">
+            <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost w-fit">
+              <Icon name="message-circle" />
+              {home.ctaSecondary}
+              <span class="sr-only">{ui.newTab}</span>
+            </a>
+            <a href={site.instagram} target="_blank" rel="noopener" class="btn btn-ghost w-fit">
+              <Icon name="instagram" />
+              {site.instagramHandle}
+              <span class="sr-only">{ui.instagram} {ui.newTab}</span>
+            </a>
+          </div>
         </div>
       </div>
 

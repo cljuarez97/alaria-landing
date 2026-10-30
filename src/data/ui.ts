@@ -5,6 +5,7 @@ export const ui = {
   bottomNav: 'Secciones',
   footerNav: 'Enlaces del sitio',
   whatsappFab: 'Escribir por WhatsApp',
+  instagram: 'en Instagram',
   newTab: '(se abre en una pestaña nueva)',
   backToTreatments: 'Todos los tratamientos',
   prevTreatment: 'Anterior',
