@@ -1,5 +1,5 @@
 // Service worker de Alaria. Sube VERSION al cambiar PRECACHE para invalidar cachés viejas.
-const VERSION = 'v4';
+const VERSION = 'v5';
 const BASE = '/alaria-landing/';
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;

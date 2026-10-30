@@ -8,6 +8,7 @@
  *   muted    #6B5A55  cream 5.98 · card 5.43 · paper 6.34
  *   field    #8E7B74  ≥3.1:1 sobre cream/card/paper (bordes de campos, WCAG 1.4.11)
  *   mist     #C9BCB5  charcoal 8.01 (texto secundario en el pie)
+ *   cocoa    #6F4730  cream 7.35 · rose-soft 6.10 · rose 4.93  (marrón oficial del logotipo; solo marca)
  *   gold     #D4AF37  solo líneas, numerales grandes decorativos y acentos (1.93 sobre cream)
  *   danger   #9B2C2C  paper 7.31 · success #2F6B4A paper 6.14
  *
@@ -26,6 +27,7 @@
 @theme {
   --color-*: initial;
   --color-wine: #7a3b4c;
+  --color-cocoa: #6f4730;
   --color-wine-deep: #5e2a39;
   --color-gold: #d4af37;
   --color-gold-ink: #7d6214;

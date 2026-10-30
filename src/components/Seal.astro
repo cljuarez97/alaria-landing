@@ -1,6 +1,8 @@
 ---
-// Sello circular con monograma: la frase rodea una "A" en itálica. Ornamental (aria-hidden):
+// Sello circular: la frase rodea la mariposa del logotipo. Ornamental (aria-hidden):
 // la misma frase aparece como texto real en la página. Texto en gold-ink (5.31:1 sobre cream).
+import butterfly from '../assets/brand/butterfly.svg?raw';
+
 interface Props {
   text: string;
   class?: string;
@@ -10,6 +12,8 @@ const { text, class: className } = Astro.props;
 const id = 'seal-ring-path';
 // La frase da una vuelta completa; textLength la ajusta a la circunferencia (2π·46 ≈ 289).
 const ring = `${text.replace(/\.$/, '')} · `;
+// La mariposa (1068×964) centrada en el disco interior (r=36).
+const mark = butterfly.replace('<svg ', '<svg x="38" y="40" width="44" height="40" class="seal-mono" ');
 ---
 <div class:list={['seal', className]} aria-hidden="true">
   <svg viewBox="0 0 120 120" width="120" height="120">
@@ -23,7 +27,7 @@ const ring = `${text.replace(/\.$/, '')} · `;
         <textPath href={`#${id}`}>{ring}</textPath>
       </text>
     </g>
-    <text x="60" y="60" class="seal-mono" text-anchor="middle" dominant-baseline="central">A</text>
+    <Fragment set:html={mark} />
   </svg>
 </div>
 
@@ -56,10 +60,7 @@ const ring = `${text.replace(/\.$/, '')} · `;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
-  .seal-mono {
-    fill: var(--color-wine);
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 40px;
+  .seal :global(.seal-mono) {
+    color: var(--color-cocoa);
   }
 </style>

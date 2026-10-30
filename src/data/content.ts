@@ -1,19 +1,19 @@
 // Contenido del sitio. Los textos entre [corchetes] son datos pendientes de confirmar con la clínica o la Dra.
 
 export const site = {
-  name: 'Alaria Medicina Estética',
+  name: 'Alaria Clínica Estética',
   tagline: 'Primero valoración, después decisión.',
   description:
     'Medicina estética con criterio médico en Guatemala. La Dra. Katherine González V. evalúa tu caso y define contigo el tratamiento adecuado. Reserva tu cita.',
   whatsapp: '50236038581',
-  whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Medicina Estética.',
+  whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Clínica Estética.',
   doctor: {
     name: 'Dra. Katherine González V.',
     title: 'Médica con enfoque en medicina estética',
     bioShort:
       'Atiende cada caso con criterio médico: evalúa primero, propone después y acompaña el seguimiento. [pendiente: años de experiencia]',
     bioLong: [
-      'La Dra. Katherine González V. atiende en Alaria Medicina Estética.',
+      'La Dra. Katherine González V. atiende en Alaria Clínica Estética.',
       'Cada consulta empieza con tu historial, tus objetivos y una revisión de contraindicaciones. Solo después se decide si un tratamiento tiene sentido en tu caso.',
       '[dato médico pendiente: trayectoria clínica y áreas de especial interés]',
     ],
@@ -36,7 +36,7 @@ export const nav = [
 ];
 
 export const home = {
-  eyebrow: 'Alaria Medicina Estética · Guatemala',
+  eyebrow: 'Alaria Clínica Estética · Guatemala',
   h1: 'Medicina estética con criterio médico en Guatemala',
   lead: 'La Dra. Katherine González V. evalúa tu caso y define contigo qué tratamiento tiene sentido. Empiezas con una valoración, no con un procedimiento.',
   ctaPrimary: 'Reservar mi valoración',
@@ -432,6 +432,6 @@ export const booking = {
 };
 
 export const footer = {
-  note: 'Alaria Medicina Estética. Medicina estética con criterio médico.',
-  legal: '© 2026 Alaria Medicina Estética. [pendiente: aviso legal y número de colegiado]',
+  note: 'Alaria Clínica Estética. Medicina estética con criterio médico.',
+  legal: '© 2026 Alaria Clínica Estética. [pendiente: aviso legal y número de colegiado]',
 };

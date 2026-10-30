@@ -1,5 +1,12 @@
 ---
+// Logotipo oficial: mariposa + letras "Alaria" + "Clínica Estética", vectorizados del arte de la
+// clínica (src/assets/brand/). Proporciones del lockup original: el lema mide el 80 % del ancho
+// de las letras y va centrado debajo.
+import butterfly from '../assets/brand/butterfly.svg?raw';
+import letters from '../assets/brand/letters.svg?raw';
+import tagline from '../assets/brand/tagline.svg?raw';
 import { href } from '../lib/url';
+import { site } from '../data/content';
 
 interface Props {
   tone?: 'dark' | 'light';
@@ -8,16 +15,57 @@ const { tone = 'dark' } = Astro.props;
 ---
 <a
   href={href('/')}
-  class:list={[
-    'press inline-flex min-h-11 flex-col justify-center no-underline',
-    tone === 'dark' ? 'text-wine' : 'text-paper',
-  ]}
+  class:list={['wordmark press inline-flex min-h-11 items-center no-underline', tone === 'light' && 'is-light']}
 >
-  <span class="font-serif text-[1.75rem] leading-none font-medium italic">Alaria</span>{' '}
-  <span
-    class:list={[
-      'mt-1 text-[0.6875rem] font-semibold tracking-[0.16em] uppercase',
-      tone === 'dark' ? 'text-gold-ink' : 'text-mist',
-    ]}>Medicina Estética</span
-  ><span class="sr-only">, inicio</span>
+  <span class="wm-mark" set:html={butterfly} />
+  <span class="wm-type">
+    <span class="wm-letters" set:html={letters} />
+    <span class="wm-tagline" set:html={tagline} />
+  </span>
+  <span class="sr-only">{site.name}, inicio</span>
 </a>
+
+<style>
+  .wordmark {
+    --wm-w: 6.5rem;
+    gap: 0.75rem;
+    color: var(--color-cocoa);
+  }
+  @media (min-width: 64rem) {
+    .wordmark {
+      --wm-w: 7.5rem;
+    }
+  }
+  .wm-mark {
+    display: block;
+    width: calc(var(--wm-w) * 0.42);
+  }
+  .wm-type {
+    display: grid;
+    justify-items: center;
+    gap: calc(var(--wm-w) * 0.045);
+    width: var(--wm-w);
+  }
+  .wm-letters {
+    display: block;
+    width: 100%;
+  }
+  .wm-tagline {
+    display: block;
+    width: 80%;
+  }
+  .wordmark :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .is-light {
+    color: var(--color-paper);
+  }
+  .is-light .wm-mark {
+    color: var(--color-gold);
+  }
+  .is-light .wm-tagline {
+    color: var(--color-mist);
+  }
+</style>
