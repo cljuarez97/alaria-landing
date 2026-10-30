@@ -19,9 +19,9 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 |---|---|---|---|---|
 | 1 | `hero-arch` | Portada de inicio | 4:5 | arched plaster doorway opening onto a calm treatment room, burgundy velvet armchair, brass floor lamp, linen curtain glowing |
 | 2 | `armonizacion-facial` | Armonización facial | 2:3 (vertical) | **Ya hay foto** (`armonizacion-facial.webp`, 1023×1537): no generar. Se recorta a 4:5 en móvil y 1:1 desde 1024px con foco `55% 30%` (`src/data/focus.ts`); si la reemplazas, mantén el rostro entre el 12 % y el 64 % del alto o ajusta el foco. |
-| 3 | `toxina-botulinica` | Toxina botulínica | 3:2 | unlabelled frosted glass vials on a brushed brass tray, crisp shadows, calm symmetry |
+| 3 | `toxina-botulinica` | Toxina botulínica | 3:4 (vertical) | **Ya hay foto** (`toxina-botulinica.webp`, 1024×1365): no generar. Foco `55% 30%`; rostro entre el 17 % y el 62 % del alto. |
 | 4 | `bioestimuladores` | Bioestimuladores | 3:2 | macro of burgundy silk folds under tension, light catching the ridges, abstract |
-| 5 | `calidad-de-piel` | Calidad de piel | 3:2 | clear serum droplets on cream glass, golden backlight, dewy highlights |
+| 5 | `calidad-de-piel` | Calidad de piel | 2:3 (vertical) | **Ya hay foto** (`calidad-de-piel.webp`, 1023×1537): no generar. Foco `50% 18%`; rostro y manos entre el 9 % y el 70 % del alto. |
 | 6 | `contorno-corporal` | Contorno corporal | 3:2 | ivory linen draped over a smooth abstract plaster curve, soft sculptural shadows |
 | 7 | `visitanos-entrada` | Visítanos | 16:9 | burgundy entrance door with brass handle, potted olive tree, leaf shadows on cream wall |
 | 8 | `agendar-escritorio` | Reservar | 4:5 | writing desk with blank cream appointment card, gold fountain pen, dried roses |

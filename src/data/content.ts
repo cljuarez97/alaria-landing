@@ -2,7 +2,7 @@
 
 export const site = {
   name: 'Alaria Clínica Estética',
-  tagline: 'Primero valoración, después decisión.',
+  tagline: 'Realza tu belleza con respaldo médico.',
   description:
     'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Reserva tu cita.',
   whatsapp: '50236038581',
@@ -68,8 +68,8 @@ export const home = {
     intro: 'Así es cada paso, desde la primera consulta hasta el seguimiento.',
     items: [
       {
-        title: 'Decides después de evaluar',
-        text: 'Primero revisamos tu caso. Si un tratamiento tiene sentido, lo decides después, con calma y con toda la información.',
+        title: 'Valoración médica personalizada',
+        text: 'Conocemos tus necesidades, antecedentes y objetivos estéticos, y analizamos tu piel y tu rostro para recomendarte las opciones más adecuadas, con sus beneficios y consideraciones.',
       },
       {
         title: 'Plan y presupuesto antes de empezar',
