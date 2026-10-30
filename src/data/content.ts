@@ -101,7 +101,7 @@ export const home = {
   },
   treatmentsTeaser: {
     title: 'Tratamientos',
-    intro: 'Cinco líneas de trabajo. Todas empiezan con la misma valoración.',
+    intro: 'Cuatro líneas de trabajo. Todas empiezan con la misma valoración.',
   },
   faqTeaser: {
     title: 'Preguntas frecuentes',
@@ -318,53 +318,6 @@ export const treatments: Treatment[] = [
         q: '¿Qué cuidados debo tener después?',
         a: 'Te damos instrucciones por escrito en cada sesión. [dato médico pendiente: protocolo de cuidados posteriores]',
       },
-    ],
-    beforeDeciding,
-  },
-  {
-    slug: 'contorno-corporal',
-    number: '05',
-    name: 'Contorno corporal',
-    short: 'Opciones para zonas localizadas, evaluadas caso por caso.',
-    metaDescription:
-      'Contorno corporal en Guatemala con valoración médica previa. Conoce las opciones para zonas localizadas y qué confirmar antes de decidir.',
-    intro:
-      'Ofrecemos opciones para zonas localizadas. No son un método para bajar de peso, y cada caso se evalúa de forma individual.',
-    forWho: [
-      'Quienes tienen zonas localizadas que no responden a dieta o ejercicio.',
-      'Quienes buscan una opinión médica antes de elegir un método.',
-      'Quienes tienen expectativas realistas sobre el resultado.',
-    ],
-    whatToExpect: [
-      { step: 'Valoración', text: 'Revisamos la zona, tu historial y tus contraindicaciones.' },
-      {
-        step: 'Plan',
-        text: 'Te explicamos las opciones, el número de sesiones orientativo y el resultado realista.',
-      },
-      {
-        step: 'Procedimiento',
-        text: 'Se realiza en consultorio con el equipo o producto confirmado. [dato médico pendiente: técnica y equipo utilizados]',
-      },
-      {
-        step: 'Seguimiento',
-        text: 'Revisamos tu evolución y los cuidados posteriores. [dato médico pendiente: citas de control]',
-      },
-    ],
-    facts: [
-      { label: 'Duración', value: '[dato médico pendiente: duración del procedimiento]' },
-      { label: 'Sesiones', value: '[dato médico pendiente: número de sesiones]' },
-      { label: 'Recuperación', value: '[dato médico pendiente: molestias esperables y tiempo de recuperación]' },
-    ],
-    faq: [
-      {
-        q: '¿Sirve para bajar de peso?',
-        a: 'No. Son opciones para zonas localizadas. Te explicamos sus límites en la valoración.',
-      },
-      {
-        q: '¿Cuántas sesiones necesito?',
-        a: 'Depende de la zona y del plan. [dato médico pendiente: número de sesiones orientativo]',
-      },
-      { q: '¿Duele?', a: 'Depende de la técnica y de la persona. [dato médico pendiente: manejo de molestias]' },
     ],
     beforeDeciding,
   },

@@ -6,7 +6,6 @@ import armonizacionFacial from '../assets/ambient/armonizacion-facial.webp';
 import toxinaBotulinica from '../assets/ambient/toxina-botulinica.webp';
 import bioestimuladores from '../assets/ambient/bioestimuladores.jpg';
 import calidadDePiel from '../assets/ambient/calidad-de-piel.webp';
-import contornoCorporal from '../assets/ambient/contorno-corporal.jpg';
 import visitanosEntrada from '../assets/ambient/visitanos-entrada.jpg';
 import agendarEscritorio from '../assets/ambient/agendar-escritorio.jpg';
 import resultadosCortina from '../assets/ambient/resultados-cortina.jpg';
@@ -18,7 +17,6 @@ export const images = {
   'toxina-botulinica': toxinaBotulinica,
   bioestimuladores,
   'calidad-de-piel': calidadDePiel,
-  'contorno-corporal': contornoCorporal,
   'visitanos-entrada': visitanosEntrada,
   'agendar-escritorio': agendarEscritorio,
   'resultados-cortina': resultadosCortina,
