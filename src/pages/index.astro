@@ -7,6 +7,8 @@ import FaqList from '../components/FaqList.astro';
 import PhotoPending from '../components/PhotoPending.astro';
 import TreatmentShowcase from '../components/TreatmentShowcase.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Ornament from '../components/Ornament.astro';
+import Seal from '../components/Seal.astro';
 import { faq, home, site, treatments } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
@@ -37,78 +39,92 @@ const jsonLd = {
 };
 ---
 <BaseLayout jsonLd={jsonLd}>
-  <!-- Hero -->
-  <section class="container-x hero grid items-center gap-x-12 gap-y-14 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
-    <div class="lg:col-span-7">
-      <p class="t-eyebrow">{home.eyebrow}</p>
-      <h1 class="t-display mt-5 max-w-[14ch] text-charcoal">
-        {
-          hasAccent ? (
-            <Fragment>
-              {h1Before}
-              <em class="t-accent text-wine">{accent}</em>
-              {h1After}
-            </Fragment>
-          ) : (
-            home.h1
-          )
-        }
-      </h1>
-      <p class="t-lead mt-6 text-charcoal/85">{home.lead}</p>
-      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <a href={href('/agendar/')} class="btn btn-primary">
-          {home.ctaPrimary}
-          <Icon name="arrow-right" />
-        </a>
-        <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost">
-          <Icon name="message-circle" />
-          {home.ctaSecondary}
-          <span class="sr-only">{ui.newTab}</span>
-        </a>
-      </div>
-      <a href={href('/tratamientos/')} class="link mt-4">
-        {home.ctaTertiary}
-        <Icon name="arrow-right" class="icon-forward" />
-      </a>
-    </div>
-
-    <figure class="hero-figure mx-auto w-full max-w-[22rem] sm:max-w-[26rem] lg:col-span-5 lg:max-w-none">
-      <div class="arch">
-        <div class="arch-media" style="aspect-ratio:4/5">
-          <Picture
-            src={images['hero-arch']}
-            alt=""
-            widths={[360, 540, 720, 960]}
-            sizes="(min-width: 1024px) 28rem, (min-width: 640px) 26rem, 22rem"
-            formats={['avif', 'webp']}
-            loading="eager"
-            fetchpriority="high"
-            decoding="sync"
-          />
+  <!-- Hero: texto a la izquierda, ventana en arco sobre un panel rosa a la derecha. -->
+  <section class="hero relative isolate overflow-clip">
+    <div class="container-x grid items-center gap-x-12 gap-y-16 pt-6 pb-[var(--section)] lg:grid-cols-12 lg:pt-12">
+      <div class="lg:col-span-7">
+        <p class="t-eyebrow hero-in" style="--d:0">{home.eyebrow}</p>
+        <Ornament class="hero-in mt-4" />
+        <h1 class="t-hero mt-5 max-w-[13ch] text-charcoal">
+          {
+            hasAccent ? (
+              <Fragment>
+                {h1Before}
+                <em class="t-accent text-wine">{accent}</em>
+                {h1After}
+              </Fragment>
+            ) : (
+              home.h1
+            )
+          }
+        </h1>
+        <p class="t-lead hero-in mt-6 max-w-[38ch] text-charcoal/85" style="--d:1">{home.lead}</p>
+        <div class="hero-in mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center" style="--d:2">
+          <a href={href('/agendar/')} class="btn btn-primary btn-signature">
+            {home.ctaPrimary}
+            <Icon name="arrow-right" />
+          </a>
+          <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost btn-tall">
+            <Icon name="message-circle" />
+            {home.ctaSecondary}
+            <span class="sr-only">{ui.newTab}</span>
+          </a>
         </div>
+        <ul class="hero-in hero-points mt-8" style="--d:3" role="list">
+          {
+            home.approach.pillars.map((p) => (
+              <li>
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
+                </svg>
+                {p.title}
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <figcaption class="mt-8 text-center font-serif text-2xl text-gold-ink italic">{site.tagline}</figcaption>
-    </figure>
+
+      <figure class="hero-figure relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:col-span-5 lg:max-w-none">
+        <span class="hero-backdrop" aria-hidden="true"></span>
+        <div class="arch hero-arch-line">
+          <div class="arch-media hero-photo" style="aspect-ratio:4/5">
+            <Picture
+              src={images['hero-arch']}
+              alt=""
+              widths={[360, 540, 720, 960]}
+              sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 20rem"
+              formats={['avif', 'webp']}
+              loading="eager"
+              fetchpriority="high"
+              decoding="sync"
+            />
+          </div>
+        </div>
+        <Seal text={site.tagline} class="hero-seal" />
+        <figcaption class="hero-in mt-10 text-center font-serif text-2xl text-gold-ink italic" style="--d:4">{site.tagline}</figcaption>
+      </figure>
+    </div>
   </section>
 
-  <!-- Cómo trabajamos -->
-  <section class="section border-t border-line" aria-labelledby="approach-title">
-    <div class="container-x grid gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-5">
-        <div class="lg:sticky lg:top-10">
-          <h2 id="approach-title" class="t-h2">{home.approach.title}</h2>
-          <p class="t-body mt-5 text-muted">{home.approach.intro}</p>
+  <!-- Cómo trabajamos: banda rosa, tres pasos con numeral bajo arco. -->
+  <section class="section surface-rose on-rose" aria-labelledby="approach-title">
+    <div class="container-x">
+      <div class="grid gap-6 lg:grid-cols-12 lg:items-end" data-reveal>
+        <div class="lg:col-span-6">
+          <Ornament reveal />
+          <h2 id="approach-title" class="t-h2 mt-5">{home.approach.title}</h2>
         </div>
+        <p class="t-body text-wine-deep lg:col-span-6 lg:pb-1">{home.approach.intro}</p>
       </div>
-      <ol class="grid gap-0 lg:col-span-7" role="list">
+      <ol class="steps mt-14 grid gap-10 md:grid-cols-3 md:gap-8 lg:mt-20" role="list">
         {
           home.approach.pillars.map((p, i) => (
-            <li class="grid grid-cols-[4.5rem_1fr] gap-x-4 border-t border-line py-8 first:border-t-0 first:pt-0 sm:grid-cols-[6rem_1fr]">
-              <span class="numeral text-[clamp(2.75rem,2.2rem+2vw,4rem)]" data-n={String(i + 1).padStart(2, '0')} aria-hidden="true"></span>
-              <div>
-                <h3 class="t-h3">{p.title}</h3>
-                <p class="t-body mt-3">{p.text}</p>
-              </div>
+            <li class="step" data-reveal style={`--d:${i}`}>
+              <span class="arch-numeral" aria-hidden="true">
+                <span class="numeral text-[2.5rem]" data-n={String(i + 1).padStart(2, '0')}></span>
+              </span>
+              <h3 class="t-h3 mt-6">{p.title}</h3>
+              <p class="t-body mt-3 text-charcoal">{p.text}</p>
             </li>
           ))
         }
@@ -116,14 +132,17 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- Doctora -->
-  <section id="doctora" class="section bg-card" aria-labelledby="doctor-title">
+  <!-- Doctora: la sección oscura del ritmo, en wine-deep con oro. -->
+  <section id="doctora" class="section doctor surface-dark on-dark relative isolate overflow-clip" aria-labelledby="doctor-title">
     <div class="container-x grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-      <PhotoPending label={ui.doctorPhotoPending} class="mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none" />
-      <div class="lg:col-span-7 lg:pt-6">
+      <div class="mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none" data-reveal>
+        <PhotoPending label={ui.doctorPhotoPending} />
+      </div>
+      <div class="lg:col-span-7 lg:pt-6" data-reveal style="--d:1">
         <p class="t-eyebrow">{site.doctor.title}</p>
-        <h2 id="doctor-title" class="t-h2 mt-4">{home.doctorTeaser.title}</h2>
-        <p class="t-lead mt-6"><Rich text={home.doctorTeaser.text} /></p>
+        <Ornament class="mt-4" />
+        <h2 id="doctor-title" class="t-h2 mt-5">{home.doctorTeaser.title}</h2>
+        <p class="t-lead mt-6 text-cream"><Rich text={home.doctorTeaser.text} /></p>
 
         <details class="more details-reveal mt-8">
           <summary class="link">
@@ -131,7 +150,7 @@ const jsonLd = {
             <Icon name="plus" class="more-icon" />
           </summary>
           <div class="more-body details-reveal-body">
-            <div class="grid gap-4 pt-4">
+            <div class="grid gap-4 pt-4 text-cream">
               {
                 site.doctor.bioLong.map((para) => (
                   <p class="t-body">
@@ -139,7 +158,7 @@ const jsonLd = {
                   </p>
                 ))
               }
-              <h3 class="t-h3 mt-6">{ui.credentials}</h3>
+              <h3 class="t-h3 mt-6 text-paper">{ui.credentials}</h3>
               <ul class="grid gap-2" role="list">
                 {
                   site.doctor.credentials.map((c) => (
@@ -155,6 +174,11 @@ const jsonLd = {
             </div>
           </div>
         </details>
+
+        <a href={href('/agendar/')} class="btn btn-light btn-signature mt-10 w-full sm:w-fit">
+          {home.ctaPrimary}
+          <Icon name="arrow-right" />
+        </a>
       </div>
     </div>
   </section>
@@ -162,9 +186,10 @@ const jsonLd = {
   <!-- Tratamientos -->
   <section class="section" aria-labelledby="treatments-title">
     <div class="container-x">
-      <div class="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between" data-reveal>
         <div>
-          <h2 id="treatments-title" class="t-h2">{home.treatmentsTeaser.title}</h2>
+          <Ornament reveal />
+          <h2 id="treatments-title" class="t-h2 mt-5">{home.treatmentsTeaser.title}</h2>
           <p class="t-body mt-4 text-muted">{home.treatmentsTeaser.intro}</p>
         </div>
         <a href={href('/tratamientos/')} class="link">
@@ -177,10 +202,13 @@ const jsonLd = {
   </section>
 
   <!-- Preguntas frecuentes -->
-  <section class="section border-t border-line" aria-labelledby="faq-title">
+  <section class="section surface-rose on-rose" aria-labelledby="faq-title">
     <div class="container-x grid gap-10 lg:grid-cols-12">
-      <h2 id="faq-title" class="t-h2 lg:col-span-4">{home.faqTeaser.title}</h2>
-      <div class="lg:col-span-8">
+      <div class="lg:col-span-4" data-reveal>
+        <Ornament reveal />
+        <h2 id="faq-title" class="t-h2 mt-5">{home.faqTeaser.title}</h2>
+      </div>
+      <div class="lg:col-span-8" data-reveal style="--d:1">
         <FaqList items={faq} />
       </div>
     </div>
@@ -190,6 +218,117 @@ const jsonLd = {
 </BaseLayout>
 
 <style>
+  /* Panel rosa que sangra hasta el borde derecho: da color al hero sin tapar el texto. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: auto 0 0 0;
+    height: 38%;
+    background: var(--color-rose-soft);
+  }
+  @media (min-width: 64rem) {
+    .hero::before {
+      inset: 2.5rem 0 0 auto;
+      width: 36%;
+      height: auto;
+      border-top-left-radius: 14rem;
+    }
+  }
+  .t-hero {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2.75rem, 1.9rem + 4.2vw, 5.25rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+  }
+  .btn-tall {
+    min-height: 3.5rem;
+  }
+  .hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-wine-deep);
+  }
+  .hero-points li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero-points svg {
+    color: var(--color-gold);
+  }
+  /* Arco rosa desplazado detrás de la foto: profundidad sin sombras genéricas. */
+  .hero-backdrop {
+    position: absolute;
+    z-index: -1;
+    inset: 12% -10% 18% 14%;
+    border-radius: 999px 999px 2px 2px;
+    background: var(--color-rose);
+  }
+  .hero-figure :global(.hero-seal) {
+    position: absolute;
+    left: -1.25rem;
+    top: 62%;
+  }
+  @media (min-width: 64rem) {
+    /* No más que el gap de columnas (3rem): si no, tapa el lead entre 1024 y 1240px. */
+    .hero-figure :global(.hero-seal) {
+      left: -2.25rem;
+    }
+  }
+
+  /* Pasos: en tablet/escritorio un hilo de oro une los arcos. */
+  .steps {
+    position: relative;
+  }
+  @media (min-width: 48rem) {
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 4.5rem;
+      right: 0;
+      top: 2.5rem;
+      height: 1px;
+      background: color-mix(in oklab, var(--color-gold) 70%, transparent);
+    }
+  }
+  .step {
+    position: relative;
+  }
+  .step .arch-numeral {
+    background: var(--color-rose-soft);
+  }
+  /* El oro sobre rosa da 1.6:1; gold-ink (4.41:1 a 40px) sí se lee. */
+  .step .numeral {
+    color: var(--color-gold-ink);
+  }
+
+  /* Arco de oro en la esquina de la sección oscura, eco del hero. */
+  .doctor::before {
+    display: none;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: -8rem;
+    bottom: -10rem;
+    width: 26rem;
+    height: 34rem;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 45%, transparent);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+  /* En móvil el arco cruzaría el texto: solo a partir de escritorio. */
+  @media (min-width: 64rem) {
+    .doctor::before {
+      display: block;
+    }
+  }
+
   .more summary {
     list-style: none;
     cursor: pointer;

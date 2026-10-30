@@ -7,6 +7,7 @@ import { booking, site, treatments } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { whatsappUrl } from '../lib/url';
+import Ornament from '../components/Ornament.astro';
 import { calPublicUrl, parseCalLink } from '../lib/cal';
 
 const f = booking.form;
@@ -38,8 +39,9 @@ const messages = {
     ]}
   >
     <div class="lg:col-span-7">
-      <h1 class="t-display">{booking.title}</h1>
-      <p class="t-lead mt-6">{calLink ? booking.calendar.intro : booking.intro}</p>
+      <Ornament class="hero-in" />
+      <h1 class="t-display mt-5">{booking.title}</h1>
+      <p class="t-lead hero-in mt-6" style="--d:1">{calLink ? booking.calendar.intro : booking.intro}</p>
       <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link mt-4">
         <Icon name="message-circle" />
         {booking.whatsappAlt}

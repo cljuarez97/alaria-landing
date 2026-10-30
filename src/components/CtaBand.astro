@@ -1,6 +1,7 @@
 ---
-// Cierre de página: reservar + alternativa por WhatsApp, sobre vino.
+// Cierre de página: reservar + alternativa por WhatsApp, sobre vino, con el arco del hero como eco.
 import Icon from './Icon.astro';
+import Ornament from './Ornament.astro';
 import { booking, home, site } from '../data/content';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
@@ -12,13 +13,16 @@ interface Props {
 const { title = booking.title, text = booking.intro } = Astro.props;
 ---
 <section class="cta-band on-dark bg-wine text-paper" aria-labelledby="cta-band-title">
-  <div class="container-x grid gap-10 py-[clamp(3.5rem,2.5rem+4vw,6rem)] lg:grid-cols-[1.4fr_1fr] lg:items-end">
+  <span class="cta-arch" aria-hidden="true"></span>
+  <span class="cta-arch-line" aria-hidden="true"></span>
+  <div class="container-x relative grid gap-10 py-[clamp(4rem,2.5rem+5vw,7rem)] lg:grid-cols-[1.4fr_1fr] lg:items-end" data-reveal>
     <div>
-      <h2 id="cta-band-title" class="t-h2 max-w-[18ch]">{title}</h2>
+      <Ornament reveal />
+      <h2 id="cta-band-title" class="t-h2 cta-title mt-6 max-w-[16ch]">{title}</h2>
       <p class="t-body mt-5 text-card">{text}</p>
     </div>
-    <div class="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-start">
-      <a href={href('/agendar/')} class="btn btn-light">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-start">
+      <a href={href('/agendar/')} class="btn btn-light btn-signature w-full sm:w-fit">
         {home.ctaPrimary}
         <Icon name="arrow-right" />
       </a>
@@ -26,7 +30,7 @@ const { title = booking.title, text = booking.intro } = Astro.props;
         href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
         target="_blank"
         rel="noopener"
-        class="link text-paper decoration-paper/40 hover:decoration-paper"
+        class="link"
       >
         <Icon name="message-circle" />
         {home.ctaSecondary}
@@ -39,18 +43,30 @@ const { title = booking.title, text = booking.intro } = Astro.props;
 <style>
   .cta-band {
     position: relative;
+    isolation: isolate;
     overflow: clip;
   }
-  /* Arco de oro como eco del hero, puramente decorativo. */
-  .cta-band::before {
-    content: '';
+  .cta-title {
+    font-size: clamp(2.25rem, 1.7rem + 2.6vw, 3.5rem);
+  }
+  /* Arco relleno en wine-deep y, desplazado, un arco de oro: profundidad sin sombras. */
+  .cta-arch,
+  .cta-arch-line {
     position: absolute;
-    right: -6rem;
-    top: 2.5rem;
-    width: 22rem;
-    height: 32rem;
-    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    z-index: -1;
+    width: clamp(14rem, 10rem + 14vw, 24rem);
+    aspect-ratio: 2 / 3;
     border-radius: 999px 999px 0 0;
     pointer-events: none;
+  }
+  .cta-arch {
+    right: clamp(-7rem, -2rem - 6vw, -1rem);
+    bottom: -4rem;
+    background: var(--color-wine-deep);
+  }
+  .cta-arch-line {
+    right: clamp(-5rem, 0rem - 6vw, 1rem);
+    bottom: -2.5rem;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 65%, transparent);
   }
 </style>

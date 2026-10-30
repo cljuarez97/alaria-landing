@@ -10,6 +10,18 @@
  *   mist     #C9BCB5  charcoal 8.01 (texto secundario en el pie)
  *   gold     #D4AF37  solo líneas, numerales grandes decorativos y acentos (1.93 sobre cream)
  *   danger   #9B2C2C  paper 7.31 · success #2F6B4A paper 6.14
+ *
+ * Rosa vintage (rosa empolvado), para superficies, fondos de sección y ornamentos:
+ *   rose-soft #F2DCD7  fondo de sección. Sobre él: charcoal 11.30 · wine 6.25 · wine-deep 8.57
+ *                      · muted 4.97 · field 3.05. gold-ink 4.41 NO llega a 4.5: en superficies
+ *                      rosadas el texto pequeño de acento va en wine (lo hace .on-rose).
+ *   rose      #E6C3BD  paneles y formas (arco del hero, relleno de filas). Sobre él: charcoal 9.12
+ *                      · wine 5.05 · wine-deep 6.92. muted 4.01 y gold-ink 3.56 no: solo vino/carbón.
+ *   rose-deep #A5636C  solo ornamento, líneas y texto ≥24px: cream 4.19 · paper 4.43 · rose-soft 3.48
+ *                      (≥3:1 vale como componente gráfico, WCAG 1.4.11).
+ *
+ * Sección oscura (wine-deep #5E2A39): paper 10.93 · cream 10.32 · mist 6.08 · gold 5.35
+ *   (aquí el oro sí sirve como texto, también pequeño). gold sobre wine: 3.90, solo ≥24px.
  */
 @theme {
   --color-*: initial;
@@ -25,6 +37,9 @@
   --color-field: #8e7b74;
   --color-mist: #c9bcb5;
   --color-line: #e3d2c7;
+  --color-rose: #e6c3bd;
+  --color-rose-soft: #f2dcd7;
+  --color-rose-deep: #a5636c;
   --color-danger: #9b2c2c;
   --color-success: #2f6b4a;
 
@@ -456,11 +471,20 @@
   .faq-icon {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
     flex: none;
+    border-radius: 999px;
     color: var(--color-wine);
-    transition: transform var(--dur-state) var(--ease-out-quart);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 80%, transparent);
+    transition:
+      transform var(--dur-state) var(--ease-out-quart),
+      background-color var(--dur-state) var(--ease-out-quart);
+  }
+  .faq-item[open] .faq-icon {
+    background: var(--color-wine);
+    color: var(--color-paper);
+    box-shadow: none;
   }
   .faq-item[open] .faq-icon {
     transform: rotate(45deg);
@@ -470,6 +494,12 @@
   .faq-item[open] .faq-body > div,
   .details-reveal[open] .details-reveal-body {
     animation: details-in 240ms var(--ease-out-quart);
+  }
+  .faq-item:not([open]) summary:hover .faq-icon {
+    background: color-mix(in oklab, var(--color-wine) 8%, transparent);
+  }
+  .on-rose .faq-item {
+    border-color: color-mix(in oklab, var(--color-rose-deep) 40%, transparent);
   }
   .faq-body > div {
     padding-bottom: 1.25rem;
@@ -520,6 +550,234 @@
   }
   100% {
     --p: 0.5;
+  }
+}
+
+/* ---------- Superficies: rosa vintage y sección oscura ---------- */
+@layer components {
+  .surface-rose {
+    background: var(--color-rose-soft);
+  }
+  /* En rosa, gold-ink no llega a 4.5:1: el acento pequeño pasa a vino. */
+  .on-rose .t-eyebrow {
+    color: var(--color-wine);
+  }
+  .surface-dark {
+    background: var(--color-wine-deep);
+    color: var(--color-paper);
+  }
+  /* Sobre wine-deep el oro sí es legible (5.35:1). */
+  .on-dark .t-eyebrow {
+    color: var(--color-gold);
+  }
+  .on-dark .link {
+    color: var(--color-paper);
+    text-decoration-color: color-mix(in oklab, var(--color-gold) 70%, transparent);
+  }
+  .on-dark .link:hover {
+    text-decoration-color: var(--color-gold);
+  }
+  .on-dark .btn-ghost {
+    color: var(--color-paper);
+    box-shadow: inset 0 0 0 1px var(--color-gold);
+  }
+  .on-dark .btn-ghost:hover {
+    background: color-mix(in oklab, var(--color-gold) 14%, transparent);
+  }
+
+  /* ---------- Botones: más presencia en el CTA principal ---------- */
+  .btn-primary,
+  .btn-light {
+    box-shadow: 0 10px 24px -14px color-mix(in oklab, var(--color-wine-deep) 85%, transparent);
+  }
+  .btn-primary .icon,
+  .btn-light .icon {
+    transition: transform var(--dur-state) var(--ease-out-quart);
+  }
+  .btn-primary:hover .icon,
+  .btn-light:hover .icon {
+    transform: translateX(3px);
+  }
+  /* Hilo de oro interior: firma del CTA principal, no un segundo borde (es un inset en el propio botón). */
+  .btn-signature {
+    position: relative;
+    min-height: 3.5rem;
+    padding-inline: 1.75rem;
+    font-size: 1.0625rem;
+  }
+  .btn-signature::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 1px;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 55%, transparent);
+    opacity: 0;
+    transform: scale(0.96);
+    transition:
+      opacity var(--dur-state) var(--ease-out-quart),
+      transform var(--dur-state) var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .btn-signature:hover::after,
+  .btn-signature:focus-visible::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------- Ornamentos dorados ---------- */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--color-gold);
+  }
+  .ornament-line {
+    height: 1px;
+    width: 2.5rem;
+    background: currentColor;
+    transform-origin: left center;
+  }
+  .ornament-line:last-child {
+    transform-origin: right center;
+  }
+  .ornament svg {
+    flex: none;
+  }
+  .ornament-center {
+    justify-content: center;
+  }
+
+  /* Encabezado de página interior: banda rosa con arco dorado. */
+  .page-head {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+  }
+  .page-head::before,
+  .page-head::after {
+    display: none;
+  }
+  /* Desde 1024px: en tablet el arco cruza el lead. */
+  @media (min-width: 64rem) {
+    .page-head::before,
+    .page-head::after {
+      display: block;
+    }
+  }
+  .page-head::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    right: clamp(-10rem, -6rem - 4vw, -4rem);
+    top: 1.5rem;
+    width: clamp(16rem, 12rem + 18vw, 30rem);
+    aspect-ratio: 3 / 4;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 70%, transparent);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+  .page-head::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    right: clamp(-8rem, -4rem - 4vw, -2rem);
+    top: 4rem;
+    width: clamp(12rem, 9rem + 14vw, 24rem);
+    aspect-ratio: 3 / 4;
+    background: var(--color-rose);
+    border-radius: 999px 999px 0 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  /* Numeral con arco: el número de paso descansa bajo un medio arco de oro. */
+  .arch-numeral {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 5rem;
+    padding-top: 0.75rem;
+  }
+  .arch-numeral::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--color-gold);
+    border-bottom: 0;
+    border-radius: 999px 999px 0 0;
+  }
+}
+
+/* ---------- Revelado al hacer scroll ----------
+   Solo se oculta si hay JS (clase .js en <html>, la pone un script inline) y el usuario no pide
+   movimiento reducido. Sin JS o con reduce, todo está visible desde el principio. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 700ms var(--ease-out-quart),
+      transform 900ms var(--ease-out-expo);
+    transition-delay: calc(var(--d, 0) * 90ms);
+  }
+  .js [data-reveal='fade'] {
+    transform: none;
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+  /* Los filetes de oro se dibujan desde el centro al aparecer su sección. */
+  .js [data-reveal] .ornament-line,
+  .js [data-reveal].ornament .ornament-line {
+    transform: scaleX(0);
+    transition: transform 900ms var(--ease-out-expo) 200ms;
+  }
+  .js [data-reveal].is-in .ornament-line,
+  .js [data-reveal].ornament.is-in .ornament-line {
+    transform: none;
+  }
+
+  /* Entrada del hero en la carga (CSS puro, no depende del JS). El h1 no se anima en opacidad
+     para no retrasar el LCP; solo los elementos de apoyo. */
+  .hero-in {
+    animation: alaria-rise 900ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--d, 0) * 110ms + 80ms);
+  }
+  .hero-arch-line {
+    animation: alaria-arch-in 1400ms var(--ease-out-expo) both 200ms;
+  }
+  .hero-photo img {
+    animation: alaria-settle 1600ms var(--ease-out-expo) both;
+  }
+  /* Una sola vuelta de entrada: un giro infinito no tendría forma de pausarse (WCAG 2.2.2). */
+  .seal-ring {
+    animation: alaria-spin 4.5s var(--ease-out-expo) 1 both 300ms;
+    transform-origin: 50% 50%;
+  }
+}
+
+@keyframes alaria-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+}
+@keyframes alaria-arch-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.97);
+  }
+}
+@keyframes alaria-settle {
+  from {
+    transform: scale(1.08);
+  }
+}
+@keyframes alaria-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

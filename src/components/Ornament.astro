@@ -1,0 +1,21 @@
+---
+// Filete de oro: línea · rombo · línea. Decorativo; con `reveal` las líneas se dibujan al entrar en vista.
+interface Props {
+  align?: 'start' | 'center';
+  reveal?: boolean;
+  class?: string;
+}
+const { align = 'start', reveal = false, class: className } = Astro.props;
+---
+<div
+  class:list={['ornament', { 'ornament-center': align === 'center' }, className]}
+  aria-hidden="true"
+  data-reveal={reveal ? 'fade' : undefined}
+>
+  {align === 'center' && <span class="ornament-line"></span>}
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M7 1 13 7 7 13 1 7Z" stroke="currentColor" stroke-width="1" />
+    <circle cx="7" cy="7" r="1.25" fill="currentColor" />
+  </svg>
+  <span class="ornament-line"></span>
+</div>

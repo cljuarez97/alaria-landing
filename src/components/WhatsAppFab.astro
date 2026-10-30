@@ -25,6 +25,14 @@ import { whatsappUrl } from '../lib/url';
       transform var(--dur-press) var(--ease-out-quart),
       background-color var(--dur-state) var(--ease-out-quart);
   }
+  /* Anillo de foco a dos tonos: el FAB flota sobre fondos claros y oscuros. */
+  .wa-fab:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 6px var(--color-charcoal),
+      0 10px 24px -10px color-mix(in oklab, var(--color-wine-deep) 70%, transparent);
+  }
   .wa-fab:hover {
     background: var(--color-wine-deep);
   }

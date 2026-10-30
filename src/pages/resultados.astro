@@ -5,6 +5,7 @@ import BeforeAfter from '../components/BeforeAfter.astro';
 import Rich from '../components/Rich.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Ornament from '../components/Ornament.astro';
 import { home, results } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
@@ -30,8 +31,11 @@ const tabs = [
       />
     </div>
     <header class="mt-10 grid gap-6 lg:mt-14 lg:grid-cols-12">
-      <h1 class="t-display lg:col-span-5">{results.title}</h1>
-      <p class="t-lead lg:col-span-7 lg:pt-3">{results.intro}</p>
+      <div class="lg:col-span-5">
+        <Ornament class="hero-in" />
+        <h1 class="t-display mt-5">{results.title}</h1>
+      </div>
+      <p class="t-lead hero-in lg:col-span-7 lg:pt-12" style="--d:1">{results.intro}</p>
     </header>
   </section>
 
@@ -68,7 +72,8 @@ const tabs = [
             caption={ui.compareHint}
           />
         </div>
-        <div class="grid gap-6 lg:col-span-4 lg:pt-2">
+        <div class="grid gap-6 lg:col-span-4 lg:pt-2" data-reveal>
+          <Ornament reveal />
           <p class="font-serif text-2xl leading-snug text-wine italic">{results.beforeAfter.emptyState}</p>
           <p class="t-small text-muted">{results.beforeAfter.consentNote}</p>
           <a href={href('/agendar/')} class="link">
@@ -81,7 +86,7 @@ const tabs = [
 
     <div id="panel-opiniones" class="tab-panel mt-12" data-panel>
       <h2 class="t-h2 panel-title">{results.testimonials.title}</h2>
-      <div class="empty mt-8 grid items-center gap-10 border-y border-line py-12 lg:grid-cols-12">
+      <div class="empty surface-rose on-rose mt-8 grid items-center gap-10 px-6 py-12 sm:px-10 lg:grid-cols-12">
         <span class="numeral text-center text-[6rem] lg:col-span-3" data-n={"“"} aria-hidden="true"></span>
         <div class="grid gap-5 lg:col-span-9">
           <p class="font-serif text-2xl leading-snug text-wine italic">{results.testimonials.emptyState}</p>

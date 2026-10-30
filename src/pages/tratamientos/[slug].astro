@@ -6,6 +6,7 @@ import Rich from '../../components/Rich.astro';
 import FaqList from '../../components/FaqList.astro';
 import FramedPicture from '../../components/FramedPicture.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Ornament from '../../components/Ornament.astro';
 import { treatments, type Treatment } from '../../data/content';
 import { treatmentImage } from '../../data/images';
 import { ui } from '../../data/ui';
@@ -38,11 +39,12 @@ const { treatment: t, prev, next } = Astro.props;
           <Icon name="arrow-left" />
           {ui.backToTreatments}
         </a>
-        <span class="numeral mt-8 block text-[clamp(3.5rem,2.8rem+3vw,5.5rem)]" data-n={t.number} aria-hidden="true"></span>
+        <Ornament class="hero-in mt-8" />
+        <span class="numeral mt-6 block text-[clamp(3.5rem,2.8rem+3vw,5.5rem)]" data-n={t.number} aria-hidden="true"></span>
         <h1 class="t-display mt-3">
           <span class="block" transition:name={`tx-title-${t.slug}`}>{t.name}</span>
         </h1>
-        <p class="t-lead mt-6">{t.intro}</p>
+        <p class="t-lead hero-in mt-6" style="--d:1">{t.intro}</p>
       </div>
       <FramedPicture
         src={treatmentImage(t.slug)}
@@ -56,13 +58,13 @@ const { treatment: t, prev, next } = Astro.props;
     </header>
 
     <!-- Datos clave -->
-    <div class="border-y border-line bg-paper">
-      <dl class="container-x grid divide-line sm:grid-cols-3 sm:divide-x max-sm:divide-y">
+    <div class="surface-dark on-dark">
+      <dl class="container-x grid divide-paper/15 sm:grid-cols-3 sm:divide-x max-sm:divide-y" data-reveal>
         {
           t.facts.map((f) => (
-            <div class="py-7 sm:px-8 sm:first:pl-0 sm:last:pr-0">
+            <div class="py-8 sm:px-8 sm:first:pl-0 sm:last:pr-0">
               <dt class="t-eyebrow">{f.label}</dt>
-              <dd class="mt-2">
+              <dd class="mt-2 text-cream">
                 <Rich text={f.value} />
               </dd>
             </div>
@@ -74,8 +76,9 @@ const { treatment: t, prev, next } = Astro.props;
     <!-- Para quién + Qué esperar -->
     <section class="section">
       <div class="container-x grid gap-16 lg:grid-cols-12">
-        <div class="lg:col-span-5">
-          <h2 id="forwho-title" class="t-h2">{ui.forWho}</h2>
+        <div class="lg:col-span-5" data-reveal>
+          <Ornament reveal />
+          <h2 id="forwho-title" class="t-h2 mt-5">{ui.forWho}</h2>
           <ul class="mt-8 grid gap-4" role="list">
             {
               t.forWho.map((item) => (
@@ -87,7 +90,7 @@ const { treatment: t, prev, next } = Astro.props;
             }
           </ul>
         </div>
-        <div class="lg:col-span-7">
+        <div class="lg:col-span-7" data-reveal style="--d:1">
           <h2 id="expect-title" class="t-h2">{ui.whatToExpect}</h2>
           <ol class="mt-8" role="list">
             {
@@ -109,8 +112,8 @@ const { treatment: t, prev, next } = Astro.props;
     </section>
 
     <!-- Antes de decidir -->
-    <section class="bg-card py-[clamp(3rem,2.5rem+3vw,5rem)]" aria-labelledby="before-title">
-      <div class="container-x grid gap-8 lg:grid-cols-12">
+    <section class="surface-rose on-rose py-[clamp(3.5rem,2.5rem+4vw,6rem)]" aria-labelledby="before-title">
+      <div class="container-x grid gap-8 lg:grid-cols-12" data-reveal>
         <h2 id="before-title" class="t-h2 lg:col-span-5">{ui.beforeDeciding}</h2>
         <ul class="grid gap-4 lg:col-span-7" role="list">
           {
@@ -128,7 +131,10 @@ const { treatment: t, prev, next } = Astro.props;
     <!-- Preguntas del tratamiento -->
     <section class="section" aria-labelledby="txfaq-title">
       <div class="container-x grid gap-10 lg:grid-cols-12">
-        <h2 id="txfaq-title" class="t-h2 lg:col-span-4">{ui.treatmentFaq}</h2>
+        <div class="lg:col-span-4" data-reveal>
+          <Ornament reveal />
+          <h2 id="txfaq-title" class="t-h2 mt-5">{ui.treatmentFaq}</h2>
+        </div>
         <div class="lg:col-span-8">
           <FaqList items={t.faq} />
         </div>

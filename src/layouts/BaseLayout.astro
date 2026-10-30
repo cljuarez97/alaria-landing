@@ -52,6 +52,8 @@ const fontFaces = `
     <!-- Solo la fuente del h1 (LCP móvil); la itálica es acento y carga con swap. -->
     <link rel="preload" href={playfairNormal} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaces}></style>
+    <!-- Antes del primer pintado: habilita el revelado al hacer scroll solo si hay JS. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
 
     <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href={`${base}/favicon-32.png`} />
@@ -89,6 +91,20 @@ const fontFaces = `
     <BottomNav />
 
     <script>
+      import { initReveal } from '../lib/reveal';
+
+      // El ClientRouter reemplaza los atributos de <html> en cada navegación: se repone `.js`
+      // antes de pintar la página nueva para que el revelado no parpadee.
+      document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
+      document.addEventListener('astro:page-load', () => {
+        initReveal({
+          root: document,
+          reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          createObserver:
+            'IntersectionObserver' in window ? (cb, opts) => new IntersectionObserver(cb, opts) : undefined,
+        });
+      });
+
       // Tras cada navegación del ClientRouter: foco al h1 (o al main). El anuncio de ruta lo hace
       // la región aria-live que inyecta Astro (.astro-route-announcer) con el <title> nuevo.
       let firstLoad = true;
