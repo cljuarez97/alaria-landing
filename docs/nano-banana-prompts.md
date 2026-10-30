@@ -18,7 +18,7 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 | # | Archivo | Dónde se usa | Proporción | Prompt (estilo común + …) |
 |---|---|---|---|---|
 | 1 | `hero-arch` | Portada de inicio | 4:5 | arched plaster doorway opening onto a calm treatment room, burgundy velvet armchair, brass floor lamp, linen curtain glowing |
-| 2 | `armonizacion-facial` | Armonización facial | 3:2 | antique gold-framed hand mirror on travertine, single pale peony, gold-rimmed porcelain dish |
+| 2 | `armonizacion-facial` | Armonización facial | 2:3 (vertical) | **Ya hay foto** (`armonizacion-facial.webp`, 1023×1537): no generar. Se recorta a 4:5 en móvil y 1:1 desde 1024px con foco `55% 30%` (`src/data/focus.ts`); si la reemplazas, mantén el rostro entre el 12 % y el 64 % del alto o ajusta el foco. |
 | 3 | `toxina-botulinica` | Toxina botulínica | 3:2 | unlabelled frosted glass vials on a brushed brass tray, crisp shadows, calm symmetry |
 | 4 | `bioestimuladores` | Bioestimuladores | 3:2 | macro of burgundy silk folds under tension, light catching the ridges, abstract |
 | 5 | `calidad-de-piel` | Calidad de piel | 3:2 | clear serum droplets on cream glass, golden backlight, dewy highlights |

@@ -2,7 +2,7 @@
 // con el mismo nombre (o cambia aquí el import si cambia la extensión). Prompts en docs/nano-banana-prompts.md.
 import type { ImageMetadata } from 'astro';
 import heroArch from '../assets/ambient/hero-arch.jpg';
-import armonizacionFacial from '../assets/ambient/armonizacion-facial.jpg';
+import armonizacionFacial from '../assets/ambient/armonizacion-facial.webp';
 import toxinaBotulinica from '../assets/ambient/toxina-botulinica.jpg';
 import bioestimuladores from '../assets/ambient/bioestimuladores.jpg';
 import calidadDePiel from '../assets/ambient/calidad-de-piel.jpg';

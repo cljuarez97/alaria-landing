@@ -6,6 +6,8 @@ import Icon from './Icon.astro';
 import FramedPicture from './FramedPicture.astro';
 import { treatments } from '../data/content';
 import { treatmentImage } from '../data/images';
+import { focusOf } from '../data/focus';
+import { frameCropClass } from '../lib/crop';
 import { ui } from '../data/ui';
 import { href } from '../lib/url';
 
@@ -18,6 +20,7 @@ interface Props {
 const { level = 3, priority = false } = Astro.props;
 const H = level === 2 ? 'h2' : 'h3';
 const [featured, ...rest] = treatments;
+const featuredImg = featured ? treatmentImage(featured.slug) : undefined;
 ---
 <div class="showcase grid gap-14 lg:grid-cols-12 lg:gap-x-12">
   {
@@ -26,9 +29,11 @@ const [featured, ...rest] = treatments;
         <a href={href(`/tratamientos/${featured.slug}/`)} class="group block no-underline">
           <div class="featured-media relative">
           <FramedPicture
-            src={treatmentImage(featured.slug)}
+            src={featuredImg!}
             alt=""
             widths={[480, 720, 960, 1280]}
+            class={frameCropClass(featuredImg!)}
+            position={focusOf(featured.slug)}
             sizes="(min-width: 1024px) 40rem, calc(100vw - 2.5rem - 8px)"
             transitionName={`tx-img-${featured.slug}`}
             mediaClass="zoom"
@@ -68,13 +73,14 @@ const [featured, ...rest] = treatments;
               </H>
               <p class="t-small mt-2 text-muted">{t.short}</p>
             </div>
-            <span class="thumb frame-media w-[5.5rem] sm:w-28" style="aspect-ratio:3/2" transition:name={`tx-img-${t.slug}`}>
+            <span class="thumb frame-media w-[5.5rem] sm:w-28" style={`--ratio:3/2${focusOf(t.slug) ? `;--focus:${focusOf(t.slug)}` : ''}`} transition:name={`tx-img-${t.slug}`}>
               <Picture
                 src={treatmentImage(t.slug)}
                 alt=""
                 widths={[176, 264]}
                 sizes="(min-width: 640px) 7rem, 5.5rem"
                 formats={['avif', 'webp']}
+                fallbackFormat="jpg"
                 loading="lazy"
                 decoding="async"
               />

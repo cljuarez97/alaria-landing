@@ -9,6 +9,8 @@ import CtaBand from '../../components/CtaBand.astro';
 import Ornament from '../../components/Ornament.astro';
 import { treatments, type Treatment } from '../../data/content';
 import { treatmentImage } from '../../data/images';
+import { focusOf } from '../../data/focus';
+import { frameCropClass } from '../../lib/crop';
 import { ui } from '../../data/ui';
 import { href } from '../../lib/url';
 
@@ -29,6 +31,7 @@ interface Props {
 }
 
 const { treatment: t, prev, next } = Astro.props;
+const img = treatmentImage(t.slug);
 ---
 <BaseLayout title={t.name} description={t.metaDescription}>
   <article>
@@ -47,13 +50,14 @@ const { treatment: t, prev, next } = Astro.props;
         <p class="t-lead hero-in mt-6" style="--d:1">{t.intro}</p>
       </div>
       <FramedPicture
-        src={treatmentImage(t.slug)}
+        src={img}
         alt=""
         widths={[480, 720, 960, 1100]}
         sizes="(min-width: 1024px) 34rem, calc(100vw - 2.5rem - 8px)"
         priority
         transitionName={`tx-img-${t.slug}`}
-        class="lg:col-span-6"
+        class={['lg:col-span-6', frameCropClass(img)].filter(Boolean).join(' ')}
+        position={focusOf(t.slug)}
       />
     </header>
 

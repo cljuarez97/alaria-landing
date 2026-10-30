@@ -36,28 +36,63 @@ export const nav = [
 
 export const home = {
   eyebrow: 'Alaria Clínica Estética · Guatemala',
-  h1: 'Medicina estética con criterio médico en Guatemala',
-  lead: 'Nuestro equipo médico evalúa tu caso y define contigo qué tratamiento tiene sentido. Empiezas con una valoración, no con un procedimiento.',
+  h1: 'Clínica de medicina estética en Guatemala',
+  lead: 'En nuestra consulta de medicina estética ofrecemos un enfoque personalizado que combina conocimiento médico y técnicas especializadas para realzar tu belleza natural y cuidar tu piel.',
   ctaPrimary: 'Reservar mi valoración',
   ctaSecondary: 'Escribir por WhatsApp',
   ctaTertiary: 'Ver tratamientos',
   approach: {
     title: 'Cómo trabajamos',
-    intro: 'Cada consulta sigue el mismo orden. Así sabes qué esperar antes de decidir nada.',
+    intro: 'Cuatro principios guían cada consulta en Alaria.',
     pillars: [
       {
-        title: 'Valoración primero',
-        text: 'Revisamos tu historial, tus objetivos y tus contraindicaciones antes de hablar de productos o procedimientos.',
+        title: 'Valoración médica personalizada',
+        text: 'Cada tratamiento comienza conociendo tus necesidades.',
       },
       {
-        title: 'Un plan claro',
-        text: 'Te explicamos qué tratamiento podría tener sentido en tu caso, por qué, y qué resultados son realistas.',
+        title: 'Enfoque científico',
+        text: 'Procedimientos basados en conocimiento médico y técnicas especializadas.',
       },
       {
-        title: 'Seguimiento médico',
-        text: 'Revisamos tu evolución después del tratamiento y ajustamos el plan si hace falta.',
+        title: 'Resultados naturales',
+        text: 'Buscamos armonizar y realzar, sin perder tu esencia.',
+      },
+      {
+        title: 'Seguridad y confianza',
+        text: 'Te acompañamos durante todo el proceso.',
       },
     ],
+  },
+  difference: {
+    title: '¿Qué nos hace diferentes?',
+    intro: 'Así es cada paso, desde la primera consulta hasta el seguimiento.',
+    items: [
+      {
+        title: 'Decides después de evaluar',
+        text: 'Primero revisamos tu caso. Si un tratamiento tiene sentido, lo decides después, con calma y con toda la información.',
+      },
+      {
+        title: 'Plan y presupuesto antes de empezar',
+        text: 'Antes de empezar sabes qué zonas se tratarían, con qué técnica y cuánto costaría. El presupuesto es personalizado y transparente.',
+      },
+      {
+        title: 'Sabes qué producto se usa',
+        text: 'Te decimos qué producto se usará antes de cualquier procedimiento. Lo elegimos según tus necesidades, con prioridad en calidad y seguridad.',
+      },
+      {
+        title: 'Revisión después del tratamiento',
+        text: 'Revisamos tu evolución y ajustamos el plan si hace falta. [pendiente: fechas de control]',
+      },
+      {
+        title: 'Atención con cita previa',
+        text: 'Te esperamos con horario reservado. Confirmas tu hora antes de llegar.',
+      },
+      {
+        title: 'Dudas antes de reservar',
+        text: 'Escríbenos por WhatsApp y te orientamos antes de decidir. [pendiente: tiempo de respuesta]',
+      },
+    ],
+    cta: 'Elegir fecha para mi valoración',
   },
   doctorTeaser: {
     title: 'Quién te atiende',
@@ -338,27 +373,27 @@ export const treatments: Treatment[] = [
 export const faq = [
   {
     q: '¿Qué pasa en la primera cita?',
-    a: 'Empiezas con una valoración: revisamos tu historial, tus objetivos y tus contraindicaciones. Si conviene un tratamiento, te lo explicamos con sus alternativas. No tienes que decidir ese día.',
+    a: 'Realizamos una valoración médica personalizada en la que conocemos tus necesidades, antecedentes y objetivos estéticos. Evaluamos las características de tu piel y rostro para recomendarte las opciones más adecuadas para ti, explicando sus beneficios y posibles consideraciones.',
   },
   {
-    q: '¿Duele? ¿Cuánto tarda la recuperación?',
-    a: 'Varía según el tratamiento y la persona. Te explicamos las molestias esperables y los cuidados antes de cualquier procedimiento. [dato médico pendiente: molestias y recuperación por tratamiento]',
+    q: '¿Los tratamientos son dolorosos? ¿Necesito tiempo de recuperación?',
+    a: 'La sensación y el tiempo de recuperación dependen del procedimiento realizado. Algunos tratamientos generan molestias leves y transitorias, mientras que otros pueden requerir cuidados específicos. Te orientaremos sobre qué esperar antes y después de cada tratamiento.',
   },
   {
-    q: '¿Va a quedar natural?',
-    a: 'El objetivo es un resultado armónico y acorde con tus rasgos. Los resultados varían en cada persona, por eso se definen en la valoración.',
+    q: '¿Los resultados se verán naturales?',
+    a: 'Nuestro objetivo es realzar tu belleza respetando tus rasgos y proporciones. Buscamos resultados armónicos y naturales, adaptados a tus características faciales y expectativas.',
   },
   {
     q: '¿Qué productos utilizan?',
-    a: 'Te informamos qué producto se usará antes de cualquier procedimiento. [pendiente: confirmar productos y registros sanitarios]',
+    a: 'Trabajamos con productos de uso médico-estético, seleccionados según las necesidades de cada paciente, priorizando su calidad, procedencia y seguridad. Te informaremos sobre el producto indicado para tu tratamiento.',
   },
   {
     q: '¿Cómo reservo mi valoración?',
     a: 'Llena el formulario de reserva o escríbenos por WhatsApp. Te confirmamos fecha y hora. [pendiente: tiempo de respuesta]',
   },
   {
-    q: '¿Cuánto cuesta?',
-    a: 'El costo depende del plan que definamos en tu valoración. [pendiente: política de precios y formas de pago]',
+    q: '¿Cuál es el precio de cada tratamiento?',
+    a: 'El costo depende del tratamiento indicado, las áreas a tratar y las necesidades individuales de cada paciente. Después de tu valoración, te proporcionaremos un presupuesto personalizado y transparente.',
   },
 ];
 

@@ -13,11 +13,22 @@ import { faq, home, site, treatments } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
+import type { IconName } from '../components/icons/icons';
+import butterfly from '../assets/brand/butterfly.svg?raw';
 
 // Acento en itálica dentro del h1 sin tocar el texto de content.ts.
-const accent = 'criterio médico';
+const accent = 'medicina estética';
 const [h1Before, h1After] = home.h1.includes(accent) ? home.h1.split(accent) : [home.h1, ''];
 const hasAccent = home.h1.includes(accent);
+
+// "¿Qué nos hace diferentes?": la última palabra va en itálica, igual que el acento del h1.
+const diffAccent = 'diferentes';
+const [diffBefore, diffAfter] = home.difference.title.includes(diffAccent)
+  ? home.difference.title.split(diffAccent)
+  : [home.difference.title, ''];
+const diffHasAccent = home.difference.title.includes(diffAccent);
+// Un icono por compromiso, en el orden de content.ts (valoración, presupuesto, producto, revisión, cita, dudas).
+const diffIcons: IconName[] = ['stethoscope', 'receipt-text', 'shield-check', 'history', 'calendar-clock', 'message-circle'];
 
 const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site).href;
 const jsonLd = {
@@ -69,18 +80,6 @@ const jsonLd = {
             <span class="sr-only">{ui.newTab}</span>
           </a>
         </div>
-        <ul class="hero-in hero-points mt-8" style="--d:3" role="list">
-          {
-            home.approach.pillars.map((p) => (
-              <li>
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-                  <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
-                </svg>
-                {p.title}
-              </li>
-            ))
-          }
-        </ul>
       </div>
 
       <figure class="hero-figure relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:col-span-5 lg:max-w-none">
@@ -105,7 +104,7 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- Cómo trabajamos: banda rosa, tres pasos con numeral bajo arco. -->
+  <!-- Cómo trabajamos: banda rosa, cuatro principios con numeral bajo arco (2×2 en tablet, 4 columnas en escritorio). -->
   <section class="section surface-rose on-rose" aria-labelledby="approach-title">
     <div class="container-x">
       <div class="grid gap-6 lg:grid-cols-12 lg:items-end" data-reveal>
@@ -115,7 +114,7 @@ const jsonLd = {
         </div>
         <p class="t-body text-wine-deep lg:col-span-6 lg:pb-1">{home.approach.intro}</p>
       </div>
-      <ol class="steps mt-14 grid gap-10 md:grid-cols-3 md:gap-8 lg:mt-20" role="list">
+      <ol class="steps mt-14 grid gap-10 md:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:mt-20 lg:grid-cols-4" role="list">
         {
           home.approach.pillars.map((p, i) => (
             <li class="step" data-reveal style={`--d:${i}`}>
@@ -128,6 +127,66 @@ const jsonLd = {
           ))
         }
       </ol>
+    </div>
+  </section>
+
+  <!-- Qué nos hace diferentes: sobre crema, entre la banda rosa y la sección oscura. Un hilo de oro
+       vertical recorre los seis compromisos y termina en la mariposa; en escritorio el CTA queda fijo
+       a la izquierda mientras se leen. -->
+  <section class="section diff relative isolate overflow-clip" aria-labelledby="diff-title">
+    <span class="diff-watermark" aria-hidden="true" set:html={butterfly} />
+    <div class="container-x diff-grid">
+      <div class="diff-head" data-reveal>
+        <Ornament reveal />
+        <h2 id="diff-title" class="t-h2 diff-title mt-5">
+          {
+            diffHasAccent ? (
+              <Fragment>
+                {diffBefore}
+                <em class="t-accent text-wine">{diffAccent}</em>
+                {diffAfter}
+              </Fragment>
+            ) : (
+              home.difference.title
+            )
+          }
+        </h2>
+        <p class="t-lead mt-6 text-charcoal/85">{home.difference.intro}</p>
+      </div>
+
+      <div class="diff-track">
+        <span class="diff-thread" aria-hidden="true" data-reveal="fade"></span>
+        <ol class="diff-list" role="list">
+          {
+            home.difference.items.map((item, i) => (
+              <li class="diff-item" data-reveal style={`--d:${i % 3}`}>
+                <span class="diff-icon">
+                  <Icon name={diffIcons[i] ?? 'check'} />
+                </span>
+                <div class="diff-copy">
+                  <h3 class="diff-item-title">{item.title}</h3>
+                  <p class="t-body text-muted">
+                    <Rich text={item.text} />
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <span class="diff-end" aria-hidden="true" data-reveal="fade" set:html={butterfly} />
+      </div>
+
+      <div class="diff-cta" data-reveal style="--d:1">
+        <a href={href('/agendar/')} class="btn btn-primary btn-signature w-full sm:w-fit">
+          {home.difference.cta}
+          <Icon name="calendar-check" />
+        </a>
+        <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link">
+          <Icon name="message-circle" />
+          {home.ctaSecondary}
+          <span class="sr-only">{ui.newTab}</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -245,22 +304,6 @@ const jsonLd = {
   .btn-tall {
     min-height: 3.5rem;
   }
-  .hero-points {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-wine-deep);
-  }
-  .hero-points li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .hero-points svg {
-    color: var(--color-gold);
-  }
   /* Arco rosa desplazado detrás de la foto: profundidad sin sombras genéricas. */
   .hero-backdrop {
     position: absolute;
@@ -275,29 +318,54 @@ const jsonLd = {
     top: 62%;
   }
   @media (min-width: 64rem) {
-    /* No más que el gap de columnas (3rem): si no, tapa el lead entre 1024 y 1240px. */
+    /* Entre 1024 y 1280px el lead llega casi al borde de su columna: el sello entra menos en el gap. */
+    .hero-figure :global(.hero-seal) {
+      left: -1.25rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    /* No más que el gap de columnas (3rem). */
     .hero-figure :global(.hero-seal) {
       left: -2.25rem;
     }
   }
 
-  /* Pasos: en tablet/escritorio un hilo de oro une los arcos. */
-  .steps {
+  /* Pasos: en tablet/escritorio un hilo de oro une cada arco con el siguiente de su fila
+     (2×2 en tablet: solo los impares; 4 columnas: todos menos el último). Se dibuja al aparecer. */
+  .step {
     position: relative;
   }
   @media (min-width: 48rem) {
-    .steps::before {
+    .step::after {
       content: '';
       position: absolute;
       left: 4.5rem;
-      right: 0;
+      right: -2rem; /* = md:gap-x-8 */
       top: 2.5rem;
       height: 1px;
       background: color-mix(in oklab, var(--color-gold) 70%, transparent);
+      transform-origin: left center;
+    }
+    .step:nth-child(2n)::after {
+      display: none;
     }
   }
-  .step {
-    position: relative;
+  @media (min-width: 64rem) {
+    .step:nth-child(2n)::after {
+      display: block;
+    }
+    .step:last-child::after {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .step[data-reveal]::after {
+      transform: scaleX(0);
+      transition: transform 1100ms var(--ease-out-expo) calc(var(--d, 0) * 90ms + 250ms);
+    }
+    :global(.js) .step[data-reveal]:global(.is-in)::after {
+      transform: none;
+    }
   }
   .step .arch-numeral {
     background: var(--color-rose-soft);
@@ -341,5 +409,174 @@ const jsonLd = {
   }
   .more[open] :global(.more-icon) {
     transform: rotate(45deg);
+  }
+  /* ---------- ¿Qué nos hace diferentes? ---------- */
+  .diff-title {
+    font-size: clamp(2.375rem, 1.7rem + 3vw, 4rem);
+    line-height: 1.02;
+    max-width: 12ch;
+  }
+  .diff-grid {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 64rem) {
+    /* Orden del DOM: cabecera, lista, CTA (así se lee y se tabula en móvil).
+       En escritorio el CTA sube a la columna izquierda y queda fijo mientras se recorre la lista. */
+    .diff-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        'head track'
+        'cta track';
+      column-gap: clamp(3rem, 1rem + 4vw, 6rem);
+      row-gap: 2.5rem;
+    }
+    .diff-head {
+      grid-area: head;
+    }
+    .diff-track {
+      grid-area: track;
+    }
+    .diff-cta {
+      grid-area: cta;
+      align-self: start;
+      position: sticky;
+      top: 2rem;
+    }
+  }
+  .diff-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  @media (min-width: 40rem) and (max-width: 63.999rem) {
+    .diff-cta {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.5rem;
+    }
+  }
+
+  /* Lista: icono en disco de papel sobre el hilo de oro, texto a la derecha.
+     El filete separador va bajo el texto, no bajo el icono, para no cruzar el hilo. */
+  .diff-track {
+    --disc: 2.75rem;
+    position: relative;
+  }
+  .diff-thread {
+    position: absolute;
+    left: calc(var(--disc) / 2);
+    top: calc(var(--disc) / 2);
+    bottom: 1rem;
+    width: 1px;
+    background: var(--color-gold);
+    transform-origin: top center;
+  }
+  .diff-item {
+    display: grid;
+    grid-template-columns: var(--disc) minmax(0, 1fr);
+    column-gap: 1.25rem;
+  }
+  .diff-item + .diff-item {
+    margin-top: 1.25rem;
+  }
+  .diff-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--disc);
+    height: var(--disc);
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: var(--color-wine);
+    box-shadow: inset 0 0 0 1px var(--color-gold);
+  }
+  .diff-copy {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.45rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  @media (min-width: 48rem) {
+    .diff-item + .diff-item {
+      margin-top: 1.75rem;
+    }
+    .diff-copy {
+      padding-bottom: 1.75rem;
+    }
+  }
+  .diff-item-title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--color-charcoal);
+    text-wrap: balance;
+  }
+  /* Tablet y escritorio ancho: título y texto en dos columnas, como un índice editorial. */
+  @media (min-width: 48rem) and (max-width: 63.999rem), (min-width: 80rem) {
+    .diff-copy {
+      grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+      column-gap: 2rem;
+      align-items: baseline;
+    }
+  }
+  /* La mariposa cierra el hilo: el recorrido termina en ti. */
+  .diff-end {
+    display: block;
+    width: var(--disc);
+    margin-top: 1.25rem;
+    color: var(--color-gold);
+  }
+  .diff-end :global(svg) {
+    display: block;
+    width: 1.75rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  /* Marca de agua: la mariposa grande en rosa detrás de la cabecera, solo donde no cruza el texto. */
+  .diff-watermark {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .diff-watermark {
+      display: block;
+      position: absolute;
+      z-index: -1;
+      left: max(-6rem, calc(50% - 46rem));
+      bottom: -4rem;
+      width: clamp(20rem, 12rem + 14vw, 30rem);
+      color: var(--color-rose-soft);
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+    .diff-watermark :global(svg) {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* El hilo crece de arriba abajo al entrar la lista; los items aparecen escalonados encima. */
+    :global(.js) .diff-thread[data-reveal] {
+      opacity: 1;
+      transform: scaleY(0);
+      transition: transform 1800ms var(--ease-out-expo) 150ms;
+    }
+    :global(.js) .diff-thread[data-reveal]:global(.is-in) {
+      transform: none;
+    }
+    :global(.js) .diff-end[data-reveal] {
+      transform: scale(0.6);
+      transition:
+        opacity 600ms var(--ease-out-quart) 500ms,
+        transform 900ms var(--ease-out-expo) 500ms;
+    }
+    :global(.js) .diff-end[data-reveal]:global(.is-in) {
+      transform: none;
+    }
   }
 </style>

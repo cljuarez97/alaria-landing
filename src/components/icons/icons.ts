@@ -15,6 +15,11 @@ import loaderCircle from 'lucide-static/icons/loader-circle.svg?raw';
 import wifiOff from 'lucide-static/icons/wifi-off.svg?raw';
 import rotateCcw from 'lucide-static/icons/rotate-ccw.svg?raw';
 import moveHorizontal from 'lucide-static/icons/move-horizontal.svg?raw';
+import stethoscope from 'lucide-static/icons/stethoscope.svg?raw';
+import receiptText from 'lucide-static/icons/receipt-text.svg?raw';
+import shieldCheck from 'lucide-static/icons/shield-check.svg?raw';
+import history from 'lucide-static/icons/history.svg?raw';
+import calendarClock from 'lucide-static/icons/calendar-clock.svg?raw';
 
 export const icons = {
   house,
@@ -33,6 +38,11 @@ export const icons = {
   'wifi-off': wifiOff,
   'rotate-ccw': rotateCcw,
   'move-horizontal': moveHorizontal,
+  stethoscope,
+  'receipt-text': receiptText,
+  'shield-check': shieldCheck,
+  history,
+  'calendar-clock': calendarClock,
 } as const;
 
 export type IconName = keyof typeof icons;

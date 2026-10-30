@@ -317,6 +317,7 @@
   }
   .frame-media {
     display: block;
+    aspect-ratio: var(--ratio, auto);
     overflow: hidden;
     border-radius: 2px;
     background: var(--color-card);
@@ -326,6 +327,17 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--focus, 50% 50%);
+  }
+  /* Fotos verticales (frameCropClass): 4:5 en móvil, 1:1 desde 1024px, para que no ocupen
+     más de una pantalla. El punto focal (--focus) evita cortar el rostro. */
+  .frame-tall .frame-media {
+    aspect-ratio: 4 / 5;
+  }
+  @media (min-width: 64rem) {
+    .frame-tall .frame-media {
+      aspect-ratio: 1 / 1;
+    }
   }
 
   /* Ventana en arco del hero: máscara + línea de oro concéntrica. */

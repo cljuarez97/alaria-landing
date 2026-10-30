@@ -14,6 +14,8 @@ interface Props {
   class?: string;
   mediaClass?: string;
   transitionName?: string;
+  /** Punto focal (`object-position`) cuando el marco recorta la imagen. */
+  position?: string;
 }
 
 const {
@@ -26,7 +28,10 @@ const {
   class: className,
   mediaClass,
   transitionName,
+  position,
 } = Astro.props;
+// Variables y no `aspect-ratio` directo: así .frame-tall puede cambiar el recorte por breakpoint.
+const mediaStyle = `--ratio:${ratio}${position ? `;--focus:${position}` : ''}`;
 
 const pic = {
   src,
@@ -34,6 +39,8 @@ const pic = {
   widths,
   sizes,
   formats: ['avif', 'webp'] as ('avif' | 'webp')[],
+  // Con fuente .webp Astro usaría PNG como <img> de respaldo (hasta 1.8 MB): JPG pesa una fracción.
+  fallbackFormat: 'jpg' as const,
   loading: priority ? ('eager' as const) : ('lazy' as const),
   fetchpriority: priority ? ('high' as const) : ('auto' as const),
   decoding: priority ? ('sync' as const) : ('async' as const),
@@ -42,13 +49,13 @@ const pic = {
 {
   transitionName ? (
     <div class:list={['frame', className]} transition:name={transitionName}>
-      <div class:list={['frame-media', mediaClass]} style={`aspect-ratio:${ratio}`}>
+      <div class:list={['frame-media', mediaClass]} style={mediaStyle}>
         <Picture {...pic} />
       </div>
     </div>
   ) : (
     <div class:list={['frame', className]}>
-      <div class:list={['frame-media', mediaClass]} style={`aspect-ratio:${ratio}`}>
+      <div class:list={['frame-media', mediaClass]} style={mediaStyle}>
         <Picture {...pic} />
       </div>
     </div>
