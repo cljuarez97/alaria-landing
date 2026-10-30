@@ -35,6 +35,7 @@ describe('verticalFocusRange', () => {
   it.each([
     ['toxina-botulinica', { width: 1024, height: 1365 }, 0.17, 0.62],
     ['calidad-de-piel', { width: 1023, height: 1537 }, 0.09, 0.7],
+    ['bioestimuladores', { width: 1031, height: 1280 }, 0.15, 0.75],
   ] as const)('el foco de %s no corta el rostro en 4:5 ni en 1:1', (slug, size, top, bottom) => {
     const y = Number(imageFocus[slug]!.split(' ')[1]!.replace('%', '')) / 100;
     for (const ratio of [4 / 5, 1]) {

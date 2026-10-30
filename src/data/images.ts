@@ -4,7 +4,7 @@ import type { ImageMetadata } from 'astro';
 import heroArch from '../assets/ambient/hero-arch.jpg';
 import armonizacionFacial from '../assets/ambient/armonizacion-facial.webp';
 import toxinaBotulinica from '../assets/ambient/toxina-botulinica.webp';
-import bioestimuladores from '../assets/ambient/bioestimuladores.jpg';
+import bioestimuladores from '../assets/ambient/bioestimuladores.webp';
 import calidadDePiel from '../assets/ambient/calidad-de-piel.webp';
 import visitanosEntrada from '../assets/ambient/visitanos-entrada.jpg';
 import agendarEscritorio from '../assets/ambient/agendar-escritorio.jpg';

@@ -8,6 +8,8 @@ export const imageFocus: Partial<Record<string, string>> = {
   'toxina-botulinica': '55% 30%',
   // 1023×1537: del pelo a las manos bajo el mentón, ~9 % a ~70 % del alto.
   'calidad-de-piel': '50% 18%',
+  // 1031×1280 (casi 4:5): de la frente al mentón, ~15 % a ~75 % del alto.
+  bioestimuladores: '50% 35%',
 };
 
 export function focusOf(slug: string): string | undefined {
