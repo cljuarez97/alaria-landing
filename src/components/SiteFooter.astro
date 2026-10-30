@@ -8,51 +8,70 @@ import { href, whatsappUrl } from '../lib/url';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<footer class="on-dark mt-0 bg-charcoal text-paper">
-  <div class="container-x grid gap-12 py-16 lg:grid-cols-[1.2fr_1fr_1fr] lg:py-20">
-    <div class="grid content-start gap-4">
-      <Wordmark tone="light" />
-      <p class="t-small max-w-[34ch] text-mist">{footer.note}</p>
-    </div>
-    <nav aria-label={ui.footerNav}>
-      <ul class="grid gap-1">
-        {
-          nav.map((item) => (
-            <li>
-              <a href={href(item.href)} class="inline-flex min-h-11 items-center text-paper underline-offset-4 hover:underline">
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <div class="grid content-start gap-4">
-      <a
-        href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
-        target="_blank"
-        rel="noopener"
-        class="inline-flex min-h-11 items-center gap-2 font-semibold text-paper underline-offset-4 hover:underline"
-      >
-        <Icon name="message-circle" />
-        {home.ctaSecondary}
-        <span class="sr-only">{ui.newTab}</span>
-      </a>
-    </div>
-  </div>
-  <div class="container-x">
-    <div class="flex flex-col gap-6 border-t border-paper/15 py-8 sm:flex-row sm:items-center sm:justify-between">
-      <div class="grid gap-2">
-        <p class="t-small text-mist">
-          {footer.legal}
-          <a href={href('/privacidad/')} class="ml-1 text-paper underline underline-offset-4">{footer.privacyLink}</a>
-        </p>
-        <p class="t-small text-mist"><Rich text={footer.credentials} /></p>
+<footer class="on-dark bg-charcoal text-paper">
+  <div class="container-x py-12 lg:py-14">
+    <!-- Marca a la izquierda; navegación y WhatsApp a la derecha, en línea en escritorio. -->
+    <div class="grid gap-10 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-16">
+      <div class="grid content-start gap-3">
+        <Wordmark tone="light" />
+        <p class="t-small max-w-[32ch] text-mist">{footer.note}</p>
       </div>
-      <div class="flex items-center gap-3">
-        <img src={`${base}/bichitech-logo.webp`} alt="" width="38" height="40" loading="lazy" decoding="async" class="h-10 w-auto opacity-90" />
+
+      <div class="grid gap-6 lg:justify-items-end">
+        <nav aria-label={ui.footerNav}>
+          <ul class="footer-nav">
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={href(item.href)} class="inline-flex min-h-11 items-center text-paper underline-offset-4 hover:underline">
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <a
+          href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+          target="_blank"
+          rel="noopener"
+          class="press inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-paper/25 px-5 font-semibold text-paper transition-colors hover:border-gold"
+        >
+          <Icon name="message-circle" />
+          {home.ctaSecondary}
+          <span class="sr-only">{ui.newTab}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-6 border-t border-paper/15 pt-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+      <div class="grid max-w-[72ch] gap-1.5 text-[0.8125rem] leading-relaxed text-mist">
+        <p>
+          {footer.legal}
+          <span aria-hidden="true" class="mx-1.5 text-gold">·</span>
+          <a href={href('/privacidad/')} class="text-paper underline underline-offset-4">{footer.privacyLink}</a>
+        </p>
+        <p><Rich text={footer.credentials} /></p>
+      </div>
+      <div class="flex shrink-0 items-center gap-3">
+        <img src={`${base}/bichitech-logo.webp`} alt="" width="38" height="40" loading="lazy" decoding="async" class="h-9 w-auto opacity-90" />
         <span class="text-[0.8125rem] text-mist">{ui.developedBy}</span>
       </div>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+  @media (min-width: 40rem) {
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 2rem;
+    }
+  }
+</style>
