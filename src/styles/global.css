@@ -752,6 +752,27 @@
   .js [data-reveal].ornament.is-in .ornament-line {
     transform: none;
   }
+  /* Fotos enmarcadas dentro de un bloque revelado: la imagen se asienta desde un leve zoom y el
+     filete de oro se desplaza hasta su posición. Se escala el <picture> y no el <img> para no
+     pisar el zoom de hover de TreatmentShowcase. Las fotos `priority` no van en [data-reveal]. */
+  .js [data-reveal] .frame .frame-media > picture {
+    display: block;
+    height: 100%;
+    transform: scale(1.08);
+    transition: transform 1400ms var(--ease-out-expo);
+    transition-delay: calc(var(--d, 0) * 90ms + 100ms);
+  }
+  .js [data-reveal] .frame::after {
+    transform: none;
+    transition: transform 900ms var(--ease-out-expo);
+    transition-delay: calc(var(--d, 0) * 90ms + 350ms);
+  }
+  .js [data-reveal].is-in .frame .frame-media > picture {
+    transform: none;
+  }
+  .js [data-reveal].is-in .frame::after {
+    transform: translate(var(--frame-offset), var(--frame-offset));
+  }
 
   /* Entrada del hero en la carga (CSS puro, no depende del JS). El h1 no se anima en opacidad
      para no retrasar el LCP; solo los elementos de apoyo. */
