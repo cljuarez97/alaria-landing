@@ -17,7 +17,7 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 
 | # | Archivo | Dónde se usa | Proporción | Prompt (estilo común + …) |
 |---|---|---|---|---|
-| 1 | `hero-arch` | Portada de inicio | 4:5 | **Excepción a la regla de sin personas** (decisión de la clínica, como las fotos de tratamientos). Usa el prompt de la sección «Portada con procedimiento» en lugar del estilo común. |
+| 1 | `hero-arch` | Portada de inicio | 4:5 | **Excepción a la regla de sin personas** (decisión de la clínica, como las fotos de tratamientos). **Ya hay imagen** (`hero-arch.jpg`, 825×1024, generada con el prompt de «Portada con procedimiento»). Si la regeneras, pide ≥1280×1600 y mantén rostro y manos en la mitad superior. |
 | 2 | `armonizacion-facial` | Armonización facial | 2:3 (vertical) | **Ya hay foto** (`armonizacion-facial.webp`, 1023×1537): no generar. Se recorta a 4:5 en móvil y 1:1 desde 1024px con foco `55% 30%` (`src/data/focus.ts`); si la reemplazas, mantén el rostro entre el 12 % y el 64 % del alto o ajusta el foco. |
 | 3 | `toxina-botulinica` | Toxina botulínica | 3:4 (vertical) | **Ya hay foto** (`toxina-botulinica.webp`, 1024×1365): no generar. Foco `55% 30%`; rostro entre el 17 % y el 62 % del alto. |
 | 4 | `bioestimuladores` | Bioestimuladores | 4:5 (vertical) | **Ya hay foto** (`bioestimuladores.webp`, 1031×1280): no generar. Foco `50% 35%`; rostro entre el 15 % y el 75 % del alto. |
