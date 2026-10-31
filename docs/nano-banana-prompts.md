@@ -17,7 +17,7 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 
 | # | Archivo | Dónde se usa | Proporción | Prompt (estilo común + …) |
 |---|---|---|---|---|
-| 1 | `hero-arch` | Portada de inicio | 4:5 | arched plaster doorway opening onto a calm treatment room, burgundy velvet armchair, brass floor lamp, linen curtain glowing |
+| 1 | `hero-arch` | Portada de inicio | 4:5 | Basado en el consultorio real (`visitanos-consultorio.jpg`): view through an arched cream plaster doorway into a small aesthetic medicine treatment room, white leather electric treatment chair slightly reclined, glossy white marble floor with soft gold veining, white marble wall panel with a thin warm LED strip, round brass-framed mirror, a few blush pink roses in a slim glass vase on a floating shelf, folded white linen towel on the chair, calm and spotless, eye-level 50mm photograph, vertical composition with the chair centered in the lower half and empty space in the upper third |
 | 2 | `armonizacion-facial` | Armonización facial | 2:3 (vertical) | **Ya hay foto** (`armonizacion-facial.webp`, 1023×1537): no generar. Se recorta a 4:5 en móvil y 1:1 desde 1024px con foco `55% 30%` (`src/data/focus.ts`); si la reemplazas, mantén el rostro entre el 12 % y el 64 % del alto o ajusta el foco. |
 | 3 | `toxina-botulinica` | Toxina botulínica | 3:4 (vertical) | **Ya hay foto** (`toxina-botulinica.webp`, 1024×1365): no generar. Foco `55% 30%`; rostro entre el 17 % y el 62 % del alto. |
 | 4 | `bioestimuladores` | Bioestimuladores | 4:5 (vertical) | **Ya hay foto** (`bioestimuladores.webp`, 1031×1280): no generar. Foco `50% 35%`; rostro entre el 15 % y el 75 % del alto. |
