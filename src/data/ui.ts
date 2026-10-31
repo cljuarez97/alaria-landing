@@ -16,7 +16,7 @@ export const ui = {
   treatmentFaq: 'Preguntas sobre este tratamiento',
   readMore: 'Ver tratamiento',
   doctorPhotoPending: 'Foto pendiente: consultorio y equipo médico',
-  clinicPhotoPending: 'Foto pendiente: consultorio',
+  clinicPhotoAlt: 'Consultorio de Alaria: sillón de tratamiento blanco, lavamanos y repisa sobre una pared de mármol iluminada',
   credentials: 'Formación',
   before: 'Antes',
   after: 'Después',

@@ -44,7 +44,7 @@ Revisa `pnpm build`, `pnpm check` y `pnpm test` antes de hacer push.
 
 ## Pendientes conocidos
 
-- Imágenes de ambiente son placeholders; faltan fotos reales del equipo y del consultorio (`PhotoPending`).
+- Imágenes de ambiente son placeholders salvo `visitanos-consultorio` (foto real, 900×1600); falta la foto real del equipo (`PhotoPending` en `/`).
 - Datos `[pendiente…]` en `content.ts` (datos médicos, enlace a Google, plazo de conservación de datos).
 - Colegiado del médico responsable y licencia sanitaria MSPAS (pie de página), costo de la valoración y revisión legal del aviso de privacidad.
 - El comparador de `/resultados/` usa dos imágenes de ejemplo hasta tener casos con consentimiento.
