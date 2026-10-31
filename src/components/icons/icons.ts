@@ -20,6 +20,8 @@ import receiptText from 'lucide-static/icons/receipt-text.svg?raw';
 import shieldCheck from 'lucide-static/icons/shield-check.svg?raw';
 import history from 'lucide-static/icons/history.svg?raw';
 import calendarClock from 'lucide-static/icons/calendar-clock.svg?raw';
+import phone from 'lucide-static/icons/phone.svg?raw';
+import mail from 'lucide-static/icons/mail.svg?raw';
 import instagram from './instagram.svg?raw';
 
 export const icons = {
@@ -44,6 +46,8 @@ export const icons = {
   'shield-check': shieldCheck,
   history,
   'calendar-clock': calendarClock,
+  phone,
+  mail,
   instagram,
 } as const;
 

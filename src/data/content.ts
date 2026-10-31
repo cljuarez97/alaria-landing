@@ -372,13 +372,16 @@ export const results = {
 export const visit = {
   title: 'Visítanos',
   intro: 'Te esperamos con cita previa. Confirma tu horario antes de llegar.',
-  address: '[pendiente: dirección completa del consultorio]',
-  mapsQuery: '[pendiente: dirección para el enlace de Google Maps]',
+  // Una línea por renglón en la tarjeta de Visítanos.
+  address: ['2a Calle 6-24, Zona 10', 'Edificio Renovati, Torre 2', '5.º nivel, clínica 508', 'Ciudad de Guatemala'],
+  mapsQuery: '2a Calle 6-24, Zona 10, Edificio Renovati, Ciudad de Guatemala',
   hours: [
-    { day: 'Lunes a viernes', time: '[pendiente: horario]' },
-    { day: 'Sábado', time: '[pendiente: horario]' },
+    { day: 'Lunes a viernes', time: '9:00 a. m. – 5:00 p. m.', opens: '09:00', closes: '17:00', days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] },
+    { day: 'Sábado', time: '9:00 a. m. – 1:00 p. m.', opens: '09:00', closes: '13:00', days: ['Saturday'] },
   ],
-  contactNote: 'Para cambios de cita, escríbenos por WhatsApp. [pendiente: teléfono fijo y correo]',
+  contactNote: 'Para cambios de cita, escríbenos por WhatsApp, llámanos o envíanos un correo.',
+  phone: '+502 3104 5178',
+  email: 'alariaclinicaestetica@gmail.com',
 };
 
 export const booking = {
@@ -439,7 +442,7 @@ export const privacy = {
     {
       title: 'Quién es responsable de tus datos',
       paragraphs: [
-        'Alaria Clínica Estética, con domicilio en [pendiente: dirección completa del consultorio]. Para cualquier asunto sobre tus datos escríbenos a [pendiente: correo de contacto] o por WhatsApp.',
+        'Alaria Clínica Estética, con domicilio en 2a Calle 6-24, Zona 10, Edificio Renovati, Torre 2, 5.º nivel, clínica 508, Ciudad de Guatemala. Para cualquier asunto sobre tus datos escríbenos a alariaclinicaestetica@gmail.com, llámanos al +502 3104 5178 o contáctanos por WhatsApp.',
       ],
     },
     {

@@ -13,6 +13,7 @@ import { isPending } from '../lib/pending';
 import { whatsappUrl } from '../lib/url';
 
 // El enlace a Google Maps solo aparece cuando hay dirección real.
+const telHref = `tel:${visit.phone.replace(/[^\d+]/g, '')}`;
 const mapsUrl = isPending(visit.mapsQuery)
   ? null
   : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(visit.mapsQuery)}`;
@@ -40,7 +41,9 @@ const mapsUrl = isPending(visit.mapsQuery)
       <div class="visit-card surface-rose on-rose grid content-start gap-10 p-6 sm:p-10 lg:col-span-5" data-reveal>
         <div>
           <h2 class="t-eyebrow">{ui.address}</h2>
-          <p class="mt-3 font-serif text-2xl leading-snug"><Rich text={visit.address} /></p>
+          <address class="mt-3 font-serif text-2xl leading-snug not-italic">
+            {visit.address.map((line) => <span class="block">{line}</span>)}
+          </address>
           {
             mapsUrl && (
               <a href={mapsUrl} target="_blank" rel="noopener" class="link mt-2">
@@ -57,9 +60,9 @@ const mapsUrl = isPending(visit.mapsQuery)
           <dl class="mt-4 border-t border-rose-deep/40">
             {
               visit.hours.map((h) => (
-                <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-rose-deep/40 py-4">
+                <div class="grid gap-1 border-b border-rose-deep/40 py-4 sm:flex sm:items-baseline sm:justify-between sm:gap-6">
                   <dt class="font-semibold">{h.day}</dt>
-                  <dd class="flex items-center gap-2 text-right">
+                  <dd class="flex items-center gap-2 sm:text-right">
                     <Icon name="clock" class="text-gold-ink" />
                     <Rich text={h.time} />
                   </dd>
@@ -70,7 +73,21 @@ const mapsUrl = isPending(visit.mapsQuery)
         </div>
 
         <div class="grid gap-4">
-          <p class="t-body text-muted"><Rich text={visit.contactNote} /></p>
+          <p class="t-body text-muted">{visit.contactNote}</p>
+          <ul class="grid gap-1">
+            <li>
+              <a href={telHref} class="link">
+                <Icon name="phone" />
+                {visit.phone}
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${visit.email}`} class="link break-all">
+                <Icon name="mail" />
+                {visit.email}
+              </a>
+            </li>
+          </ul>
           <div class="flex flex-wrap gap-3">
             <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost w-fit">
               <Icon name="message-circle" />

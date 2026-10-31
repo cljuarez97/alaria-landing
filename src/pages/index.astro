@@ -9,7 +9,7 @@ import TreatmentShowcase from '../components/TreatmentShowcase.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Ornament from '../components/Ornament.astro';
 import Seal from '../components/Seal.astro';
-import { faq, home, site, treatments } from '../data/content';
+import { faq, home, site, treatments, visit } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
@@ -41,6 +41,19 @@ const jsonLd = {
   image: new URL('icon-512.png', siteUrl).href,
   telephone: `+${site.whatsapp}`,
   sameAs: [site.instagram],
+  email: visit.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: visit.address.slice(0, 3).join(', '),
+    addressLocality: 'Ciudad de Guatemala',
+    addressCountry: 'GT',
+  },
+  openingHoursSpecification: visit.hours.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.days,
+    opens: h.opens,
+    closes: h.closes,
+  })),
   areaServed: { '@type': 'Country', name: 'Guatemala' },
   availableService: treatments.map((t) => ({
     '@type': 'MedicalProcedure',
