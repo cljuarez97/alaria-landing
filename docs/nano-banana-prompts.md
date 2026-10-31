@@ -17,7 +17,7 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 
 | # | Archivo | Dónde se usa | Proporción | Prompt (estilo común + …) |
 |---|---|---|---|---|
-| 1 | `hero-arch` | Portada de inicio | 4:5 | Basado en el consultorio real (`visitanos-consultorio.jpg`): view through an arched cream plaster doorway into a small aesthetic medicine treatment room, white leather electric treatment chair slightly reclined, glossy white marble floor with soft gold veining, white marble wall panel with a thin warm LED strip, round brass-framed mirror, a few blush pink roses in a slim glass vase on a floating shelf, folded white linen towel on the chair, calm and spotless, eye-level 50mm photograph, vertical composition with the chair centered in the lower half and empty space in the upper third |
+| 1 | `hero-arch` | Portada de inicio | 4:5 | **Excepción a la regla de sin personas** (decisión de la clínica, como las fotos de tratamientos). Usa el prompt de la sección «Portada con procedimiento» en lugar del estilo común. |
 | 2 | `armonizacion-facial` | Armonización facial | 2:3 (vertical) | **Ya hay foto** (`armonizacion-facial.webp`, 1023×1537): no generar. Se recorta a 4:5 en móvil y 1:1 desde 1024px con foco `55% 30%` (`src/data/focus.ts`); si la reemplazas, mantén el rostro entre el 12 % y el 64 % del alto o ajusta el foco. |
 | 3 | `toxina-botulinica` | Toxina botulínica | 3:4 (vertical) | **Ya hay foto** (`toxina-botulinica.webp`, 1024×1365): no generar. Foco `55% 30%`; rostro entre el 17 % y el 62 % del alto. |
 | 4 | `bioestimuladores` | Bioestimuladores | 4:5 (vertical) | **Ya hay foto** (`bioestimuladores.webp`, 1031×1280): no generar. Foco `50% 35%`; rostro entre el 15 % y el 75 % del alto. |
@@ -26,6 +26,14 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 | 8 | `agendar-escritorio` | Reservar | 4:5 | writing desk with blank cream appointment card, gold fountain pen, dried roses |
 | 9 | `resultados-cortina` | Cabecera de Resultados | 21:9 | burgundy velvet curtain slightly parted, warm light spilling across cream floor |
 | 10 | `splash-ventana` | Imagen para compartir (OG) y estados vacíos | 1:1 | arched window shadow cast on cream plaster wall, a few flecks of gold leaf |
+
+## Portada con procedimiento (`hero-arch`)
+
+Sin el estilo común (ese prohíbe personas). Sin agujas ni resultados visibles.
+
+```
+Realistic editorial photograph, vertical 4:5. Close-up of the gloved hands of a female aesthetic doctor, white nitrile gloves, gently assessing the cheekbone and jawline of a relaxed Latina woman in her early thirties lying on a white treatment chair, eyes closed, calm expression, natural skin with visible pores and fine texture, minimal makeup, dark hair pulled back with a white headband. The doctor is out of frame except for her hands and a hint of a white coat sleeve. Soft diffused window light from the left, warm cream background with a blurred burgundy wine (#7A3B4C) accent and a touch of antique gold, shallow depth of field, 85mm lens, subtle film grain, low contrast, matte. Face and hands centered in the upper half of the frame. No needles, no syringes, no marker lines, no text, no logos, not airbrushed, no plastic skin.
+```
 
 ## Material real (no usar IA)
 
