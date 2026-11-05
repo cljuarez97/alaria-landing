@@ -11,7 +11,7 @@ import { whatsappUrl } from '../lib/url';
     <h1 class="t-display max-w-[14ch]">{ui.offline.title}</h1>
     <p class="t-lead">{ui.offline.text}</p>
     <div class="flex flex-col gap-3 sm:flex-row">
-      <button type="button" class="btn btn-primary" onclick="location.reload()">
+      <button type="button" class="btn btn-primary" data-retry>
         <Icon name="rotate-ccw" />
         {ui.offline.retry}
       </button>
@@ -23,3 +23,13 @@ import { whatsappUrl } from '../lib/url';
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  // Sin onclick inline: la CSP lo bloquearía.
+  document.addEventListener('astro:page-load', () => {
+    const retry = document.querySelector<HTMLButtonElement>('[data-retry]');
+    if (!retry || retry.dataset.ready) return;
+    retry.dataset.ready = 'true';
+    retry.addEventListener('click', () => location.reload());
+  });
+</script>

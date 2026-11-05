@@ -27,6 +27,7 @@ Sitio de Alaria Clínica Estética. El nombre de la médica no debe aparecer en 
 - Enlaces internos siempre con `href('/ruta/')`.
 - Scripts de cliente se inicializan en `astro:page-load` (el ClientRouter no recarga la página) y deben ser idempotentes (`dataset.ready`).
 - Animaciones solo con transform/opacity (excepción: `grid-template-rows` del FAQ y `clip-path` del comparador). Todo queda sin animación con `prefers-reduced-motion: reduce`.
+- CSP: `src/lib/csp.mjs` la inyecta por `<meta>` al terminar el build, con los hashes de los scripts inline de todo el sitio (no usar `security.csp`: no soporta ClientRouter). Sin `onclick` ni otros manejadores inline. Un origen externo nuevo hay que añadirlo en `buildPolicy`.
 - Sin doble borde, sin glassmorphism, sin franjas laterales `border-l`, sin emojis.
 
 ## Comandos
