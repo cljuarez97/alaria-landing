@@ -438,7 +438,7 @@ export const booking = {
     contactEmail: 'Te escribiremos a {email}.',
     contactPhone: 'Te escribiremos al {phone}.',
     whatsapp: 'Escribir por WhatsApp',
-    whatsappMessage: 'Hola, soy {name}. Acabo de solicitar una cita en Alaria para el {when}.',
+    whatsappMessage: 'Hola, soy {name}. Acabo de solicitar una cita en Alaria para el {when}',
     directions: 'Cómo llegar',
     again: 'Solicitar otra cita',
   },

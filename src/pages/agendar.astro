@@ -96,6 +96,10 @@ const messages = {
 
         <fieldset class="picker" data-time-set aria-describedby="slot-error" hidden>
           <legend class="t-h3"><span class="step-n" aria-hidden="true">2</span><span class="sr-only">{p.stepOf.replace('{n}', '2')} </span>{p.timeLegend}</legend>
+          <p id="time-error" class="field-error mb-3" role="alert" hidden>
+            <Icon name="circle-alert" />
+            <span data-error-text></span>
+          </p>
           <div class="times" data-times></div>
         </fieldset>
         <fieldset class="picker grid gap-6" data-details-set>
@@ -177,6 +181,14 @@ const messages = {
           <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
         </div>
 
+        <div role="status" aria-live="polite" class="status" data-status data-kind="none">
+          <span class="status-icon" aria-hidden="true">
+            <span data-icon="error"><Icon name="circle-alert" /></span>
+            <span data-icon="offline"><Icon name="wifi-off" /></span>
+          </span>
+          <span data-status-text></span>
+        </div>
+
         <div class="grid gap-4">
           <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
             <span class="submit-icon" aria-hidden="true">
@@ -194,13 +206,6 @@ const messages = {
           {booking.whatsappAlt}
           <span class="sr-only">{ui.newTab}</span>
         </a>
-        <div role="status" aria-live="polite" class="status" data-status data-kind="none">
-          <span class="status-icon" aria-hidden="true">
-            <span data-icon="error"><Icon name="circle-alert" /></span>
-            <span data-icon="offline"><Icon name="wifi-off" /></span>
-          </span>
-          <span data-status-text></span>
-        </div>
       </form>
 
       <section class="confirmation mt-12" data-confirmation hidden>
@@ -532,6 +537,9 @@ const messages = {
     background: var(--color-paper);
     box-shadow: inset 0 0 0 1px var(--color-line);
     line-height: 1.5;
+  }
+  .status {
+    scroll-margin-block: 5rem;
   }
   .status[data-kind='none'] {
     /* Vacío pero presente en el DOM para que aria-live funcione. */

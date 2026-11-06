@@ -5,16 +5,18 @@ import { site } from '../data/content';
 import { ui } from '../data/ui';
 import { whatsappUrl } from '../lib/url';
 ---
-<a
-  href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
-  target="_blank"
-  rel="noopener"
-  class="wa-fab press fixed right-6 bottom-6 z-30 hidden size-14 items-center justify-center rounded-full bg-wine text-paper lg:flex"
-  aria-label={`${ui.whatsappFab} ${ui.newTab}`}
-  transition:persist="wa-fab"
->
-  <Icon name="whatsapp" size={24} />
-</a>
+<aside aria-label={ui.whatsappFab}>
+  <a
+    href={whatsappUrl(site.whatsapp, site.whatsappMessage)}
+    target="_blank"
+    rel="noopener"
+    class="wa-fab press fixed right-6 bottom-6 z-30 hidden size-14 items-center justify-center rounded-full bg-wine text-paper lg:flex"
+    aria-label={`${ui.whatsappFab} ${ui.newTab}`}
+    transition:persist="wa-fab"
+  >
+    <Icon name="whatsapp" size={24} />
+  </a>
+</aside>
 
 <style>
   .wa-fab {

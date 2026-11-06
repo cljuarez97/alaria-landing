@@ -39,14 +39,14 @@ const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD)
   <article>
     <!-- Hero del tratamiento -->
     <header class="container-x grid gap-x-12 gap-y-10 pt-6 pb-16 lg:grid-cols-12 lg:items-end lg:pt-10 lg:pb-24">
-      <div class="lg:col-span-6 lg:pb-4">
+      <div class="min-w-0 lg:col-span-6 lg:pb-4">
         <a href={href('/tratamientos/')} class="link -ml-0.5 text-[0.9375rem]">
           <Icon name="arrow-left" />
           {ui.backToTreatments}
         </a>
         <Ornament class="hero-in mt-8" />
         <span class="numeral mt-6 block text-[clamp(3.5rem,2.8rem+3vw,5.5rem)]" data-n={t.number} aria-hidden="true"></span>
-        <h1 class="t-display mt-3">
+        <h1 class="t-display mt-3 hyphens-auto">
           <span class="block" transition:name={`tx-title-${t.slug}`}>{t.name}</span>
         </h1>
         <p class="t-lead hero-in mt-6" style="--d:1">{t.intro}</p>

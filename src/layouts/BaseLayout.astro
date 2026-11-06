@@ -50,7 +50,7 @@ const fontFaces = `
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Solo la fuente del h1 (LCP móvil); la itálica es acento y carga con swap. -->
