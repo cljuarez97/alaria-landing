@@ -6,6 +6,7 @@ import {
   formatTime,
   monthCells,
   monthsWithSlots,
+  padCells,
   requestAppointment,
   slotStart,
 } from './appointments';
@@ -71,6 +72,12 @@ describe('fechas', () => {
     expect(december.slice(0, 3)).toEqual([null, null, '2026-12-01']);
   });
 
+  it('rellena los meses cortos sin tocar los largos', () => {
+    expect(padCells(monthCells(2026, 10))).toHaveLength(35);
+    const long = monthCells(2026, 7); // agosto de 2026 ocupa 6 semanas
+    expect(padCells(long)).toEqual(long);
+  });
+
   it('lista los meses con horas sin repetirlos', () => {
     const days = [
       { date: '2026-12-01', slots: ['09:00'] },
@@ -86,8 +93,8 @@ describe('fechas', () => {
   it('formatea en español', () => {
     expect(formatDate('2026-11-09')).toBe('lunes 9 de noviembre');
     expect(formatMonth(2026, 10)).toBe('noviembre de 2026');
-    expect(formatTime('09:00')).toBe('9:00 a. m.');
-    expect(formatTime('12:30')).toBe('12:30 p. m.');
-    expect(formatTime('13:00')).toBe('1:00 p. m.');
+    expect(formatTime('09:00')).toBe('9:00\u00a0a.\u00a0m.');
+    expect(formatTime('12:30')).toBe('12:30\u00a0p.\u00a0m.');
+    expect(formatTime('13:00')).toBe('1:00\u00a0p.\u00a0m.');
   });
 });
