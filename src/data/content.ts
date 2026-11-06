@@ -396,6 +396,7 @@ export const booking = {
     detailsLegend: 'Déjanos tus datos',
     timezone: 'Los horarios están en hora de Guatemala.',
     loading: 'Cargando horarios disponibles…',
+    noScript: 'Para ver los horarios necesitas JavaScript. También puedes escribirnos por WhatsApp.',
     loadError: 'No pudimos cargar los horarios. Inténtalo de nuevo o escríbenos por WhatsApp.',
     retry: 'Reintentar',
     empty: 'Por ahora no hay horarios disponibles. Escríbenos por WhatsApp y te ayudamos.',

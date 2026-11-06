@@ -22,6 +22,9 @@ type Messages = {
   slotTaken: string;
   rateLimited: string;
   offline: string;
+  loading: string;
+  loadError: string;
+  empty: string;
 };
 
 const VALIDATED = ['name', 'phone', 'email'] as const;
@@ -41,6 +44,8 @@ function setup(form: HTMLFormElement) {
   const timesBox = q('[data-times]');
   const summary = q('[data-summary]');
   const slotError = q('#slot-error');
+  const live = q('[data-picker-live]');
+  const retry = q<HTMLButtonElement>('[data-retry]');
   const button = q<HTMLButtonElement>('button[type="submit"]');
   const label = q('[data-submit-label]');
   const status = q('[data-status]');
@@ -55,6 +60,7 @@ function setup(form: HTMLFormElement) {
 
   const setPickerState = (state: 'loading' | 'ready' | 'error' | 'empty') => {
     picker.dataset.state = state;
+    live.textContent = { loading: msg.loading, ready: '', error: msg.loadError, empty: msg.empty }[state];
   };
 
   const slotsOf = (date: string) => availability.days.find((d) => d.date === date)?.slots ?? [];
@@ -95,8 +101,15 @@ function setup(form: HTMLFormElement) {
     const month = months[monthIndex];
     if (!month) return;
     monthLabel.textContent = formatMonth(month.year, month.month);
-    prev.disabled = monthIndex === 0;
-    next.disabled = monthIndex === months.length - 1;
+    const lastFocused = document.activeElement;
+    const atStart = monthIndex === 0;
+    const atEnd = monthIndex === months.length - 1;
+    // Un botón deshabilitado pierde el foco: se pasa al otro antes de que caiga en <body>.
+    // Ese otro aún puede estar deshabilitado, y entonces no aceptaría el foco.
+    prev.disabled = atStart;
+    next.disabled = atEnd;
+    if (atStart && !atEnd && lastFocused === prev) next.focus();
+    if (atEnd && !atStart && lastFocused === next) prev.focus();
     daysBox.replaceChildren(
       ...monthCells(month.year, month.month).map((date) => {
         if (!date) return document.createElement('span');
@@ -152,7 +165,23 @@ function setup(form: HTMLFormElement) {
     monthIndex += 1;
     renderMonth();
   });
-  q('[data-retry]').addEventListener('click', load);
+  retry.addEventListener('click', async () => {
+    await load();
+    if (picker.dataset.state === 'error') retry.focus();
+    else form.querySelector<HTMLInputElement>('.day input:not(:disabled)')?.focus();
+  });
+
+  // Enter en un radio selecciona la opción en vez de enviar el formulario a medias.
+  form.addEventListener('keydown', (event) => {
+    const target = event.target;
+    if (event.key === 'Enter' && target instanceof HTMLInputElement && target.type === 'radio') {
+      event.preventDefault();
+      target.click();
+    }
+  });
+
+  // El error que muestra el blur desplaza el botón y el clic se perdería: se valida al enviar.
+  button.addEventListener('mousedown', (event) => event.preventDefault());
 
   const read = (): BookingFields => {
     const data = new FormData(form);
@@ -180,8 +209,8 @@ function setup(form: HTMLFormElement) {
       box.querySelector<HTMLElement>('[data-error-text]')!.textContent = err ? msg.validation[err.code] : '';
     }
     if (!only) {
-      slotError.hidden = !errors.some((e) => e.field === 'slot');
       slotError.querySelector<HTMLElement>('[data-error-text]')!.textContent = msg.validation.slot;
+      slotError.hidden = !errors.some((e) => e.field === 'slot');
     }
   };
 
@@ -228,7 +257,9 @@ function setup(form: HTMLFormElement) {
     showErrors(errors);
     if (errors.length) {
       if (errors.some((e) => e.field === 'slot')) {
-        picker.scrollIntoView({ block: 'center' });
+        const missing = selectedDate ? '.slot input' : '.day input:not(:disabled)';
+        form.querySelector<HTMLInputElement>(missing)?.focus({ preventScroll: true });
+        slotError.scrollIntoView({ block: 'start' });
         return;
       }
       const first = VALIDATED.find((f) => errors.some((e) => e.field === f));
