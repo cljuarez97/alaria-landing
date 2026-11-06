@@ -26,6 +26,12 @@ var CONFIG = {
   ALLOWED_ORIGINS: ['https://cljuarez97.github.io', 'http://localhost:4321'],
   RATE_LIMIT_GLOBAL_PER_HOUR: 30,
   RATE_LIMIT_PHONE_PER_6H: 3,
+  // Si la clínica no responde: se le recuerda y, pasado el plazo, la hora se libera y se avisa a la paciente.
+  PENDING_NUDGE_HOURS: 4,
+  PENDING_EXPIRE_HOURS: 48,
+  // Solo a quien lo autorizó en el formulario.
+  FOLLOWUP_DAYS: 7,
+  SITE_URL: 'https://cljuarez97.github.io/alaria-landing/agendar/',
 };
 
 var MINUTE_MS = 60 * 1000;
@@ -148,6 +154,8 @@ function validateRequest(body, cfg) {
       message: String(body.message == null ? '' : body.message).trim().slice(0, 1000),
       startMs: Date.parse(slotStart),
       origin: origin,
+      // Sin correo no hay a dónde enviar el recordatorio.
+      followup: body.followup === true && Boolean(email),
     },
   };
 }
@@ -219,4 +227,16 @@ function linesToHtml(lines) {
       return '<p>' + escapeHtml(line).replace(/\n/g, '<br>') + '</p>';
     })
     .join('');
+}
+
+/**
+ * Qué hacer con una solicitud sin atender: 'expire' (liberar la hora), 'nudge' (recordar a la clínica) o null.
+ * Si la cita es dentro de 24 h no se espera al plazo normal para recordarlo.
+ */
+function pendingAction(createdMs, startMs, nudged, now, cfg) {
+  var hour = 60 * MINUTE_MS;
+  if (startMs <= now || now - createdMs >= cfg.PENDING_EXPIRE_HOURS * hour) return 'expire';
+  if (nudged) return null;
+  if (now - createdMs >= cfg.PENDING_NUDGE_HOURS * hour || startMs - now <= 24 * hour) return 'nudge';
+  return null;
 }

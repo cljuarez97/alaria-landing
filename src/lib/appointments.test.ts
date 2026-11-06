@@ -18,6 +18,7 @@ const payload = {
   email: '',
   treatment: '',
   message: '',
+  followup: false,
   slotStart: '2026-11-09T09:00:00-06:00',
   origin: 'http://localhost:4321',
 };

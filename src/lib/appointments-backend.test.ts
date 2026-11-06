@@ -20,6 +20,7 @@ type Backend = {
   buildIcs(uid: string, start: number, end: number, now: number, cfg: unknown): string;
   whatsappNotice(phone: string, text: string): string;
   linesToHtml(lines: string[]): string;
+  pendingAction(created: number, start: number, nudged: string | null, now: number, cfg: unknown): string | null;
 };
 
 const context = vm.createContext({});
@@ -125,6 +126,37 @@ describe('validateRequest', () => {
     const { data } = gs.validateRequest({ ...valid, name: 'Ana\r\nBcc: x@y.com', message: 'a'.repeat(2000) }, cfg);
     expect(data.name).toBe('Ana Bcc: x@y.com');
     expect(data.message).toHaveLength(1000);
+  });
+});
+
+describe('pendingAction', () => {
+  const hour = 3_600_000;
+  const start = at(`${MONDAY}T10:00:00-06:00`);
+  const week = 7 * 24 * hour;
+
+  it('no hace nada con una solicitud reciente y lejana', () => {
+    expect(gs.pendingAction(start - week, start, null, start - week + hour, cfg)).toBeNull();
+  });
+  it('recuerda a la clínica a las 4 horas, una sola vez', () => {
+    const now = start - week + 4 * hour;
+    expect(gs.pendingAction(start - week, start, null, now, cfg)).toBe('nudge');
+    expect(gs.pendingAction(start - week, start, '1', now, cfg)).toBeNull();
+  });
+  it('recuerda de inmediato si la cita es dentro de 24 horas', () => {
+    const now = start - 20 * hour;
+    expect(gs.pendingAction(now, start, null, now, cfg)).toBe('nudge');
+  });
+  it('libera la hora a las 48 horas o si la cita ya pasó', () => {
+    expect(gs.pendingAction(start - week, start, '1', start - week + 48 * hour, cfg)).toBe('expire');
+    expect(gs.pendingAction(start - hour, start, '1', start + hour, cfg)).toBe('expire');
+  });
+});
+
+describe('seguimiento', () => {
+  it('requiere permiso explícito y correo', () => {
+    expect(gs.validateRequest({ ...valid, followup: true }, cfg).data.followup).toBe(true);
+    expect(gs.validateRequest({ ...valid, followup: 'true' }, cfg).data.followup).toBe(false);
+    expect(gs.validateRequest({ ...valid, followup: true, email: '' }, cfg).data.followup).toBe(false);
   });
 });
 

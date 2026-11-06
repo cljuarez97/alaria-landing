@@ -14,7 +14,11 @@ Funciona igual desde GitHub Pages y desde local; lo enviado desde `localhost:432
    - **Aceptar**: el evento pasa a verde "Cita" y la paciente recibe la confirmación con un `.ics`.
    - **Rechazar**: se borra el evento, la hora queda libre y se avisa a la paciente.
    - Si la paciente no dejó correo, la página ofrece un mensaje listo para WhatsApp.
-4. Cada hora: recordatorio por correo 24 h antes y limpieza de solicitudes sin atender cuya hora ya pasó.
+4. Cada hora:
+   - recuerda a la clínica una solicitud sin responder a las 4 h, o de inmediato si la cita es dentro de 24 h;
+   - a las 48 h, o si la hora ya pasó, libera la hora y avisa a la clínica y a la paciente;
+   - envía el recordatorio 24 h antes de la cita;
+   - una semana después envía el recordatorio de control, solo a quien lo autorizó.
 5. La paciente puede cancelar desde su correo; la clínica recibe el aviso.
 
 Borrar un evento directamente en Google Calendar libera la hora, pero no avisa a la paciente: para eso usa

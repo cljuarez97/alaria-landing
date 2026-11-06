@@ -411,6 +411,7 @@ export const booking = {
     phone: 'Teléfono o WhatsApp',
     email: 'Correo electrónico (recomendado)',
     emailHint: 'Con tu correo recibes la confirmación, un recordatorio y la opción de cancelar.',
+    followup: 'Una semana después de mi cita, recuérdenme agendar mi control.',
     treatment: 'Tratamiento de interés',
     message: 'Cuéntanos qué te preocupa',
     submit: 'Solicitar mi cita',
@@ -482,7 +483,7 @@ export const privacy = {
     {
       title: 'Para qué los usamos',
       paragraphs: [
-        'Solo para confirmar, cambiar o recordarte tu cita y preparar tu valoración. No vendemos ni cedemos tus datos, y no te enviaremos publicidad sin tu permiso.',
+        'Solo para confirmar, cambiar o recordarte tu cita y preparar tu valoración y, si lo autorizas en el formulario, para recordarte agendar tu control una semana después. No vendemos ni cedemos tus datos, y no te enviaremos publicidad sin tu permiso.',
       ],
     },
     {
