@@ -387,40 +387,48 @@ export const visit = {
 export const booking = {
   title: 'Reserva tu valoración',
   intro:
-    'Llena el formulario y te confirmamos la cita. Solo pedimos los datos necesarios para preparar tu consulta.',
-  // Clave pública de Web3Forms: identifica el formulario, no es un secreto.
-  web3formsKey: 'd59195be-15a6-4e3c-af03-01120f9995df',
-  endpoint: 'https://api.web3forms.com/submit',
+    'Elige el día y la hora que prefieras y déjanos tus datos. Revisamos tu solicitud y te confirmamos la cita.',
+  // URL de la aplicación web de Apps Script (apps-script/). No es un secreto: identifica el servicio.
+  endpoint: '',
+  picker: {
+    dayLegend: 'Elige el día',
+    timeLegend: 'Elige la hora',
+    detailsLegend: 'Déjanos tus datos',
+    timezone: 'Los horarios están en hora de Guatemala.',
+    loading: 'Cargando horarios disponibles…',
+    loadError: 'No pudimos cargar los horarios. Inténtalo de nuevo o escríbenos por WhatsApp.',
+    retry: 'Reintentar',
+    empty: 'Por ahora no hay horarios disponibles. Escríbenos por WhatsApp y te ayudamos.',
+    prevMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente',
+    selected: 'Tu solicitud:',
+    pendingNote: 'La cita queda confirmada cuando la clínica la acepte.',
+  },
   form: {
     name: 'Nombre completo',
     phone: 'Teléfono o WhatsApp',
     email: 'Correo electrónico (opcional)',
+    emailHint: 'Con tu correo recibes la confirmación, un recordatorio y la opción de cancelar.',
     treatment: 'Tratamiento de interés (opcional)',
     message: 'Cuéntanos qué te preocupa (opcional)',
-    submit: 'Reservar mi valoración',
+    submit: 'Solicitar mi cita',
     sending: 'Enviando tu solicitud…',
-    success: 'Recibimos tu solicitud. Te escribiremos para confirmar fecha y hora.',
-    error:
-      'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp.',
+    success:
+      'Recibimos tu solicitud para el {when}: apartamos la hora mientras la revisamos y te confirmaremos por correo o WhatsApp.',
+    error: 'No pudimos enviar tu solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.',
+    slotTaken: 'Esa hora se acaba de ocupar. Elige otra, por favor.',
+    rateLimited: 'Recibimos varias solicitudes con estos datos. Escríbenos por WhatsApp y te ayudamos.',
     offline:
       'Sin conexión. Tu solicitud no se envió. Intenta de nuevo cuando vuelvas a estar en línea o escríbenos por WhatsApp.',
     privacy: 'Usamos tus datos solo para agendar y preparar tu valoración.',
   },
   validation: {
     required: 'Este campo es obligatorio.',
+    slot: 'Elige un día y una hora.',
     email: 'Escribe un correo válido, por ejemplo nombre@correo.com.',
     phone: 'Escribe un número de 8 dígitos, por ejemplo 5555 5555.',
   },
   whatsappAlt: '¿Prefieres hablar primero? Escríbenos por WhatsApp.',
-  // Calendario de Cal.com: `usuario/evento` o la URL pública del evento. Vacío = se muestra el formulario.
-  // Horario, zona horaria, SMS, correos y .ics se configuran en Cal.com, no aquí.
-  calendar: {
-    link: 'alaria-hb0huy/valoracion',
-    intro:
-      'Elige el día y la hora que te queden mejor. Al reservar te llega la confirmación con un archivo para agregar la cita a tu calendario.',
-    timezone: 'Los horarios están en hora de Guatemala.',
-    fallback: '¿No carga el calendario? Ábrelo en Cal.com.',
-  },
 };
 
 export const footer = {
@@ -461,7 +469,7 @@ export const privacy = {
     {
       title: 'Servicios que nos ayudan',
       paragraphs: [
-        'Para recibir tus solicitudes usamos servicios externos que pueden guardar los datos fuera de Guatemala: Cal.com (calendario de citas), Web3Forms (envío del formulario) y WhatsApp (mensajes). El proveedor que aloja este sitio puede registrar datos técnicos, como la dirección IP, para su funcionamiento y seguridad.',
+        'Para gestionar tus solicitudes usamos servicios externos que pueden guardar los datos fuera de Guatemala: Google (Calendar y Gmail, para la agenda y los avisos de tu cita) y WhatsApp (mensajes). El proveedor que aloja este sitio puede registrar datos técnicos, como la dirección IP, para su funcionamiento y seguridad.',
       ],
     },
     {

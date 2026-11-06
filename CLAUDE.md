@@ -18,8 +18,9 @@ Sitio de Alaria Clínica Estética. El nombre de la médica no debe aparecer en 
 - `src/data/images.ts`: mapa de imágenes de ambiente (`src/assets/ambient/`). Para reemplazar una, sobrescribe el archivo con el mismo nombre. Prompts en `docs/nano-banana-prompts.md`.
 - `src/layouts/BaseLayout.astro`: head (SEO, canonical, OG, PWA, fuentes), skip link, `ClientRouter`, header, footer, barra inferior, botón de WhatsApp, foco al h1 tras navegar.
 - `src/components/`: `SiteHeader` (nav ≥1024px), `BottomNav` (<1024px, `transition:persist`), `WhatsAppFab` (solo ≥1024px), `SiteFooter`, `TreatmentShowcase` (destacado + lista numerada con `transition:name`), `FramedPicture` (marco firma), `PhotoPending` (fotos reales pendientes), `FaqList` (`<details>` animado), `BeforeAfter` (comparador con `input range`), `CtaBand`, `Rich`, `Icon`, `PwaHead`.
-- `src/pages/`: `/`, `/tratamientos/`, `/tratamientos/[slug]/`, `/resultados/`, `/visitanos/`, `/agendar/` (formulario Web3Forms con `src/scripts/booking.ts`), `/privacidad/` (aviso de privacidad, borrador pendiente de revisión legal), `/offline/` (lo precachea `public/sw.js`), `404`.
+- `src/pages/`: `/`, `/tratamientos/`, `/tratamientos/[slug]/`, `/resultados/`, `/visitanos/`, `/agendar/` (calendario de horas libres + solicitud: `src/scripts/booking-page.ts`, `src/scripts/booking.ts`, `src/lib/appointments.ts`), `/privacidad/` (aviso de privacidad, borrador pendiente de revisión legal), `/offline/` (lo precachea `public/sw.js`), `404`.
 - `src/lib/`: `url.ts` (`href()` respeta `BASE_URL`; úsalo en todo enlace interno), `pending.ts`, `transitions.ts` (animación de página).
+- `apps-script/`: backend de citas en Google Apps Script (`Logic.gs` pura, probada por `src/lib/appointments-backend.test.ts`; `Code.gs` con los servicios de Google). No se despliega con el sitio: ver `docs/citas-google.md`. Si cambias algo aquí, hay que publicar una versión nueva en Apps Script.
 - `public/`: favicons, manifest, `sw.js` (sube `VERSION` si cambias el precache), `bichitech-logo.webp`.
 
 ## Reglas
