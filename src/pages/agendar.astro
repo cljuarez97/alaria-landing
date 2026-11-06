@@ -40,11 +40,6 @@ const messages = {
       <Ornament class="hero-in" />
       <h1 class="t-display mt-5">{booking.title}</h1>
       <p class="t-lead hero-in mt-6" style="--d:1">{booking.intro}</p>
-      <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link mt-4">
-        <Icon name="message-circle" />
-        {booking.whatsappAlt}
-        <span class="sr-only">{ui.newTab}</span>
-      </a>
 
       <form
         id="appointment-form"
@@ -59,12 +54,16 @@ const messages = {
         </p>
 
         <fieldset class="picker" data-picker data-state="loading" aria-describedby="slot-error">
-          <legend class="t-h3">{p.dayLegend}</legend>
+          <legend class="t-h3"><span class="step-n" aria-hidden="true">1</span><span class="sr-only">{p.stepOf.replace('{n}', '1')} </span>{p.dayLegend}</legend>
           <p class="t-small text-muted">{p.timezone}</p>
 
           <p class="sr-only" data-picker-live role="status"></p>
           <noscript><p class="picker-note t-small text-muted">{p.noScript}</p></noscript>
-          <p class="picker-note t-small text-muted" data-when="loading">{p.loading}</p>
+          <div class="calendar skeleton mt-5" data-when="loading" aria-hidden="true">
+            <div class="calendar-head"><p class="t-small text-muted">{p.loading}</p></div>
+            <div class="week t-small text-muted">{weekdays.map((day) => <span>{day}</span>)}</div>
+            <div class="days">{Array.from({ length: 35 }, () => <span class="sk-cell"></span>)}</div>
+          </div>
           <p class="picker-note t-small text-muted" data-when="empty">{p.empty}</p>
           <div class="picker-note" data-when="error">
             <p class="t-small text-muted">{p.loadError}</p>
@@ -92,11 +91,11 @@ const messages = {
         </fieldset>
 
         <fieldset class="picker" data-time-set aria-describedby="slot-error" hidden>
-          <legend class="t-h3">{p.timeLegend}</legend>
+          <legend class="t-h3"><span class="step-n" aria-hidden="true">2</span><span class="sr-only">{p.stepOf.replace('{n}', '2')} </span>{p.timeLegend}</legend>
           <div class="times" data-times></div>
         </fieldset>
-        <fieldset class="picker grid gap-6">
-          <legend class="t-h3">{p.detailsLegend}</legend>
+        <fieldset class="picker grid gap-6" data-details-set>
+          <legend class="t-h3"><span class="step-n" aria-hidden="true">3</span><span class="sr-only">{p.stepOf.replace('{n}', '3')} </span>{p.detailsLegend}</legend>
           <p class="summary" data-summary hidden>
             <Icon name="calendar-check" class="text-wine" />
             <span>
@@ -135,19 +134,29 @@ const messages = {
             ))
           }
 
-          <div>
-            <label for="treatment" class="field-label">{f.treatment}</label>
-            <select id="treatment" name="treatment" class="field">
-              <option value="">{ui.selectPlaceholder}</option>
-              <option value={ui.generalAssessment}>{ui.generalAssessment}</option>
-              {treatments.map((t) => <option value={t.name}>{t.name}</option>)}
-            </select>
-          </div>
+          <details class="extras details-reveal" data-extras>
+            <summary class="extras-summary">
+              <Icon name="plus" class="extras-icon" />
+              {p.extras}
+            </summary>
+            <div class="details-reveal-body">
+              <div class="grid gap-6 pt-5">
+              <div>
+                <label for="treatment" class="field-label">{f.treatment}</label>
+                <select id="treatment" name="treatment" class="field">
+                  <option value="">{ui.selectPlaceholder}</option>
+                  <option value={ui.generalAssessment}>{ui.generalAssessment}</option>
+                  {treatments.map((t) => <option value={t.name}>{t.name}</option>)}
+                </select>
+              </div>
 
-          <div>
-            <label for="message" class="field-label">{f.message}</label>
-            <textarea id="message" name="message" rows="4" class="field"></textarea>
-          </div>
+              <div>
+                <label for="message" class="field-label">{f.message}</label>
+                <textarea id="message" name="message" rows="4" class="field"></textarea>
+              </div>
+              </div>
+            </div>
+          </details>
         </fieldset>
 
         <!-- Honeypot: invisible y fuera del orden de tabulación. -->
@@ -168,6 +177,11 @@ const messages = {
           </p>
         </div>
 
+        <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link w-fit">
+          <Icon name="message-circle" />
+          {booking.whatsappAlt}
+          <span class="sr-only">{ui.newTab}</span>
+        </a>
         <div role="status" aria-live="polite" class="status" data-status data-kind="none">
           <span class="status-icon" aria-hidden="true">
             <span data-icon="success"><Icon name="check" /></span>
@@ -199,6 +213,66 @@ const messages = {
 </script>
 
 <style>
+  .step-n {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-right: 0.625rem;
+    border-radius: 999px;
+    background: var(--color-wine);
+    color: var(--color-paper);
+    font-family: var(--font-sans, inherit);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    vertical-align: 0.15em;
+  }
+  [data-time-set],
+  [data-details-set] {
+    scroll-margin-top: 1rem;
+  }
+  /* Mismas medidas que el calendario real: al llegar los horarios la página no salta. */
+  .skeleton .calendar-head {
+    justify-content: center;
+    min-height: 2.75rem;
+  }
+  .picker .days > span {
+    aspect-ratio: 1;
+  }
+  .sk-cell {
+    border-radius: 2px;
+    background: var(--color-card);
+    animation: sk-pulse 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes sk-pulse {
+    to {
+      opacity: 0.45;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk-cell {
+      animation: none;
+    }
+  }
+  .extras-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    color: var(--color-wine);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .extras-summary::-webkit-details-marker {
+    display: none;
+  }
+  .extras-summary :global(.extras-icon) {
+    transition: transform var(--dur-state) var(--ease-out-quart);
+  }
+  .extras[open] .extras-summary :global(.extras-icon) {
+    transform: rotate(45deg);
+  }
   .picker {
     min-width: 0;
     border: 0;
@@ -296,6 +370,7 @@ const messages = {
   }
   .picker :global(.day span) {
     aspect-ratio: 1;
+    height: 100%;
     min-height: 0;
     background: var(--color-card);
     font-weight: 600;
