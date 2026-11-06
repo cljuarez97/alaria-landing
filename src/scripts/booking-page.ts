@@ -50,6 +50,7 @@ function setup(form: HTMLFormElement) {
   const timesBox = q('[data-times]');
   const summary = q('[data-summary]');
   const slotError = q('#slot-error');
+  const timeError = q('#time-error');
   const live = q('[data-picker-live]');
   const retry = q<HTMLButtonElement>('[data-retry]');
   const button = q<HTMLButtonElement>('button[type="submit"]');
@@ -107,6 +108,7 @@ function setup(form: HTMLFormElement) {
         input.checked = time === selectedTime;
         input.addEventListener('change', () => {
           selectedTime = time;
+          timeError.hidden = true;
           renderSummary();
           track('hora-elegida');
           reveal(detailsSet);
@@ -149,6 +151,7 @@ function setup(form: HTMLFormElement) {
         input.addEventListener('change', () => {
           selectedDate = date;
           selectedTime = '';
+          timeError.hidden = true;
           renderTimes();
           track('dia-elegido');
           reveal(timeSet);
@@ -258,6 +261,16 @@ function setup(form: HTMLFormElement) {
     });
   }
 
+  // La hora elegida se ocupó: el aviso y el foco van a donde hay que elegir otra.
+  const showSlotTaken = () => {
+    const stillOnDay = Boolean(selectedDate) && !timeSet.hidden;
+    const box = stillOnDay ? timeError : slotError;
+    box.querySelector<HTMLElement>('[data-error-text]')!.textContent = msg.slotTaken;
+    box.hidden = false;
+    (stillOnDay ? timeSet : box).scrollIntoView({ block: 'start' });
+    form.querySelector<HTMLInputElement>(stillOnDay ? '.slot input' : '.day input:not(:disabled)')?.focus({ preventScroll: true });
+  };
+
   const clearSelection = () => {
     selectedDate = '';
     selectedTime = '';
@@ -347,14 +360,19 @@ function setup(form: HTMLFormElement) {
       void load();
       return;
     }
-    if (result.error === 'offline') setStatus('offline', msg.offline);
-    else if (result.error === 'rate_limited') setStatus('error', msg.rateLimited);
-    else if (result.error === 'slot_taken') {
-      setStatus('error', msg.slotTaken);
+    if (result.error === 'slot_taken') {
       selectedTime = '';
       await load();
-      timeSet.scrollIntoView({ block: 'center' });
-    } else setStatus('error', msg.error);
+      showSlotTaken();
+      return;
+    }
+    setStatus(
+      result.error === 'offline' ? 'offline' : 'error',
+      result.error === 'offline' ? msg.offline : result.error === 'rate_limited' ? msg.rateLimited : msg.error,
+    );
+    // El botón estuvo deshabilitado y perdió el foco: vuelve a él, con el aviso a la vista.
+    button.focus({ preventScroll: true });
+    status.scrollIntoView({ block: 'nearest' });
   });
 
   // Quien llega desde un tratamiento no tiene que volver a elegirlo.
