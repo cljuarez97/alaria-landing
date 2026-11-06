@@ -11,6 +11,7 @@ import {
   slotStart,
   type Availability,
 } from '../lib/appointments';
+import { whatsappUrl } from '../lib/url';
 import { isBot, normalizePhone, validateBooking, type BookingFields, type FieldError } from './booking';
 
 type Messages = {
@@ -18,7 +19,6 @@ type Messages = {
   validation: Record<FieldError['code'] | 'slot', string>;
   submit: string;
   sending: string;
-  success: string;
   error: string;
   slotTaken: string;
   rateLimited: string;
@@ -26,6 +26,10 @@ type Messages = {
   loading: string;
   loadError: string;
   empty: string;
+  whatsapp: string;
+  whatsappMessage: string;
+  contactEmail: string;
+  contactPhone: string;
 };
 
 const VALIDATED = ['name', 'phone', 'email'] as const;
@@ -233,7 +237,7 @@ function setup(form: HTMLFormElement) {
     }
   };
 
-  const setStatus = (kind: 'none' | 'success' | 'error' | 'offline', text = '') => {
+  const setStatus = (kind: 'none' | 'error' | 'offline', text = '') => {
     status.dataset.kind = kind;
     statusText.textContent = text;
   };
@@ -256,18 +260,41 @@ function setup(form: HTMLFormElement) {
     selectedTime = '';
   };
 
+  const confirmation = document.querySelector<HTMLElement>('[data-confirmation]')!;
+  const showConfirmation = (fields: BookingFields, when: string) => {
+    const email = fields.email.trim();
+    confirmation.querySelector('[data-confirmation-when]')!.textContent = when;
+    confirmation.querySelector('[data-confirmation-contact]')!.textContent = email
+      ? msg.contactEmail.replace('{email}', email)
+      : msg.contactPhone.replace('{phone}', normalizePhone(fields.phone));
+    confirmation.querySelector<HTMLAnchorElement>('[data-confirmation-whatsapp]')!.href = whatsappUrl(
+      msg.whatsapp,
+      msg.whatsappMessage.replace('{name}', fields.name.trim()).replace('{when}', when),
+    );
+    form.hidden = true;
+    confirmation.hidden = false;
+    // El foco va al título para que el lector de pantalla anuncie el resultado.
+    confirmation.querySelector<HTMLElement>('[data-confirmation-title]')!.focus({ preventScroll: true });
+    confirmation.scrollIntoView({ block: 'start' });
+  };
+  confirmation.querySelector('[data-confirmation-again]')!.addEventListener('click', () => {
+    confirmation.hidden = true;
+    form.hidden = false;
+    picker.scrollIntoView({ block: 'start' });
+    form.querySelector<HTMLInputElement>('.day input:not(:disabled)')?.focus({ preventScroll: true });
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (button.dataset.state === 'sending') return;
     setStatus('none');
     const fields = read();
-    const when = selectedTime ? `${formatDate(selectedDate)} a las ${formatTime(selectedTime)}` : '';
-    const successText = msg.success.replace('{when}', when);
+    const when = selectedTime ? `${formatDate(selectedDate)}, ${formatTime(selectedTime)}` : '';
 
     // Un bot recibe "éxito" y no se envía nada.
     if (isBot(fields)) {
       form.reset();
-      setStatus('success', successText);
+      showConfirmation(fields, when);
       return;
     }
 
@@ -311,8 +338,7 @@ function setup(form: HTMLFormElement) {
       touched.clear();
       clearSelection();
       showErrors([]);
-      setStatus('success', successText);
-      status.scrollIntoView({ block: 'center' });
+      showConfirmation(fields, when);
       void load();
       return;
     }

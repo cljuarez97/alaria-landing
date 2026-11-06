@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isActive, routeOf, whatsappUrl } from './url';
+import { isActive, routeOf, whatsappUrl, mapsUrl } from './url';
 
 describe('routeOf', () => {
   it('quita la base y normaliza la barra final', () => {
@@ -25,5 +25,11 @@ describe('whatsappUrl', () => {
     expect(whatsappUrl('50236038581', 'Hola, ¿qué tal?')).toBe(
       'https://wa.me/50236038581?text=Hola%2C%20%C2%BFqu%C3%A9%20tal%3F',
     );
+  });
+});
+
+describe('mapsUrl', () => {
+  it('codifica la dirección', () => {
+    expect(mapsUrl('2a Calle 6-24, Zona 10')).toBe('https://www.google.com/maps/search/?api=1&query=2a%20Calle%206-24%2C%20Zona%2010');
   });
 });
