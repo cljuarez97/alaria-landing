@@ -1,5 +1,6 @@
 ---
-// Pinta un texto de content.ts marcando los tramos [pendientes] con <mark class="pending">.
+// Pinta un texto de content.ts. Los tramos [pendientes] solo se ven en desarrollo, marcados con
+// <mark class="pending">: en producción la paciente nunca lee un dato sin confirmar.
 import { splitPending } from '../lib/pending';
 
 interface Props {
@@ -7,5 +8,6 @@ interface Props {
 }
 
 const segments = splitPending(Astro.props.text);
+const isProd = import.meta.env.PROD;
 ---
-{segments.map((s) => (s.pending ? <mark class="pending">{s.text}</mark> : s.text))}
+{segments.map((s) => (s.pending ? !isProd && <mark class="pending">{s.text}</mark> : s.text))}
