@@ -65,6 +65,11 @@ export function monthCells(year: number, month: number): (string | null)[] {
   return cells;
 }
 
+/** Rellena hasta `min` celdas: los meses cortos miden lo mismo que el calendario de carga y la página no salta. */
+export function padCells(cells: (string | null)[], min = 35): (string | null)[] {
+  return cells.length >= min ? cells : [...cells, ...Array.from({ length: min - cells.length }, () => null)];
+}
+
 /** Meses con horas libres, en orden: `[{ year, month }]` (mes desde 0). */
 export function monthsWithSlots(days: AvailableDay[]): { year: number; month: number }[] {
   const keys = [...new Set(days.map((d) => d.date.slice(0, 7)))].sort();
@@ -84,5 +89,6 @@ export function formatDate(date: string): string {
 /** `13:30` → `1:30 p. m.` */
 export function formatTime(time: string): string {
   const [hour = 0, minutes = 0] = time.split(':').map(Number);
-  return `${hour % 12 || 12}:${String(minutes).padStart(2, '0')} ${hour < 12 ? 'a. m.' : 'p. m.'}`;
+  // Espacios duros: "a. m." nunca queda partido en dos líneas.
+  return `${hour % 12 || 12}:${String(minutes).padStart(2, '0')}\u00a0${hour < 12 ? 'a.\u00a0m.' : 'p.\u00a0m.'}`;
 }

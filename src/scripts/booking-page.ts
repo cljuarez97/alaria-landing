@@ -6,6 +6,7 @@ import {
   formatTime,
   monthCells,
   monthsWithSlots,
+  padCells,
   requestAppointment,
   slotStart,
   type Availability,
@@ -51,6 +52,22 @@ function setup(form: HTMLFormElement) {
   const status = q('[data-status]');
   const statusText = q('[data-status-text]');
   const touched = new Set<string>();
+  const detailsSet = q('[data-details-set]');
+  // Avanzar solo tras un toque o clic: con teclado, las flechas cambian de opción y el foco ya manda.
+  let usedPointer = false;
+  form.addEventListener('pointerdown', () => {
+    usedPointer = true;
+  });
+  form.addEventListener('keydown', () => {
+    usedPointer = false;
+  });
+  const reveal = (target: HTMLElement) => {
+    if (!usedPointer) return;
+    const { top } = target.getBoundingClientRect();
+    if (top >= 0 && top <= innerHeight * 0.5) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+  };
 
   let availability: Availability = { utcOffset: '', days: [] };
   let months: { year: number; month: number }[] = [];
@@ -86,6 +103,7 @@ function setup(form: HTMLFormElement) {
         input.addEventListener('change', () => {
           selectedTime = time;
           renderSummary();
+          reveal(detailsSet);
         });
         const text = document.createElement('span');
         text.textContent = formatTime(time);
@@ -111,7 +129,7 @@ function setup(form: HTMLFormElement) {
     if (atStart && !atEnd && lastFocused === prev) next.focus();
     if (atEnd && !atStart && lastFocused === next) prev.focus();
     daysBox.replaceChildren(
-      ...monthCells(month.year, month.month).map((date) => {
+      ...padCells(monthCells(month.year, month.month)).map((date) => {
         if (!date) return document.createElement('span');
         const option = document.createElement('label');
         option.className = 'day';
@@ -126,6 +144,7 @@ function setup(form: HTMLFormElement) {
           selectedDate = date;
           selectedTime = '';
           renderTimes();
+          reveal(timeSet);
         });
         const text = document.createElement('span');
         text.textContent = String(Number(date.slice(8)));
