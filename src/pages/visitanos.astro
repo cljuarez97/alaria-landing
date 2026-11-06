@@ -9,14 +9,10 @@ import { home, site, visit } from '../data/content';
 import { images } from '../data/images';
 import { imageFocus } from '../data/focus';
 import { ui } from '../data/ui';
-import { isPending } from '../lib/pending';
-import { whatsappUrl } from '../lib/url';
+import { mapsUrl, whatsappUrl } from '../lib/url';
 
-// El enlace a Google Maps solo aparece cuando hay dirección real.
 const telHref = `tel:${visit.phone.replace(/[^\d+]/g, '')}`;
-const mapsUrl = isPending(visit.mapsQuery)
-  ? null
-  : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(visit.mapsQuery)}`;
+const maps = mapsUrl(visit.mapsQuery);
 ---
 <BaseLayout title={visit.title} description={`${visit.intro} ${site.name}.`}>
   <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
@@ -35,15 +31,11 @@ const mapsUrl = isPending(visit.mapsQuery)
           <address class="mt-3 font-serif text-2xl leading-snug not-italic">
             {visit.address.map((line) => <span class="block">{line}</span>)}
           </address>
-          {
-            mapsUrl && (
-              <a href={mapsUrl} target="_blank" rel="noopener" class="link mt-2">
-                <Icon name="map-pin" />
-                Google Maps
-                <span class="sr-only">{ui.newTab}</span>
-              </a>
-            )
-          }
+          <a href={maps} target="_blank" rel="noopener" class="link mt-2">
+            <Icon name="map-pin" />
+            Google Maps
+            <span class="sr-only">{ui.newTab}</span>
+          </a>
         </div>
 
         <div>

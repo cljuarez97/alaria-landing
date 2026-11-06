@@ -415,14 +415,28 @@ export const booking = {
     message: 'Cuéntanos qué te preocupa',
     submit: 'Solicitar mi cita',
     sending: 'Enviando tu solicitud…',
-    success:
-      'Recibimos tu solicitud para el {when}: apartamos la hora mientras la revisamos y te confirmaremos por correo o WhatsApp.',
     error: 'No pudimos enviar tu solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.',
     slotTaken: 'Esa hora se acaba de ocupar. Elige otra, por favor.',
     rateLimited: 'Recibimos varias solicitudes con estos datos. Escríbenos por WhatsApp y te ayudamos.',
     offline:
       'Sin conexión. Tu solicitud no se envió. Intenta de nuevo cuando vuelvas a estar en línea o escríbenos por WhatsApp.',
     privacy: 'Usamos tus datos solo para agendar y preparar tu valoración.',
+  },
+  confirmation: {
+    title: 'Recibimos tu solicitud',
+    pending: 'Aún no está confirmada: apartamos la hora mientras la clínica la revisa.',
+    nextTitle: 'Qué sigue',
+    next: [
+      'La clínica revisa tu solicitud.',
+      'Te avisamos si la cita queda confirmada o si hace falta otra hora.',
+      'Si se confirma, te esperamos en Edificio Renovati, Torre 2, clínica 508.',
+    ],
+    contactEmail: 'Te escribiremos a {email}.',
+    contactPhone: 'Te escribiremos al {phone}.',
+    whatsapp: 'Escribir por WhatsApp',
+    whatsappMessage: 'Hola, soy {name}. Acabo de solicitar una cita en Alaria para el {when}.',
+    directions: 'Cómo llegar',
+    again: 'Solicitar otra cita',
   },
   validation: {
     required: 'Este campo es obligatorio.',

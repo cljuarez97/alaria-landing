@@ -2,15 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FramedPicture from '../components/FramedPicture.astro';
 import Icon from '../components/Icon.astro';
-import { booking, footer, site, treatments } from '../data/content';
+import { booking, footer, site, treatments, visit } from '../data/content';
 import { images } from '../data/images';
 import { imageFocus } from '../data/focus';
 import { ui } from '../data/ui';
-import { href, whatsappUrl } from '../lib/url';
+import { href, mapsUrl, whatsappUrl } from '../lib/url';
 import Ornament from '../components/Ornament.astro';
 
 const f = booking.form;
 const p = booking.picker;
+const c = booking.confirmation;
 const fields = [
   { id: 'name', label: f.name, type: 'text', autocomplete: 'name', required: true },
   { id: 'phone', label: f.phone, type: 'tel', autocomplete: 'tel', required: true, inputmode: 'tel' },
@@ -24,7 +25,6 @@ const messages = {
   validation: booking.validation,
   submit: f.submit,
   sending: f.sending,
-  success: f.success,
   error: f.error,
   slotTaken: f.slotTaken,
   rateLimited: f.rateLimited,
@@ -32,6 +32,10 @@ const messages = {
   loading: p.loading,
   loadError: p.loadError,
   empty: p.empty,
+  whatsapp: site.whatsapp,
+  whatsappMessage: c.whatsappMessage,
+  contactEmail: c.contactEmail,
+  contactPhone: c.contactPhone,
 };
 ---
 <BaseLayout title={booking.title} description={booking.intro}>
@@ -184,13 +188,41 @@ const messages = {
         </a>
         <div role="status" aria-live="polite" class="status" data-status data-kind="none">
           <span class="status-icon" aria-hidden="true">
-            <span data-icon="success"><Icon name="check" /></span>
             <span data-icon="error"><Icon name="circle-alert" /></span>
             <span data-icon="offline"><Icon name="wifi-off" /></span>
           </span>
           <span data-status-text></span>
         </div>
       </form>
+
+      <section class="confirmation mt-12" data-confirmation hidden>
+        <h2 class="t-h2 confirmation-title" tabindex="-1" data-confirmation-title>
+          <span class="confirmation-check"><Icon name="check" /></span>
+          {c.title}
+        </h2>
+        <p class="t-lead mt-5 first-letter:uppercase" data-confirmation-when></p>
+        <p class="t-body mt-3 text-muted">{c.pending}</p>
+
+        <h3 class="t-h3 mt-8">{c.nextTitle}</h3>
+        <ol class="confirmation-steps mt-4 grid gap-3" role="list">
+          {c.next.map((step) => <li>{step}</li>)}
+        </ol>
+        <p class="t-body mt-4" data-confirmation-contact></p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-primary" data-confirmation-whatsapp>
+            <Icon name="message-circle" />
+            {c.whatsapp}
+            <span class="sr-only">{ui.newTab}</span>
+          </a>
+          <a href={mapsUrl(visit.mapsQuery)} target="_blank" rel="noopener" class="btn btn-ghost">
+            <Icon name="map-pin" />
+            {c.directions}
+            <span class="sr-only">{ui.newTab}</span>
+          </a>
+        </div>
+        <button type="button" class="link mt-6" data-confirmation-again>{c.again}</button>
+      </section>
     </div>
 
     <aside class="hidden lg:col-span-5 lg:block">
@@ -213,6 +245,36 @@ const messages = {
 </script>
 
 <style>
+  .confirmation[hidden] {
+    display: none;
+  }
+  .confirmation {
+    scroll-margin-top: 1.5rem;
+  }
+  .confirmation-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    outline: none;
+  }
+  .confirmation-check {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--color-success);
+    color: var(--color-paper);
+  }
+  .confirmation-steps {
+    padding-left: 1.25rem;
+    list-style: decimal;
+  }
+  .confirmation-steps li::marker {
+    color: var(--color-gold-ink);
+    font-weight: 600;
+  }
   .step-n {
     display: inline-grid;
     place-items: center;
@@ -461,11 +523,6 @@ const messages = {
   .status-icon :global(.icon) {
     margin-top: 0.15em;
   }
-  .status[data-kind='success'] {
-    color: var(--color-success);
-    animation: rise 280ms var(--ease-out-quart);
-  }
-  .status[data-kind='success'] [data-icon='success'],
   .status[data-kind='error'] [data-icon='error'],
   .status[data-kind='offline'] [data-icon='offline'] {
     display: inline-flex;
