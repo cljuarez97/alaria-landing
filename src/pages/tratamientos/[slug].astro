@@ -7,7 +7,7 @@ import FaqList from '../../components/FaqList.astro';
 import FramedPicture from '../../components/FramedPicture.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Ornament from '../../components/Ornament.astro';
-import { treatments, type Treatment } from '../../data/content';
+import { home, treatments, type Treatment } from '../../data/content';
 import { treatmentImage } from '../../data/images';
 import { focusOf } from '../../data/focus';
 import { frameCropClass } from '../../lib/crop';
@@ -50,6 +50,10 @@ const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD)
           <span class="block" transition:name={`tx-title-${t.slug}`}>{t.name}</span>
         </h1>
         <p class="t-lead hero-in mt-6" style="--d:1">{t.intro}</p>
+        <a href={href(`/agendar/?tratamiento=${t.slug}`)} class="btn btn-primary btn-signature hero-in mt-8 w-full sm:w-fit" style="--d:2">
+          {home.ctaPrimary}
+          <Icon name="arrow-right" />
+        </a>
       </div>
       <FramedPicture
         src={img}
@@ -173,5 +177,5 @@ const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD)
       </ul>
     </nav>
   </article>
-  <CtaBand />
+  <CtaBand treatment={t.slug} />
 </BaseLayout>

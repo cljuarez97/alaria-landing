@@ -4,7 +4,7 @@ export const site = {
   name: 'Alaria Clínica Estética',
   tagline: 'Realza tu belleza con respaldo médico.',
   description:
-    'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Reserva tu cita.',
+    'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Solicita tu cita.',
   whatsapp: '50231045178',
   whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Clínica Estética.',
   instagram: 'https://www.instagram.com/alaria_gt/',
@@ -32,14 +32,14 @@ export const nav = [
   { label: 'Inicio', short: 'Inicio', href: '/' },
   { label: 'Tratamientos', short: 'Tratamientos', href: '/tratamientos/' },
   { label: 'Visítanos', short: 'Visítanos', href: '/visitanos/' },
-  { label: 'Reservar valoración', short: 'Reservar', href: '/agendar/' },
+  { label: 'Solicitar cita', short: 'Agendar', href: '/agendar/' },
 ];
 
 export const home = {
   eyebrow: 'Alaria Clínica Estética · Guatemala',
   h1: 'Clínica de medicina estética en Guatemala',
   lead: 'En nuestra consulta de medicina estética ofrecemos un enfoque personalizado que combina conocimiento médico y técnicas especializadas para realzar tu belleza natural y cuidar tu piel.',
-  ctaPrimary: 'Reservar mi valoración',
+  ctaPrimary: 'Solicitar mi cita',
   ctaSecondary: 'Escribir por WhatsApp',
   ctaTertiary: 'Ver tratamientos',
   approach: {
@@ -93,7 +93,7 @@ export const home = {
         text: 'Escríbenos por WhatsApp y te orientamos antes de decidir. [pendiente: tiempo de respuesta]',
       },
     ],
-    cta: 'Elegir fecha para mi valoración',
+    cta: 'Solicitar mi cita',
   },
   doctorTeaser: {
     title: 'Quién te atiende',
@@ -384,7 +384,7 @@ export const visit = {
 };
 
 export const booking = {
-  title: 'Reserva tu valoración',
+  title: 'Solicita tu cita',
   intro:
     'Elige el día y la hora que prefieras y déjanos tus datos. Revisamos tu solicitud y te confirmamos la cita.',
   // URL de la aplicación web de Apps Script (apps-script/). No es un secreto: identifica el servicio.
