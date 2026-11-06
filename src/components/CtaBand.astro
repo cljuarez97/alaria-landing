@@ -9,8 +9,11 @@ import { href, whatsappUrl } from '../lib/url';
 interface Props {
   title?: string;
   text?: string;
+  /** Slug del tratamiento: llega ya elegido al formulario. */
+  treatment?: string;
 }
-const { title = booking.title, text = booking.intro } = Astro.props;
+const { title = booking.title, text = booking.intro, treatment } = Astro.props;
+const bookingHref = href(treatment ? `/agendar/?tratamiento=${treatment}` : '/agendar/');
 ---
 <section class="cta-band on-dark bg-wine text-paper" aria-labelledby="cta-band-title">
   <span class="cta-arch" aria-hidden="true"></span>
@@ -22,7 +25,7 @@ const { title = booking.title, text = booking.intro } = Astro.props;
       <p class="t-body mt-5 text-card">{text}</p>
     </div>
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-start">
-      <a href={href('/agendar/')} class="btn btn-light btn-signature w-full sm:w-fit">
+      <a href={bookingHref} class="btn btn-light btn-signature w-full sm:w-fit">
         {home.ctaPrimary}
         <Icon name="arrow-right" />
       </a>
