@@ -28,8 +28,9 @@ export function inlineScriptHashes(html) {
 }
 
 /**
- * `style-src` lleva 'unsafe-inline': el sitio usa `style="--d:1"` y tanto el ClientRouter como el
- * embed de Cal.com insertan estilos. `frame-ancestors` no se puede poner aquí: se ignora en <meta>.
+ * `style-src` lleva 'unsafe-inline': el sitio usa `style="--d:1"` y el ClientRouter inserta estilos.
+ * `connect-src`: Apps Script responde desde script.google.com y redirige a script.googleusercontent.com.
+ * `frame-ancestors` no se puede poner aquí: se ignora en <meta>.
  * @param {string[]} hashes
  * @returns {string}
  */
@@ -37,17 +38,17 @@ export function buildPolicy(hashes) {
   const scripts = [...new Set(hashes)].sort();
   return [
     "default-src 'self'",
-    `script-src ${["'self'", ...scripts, 'https://app.cal.com'].join(' ')}`,
+    `script-src ${["'self'", ...scripts].join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https://cal.com https://app.cal.com",
+    "img-src 'self' data:",
     "font-src 'self'",
-    "connect-src 'self' https://api.web3forms.com https://cal.com https://app.cal.com",
-    'frame-src https://cal.com https://app.cal.com',
+    "connect-src 'self' https://script.google.com https://script.googleusercontent.com",
+    "frame-src 'none'",
     "manifest-src 'self'",
     "worker-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self' https://api.web3forms.com",
+    "form-action 'self'",
   ].join('; ');
 }
 

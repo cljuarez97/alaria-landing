@@ -62,7 +62,7 @@ async function cacheFirst(request, cacheName, max) {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  // Solo GET del propio sitio: nunca el POST a Web3Forms ni enlaces externos (wa.me, mapas).
+  // Solo GET del propio sitio: nunca las citas de Apps Script ni enlaces externos (wa.me, mapas).
   if (request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return;
 
   // El ClientRouter pide las páginas con fetch() sin `Accept: text/html`, así que se reconocen

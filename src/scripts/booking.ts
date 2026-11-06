@@ -3,6 +3,7 @@ export type BookingFields = {
   phone: string;
   email: string;
   treatment: string;
+  slot: string;
   message?: string;
   botcheck?: string;
 };
@@ -20,7 +21,7 @@ export function normalizePhone(raw: string): string {
 export function validateBooking(fields: BookingFields): FieldError[] {
   const errors: FieldError[] = [];
   // Correo y tratamiento son opcionales: menos fricción para reservar.
-  const required: (keyof BookingFields)[] = ['name', 'phone'];
+  const required: (keyof BookingFields)[] = ['slot', 'name', 'phone'];
   for (const field of required) {
     if (!fields[field]?.trim()) errors.push({ field, code: 'required' });
   }
@@ -36,26 +37,4 @@ export function validateBooking(fields: BookingFields): FieldError[] {
 /** Un bot que rellena el honeypot recibe "éxito" sin que se envíe nada. */
 export function isBot(fields: BookingFields): boolean {
   return Boolean(fields.botcheck);
-}
-
-export type SubmitResult = 'success' | 'error' | 'offline';
-
-export async function submitBooking(
-  endpoint: string,
-  payload: Record<string, string>,
-  fetchImpl: typeof fetch = fetch,
-): Promise<SubmitResult> {
-  if (typeof navigator !== 'undefined' && navigator.onLine === false) return 'offline';
-  try {
-    const res = await fetchImpl(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) return 'error';
-    const data = (await res.json().catch(() => ({}))) as { success?: boolean };
-    return data.success === false ? 'error' : 'success';
-  } catch {
-    return 'offline';
-  }
 }
