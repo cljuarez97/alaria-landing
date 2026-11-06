@@ -5,6 +5,7 @@ import Icon from './Icon.astro';
 import { footer, nav, site, home } from '../data/content';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
+import { isPublishable } from '../lib/pending';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -62,7 +63,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <span aria-hidden="true" class="mx-1.5 text-gold">·</span>
           <a href={href('/privacidad/')} class="text-paper underline underline-offset-4">{footer.privacyLink}</a>
         </p>
-        <p><Rich text={footer.credentials} /></p>
+        {
+          footer.credentials
+            .filter((line) => isPublishable(line, import.meta.env.PROD, true))
+            .map((line) => (
+              <p>
+                <Rich text={line} />
+              </p>
+            ))
+        }
       </div>
       <div class="flex shrink-0 items-center gap-3">
         <img src={`${base}/bichitech-logo.webp`} alt="" width="38" height="40" loading="lazy" decoding="async" class="h-9 w-auto opacity-90" />

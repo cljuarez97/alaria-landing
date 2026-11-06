@@ -4,6 +4,7 @@ import FramedPicture from '../components/FramedPicture.astro';
 import Icon from '../components/Icon.astro';
 import { booking, footer, site, treatments } from '../data/content';
 import { images } from '../data/images';
+import { imageFocus } from '../data/focus';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
 import Ornament from '../components/Ornament.astro';
@@ -181,11 +182,12 @@ const messages = {
     <aside class="hidden lg:col-span-5 lg:block">
       <div class="lg:sticky lg:top-10">
         <FramedPicture
-          src={images['agendar-escritorio']}
-          alt=""
+          src={images['visitanos-consultorio']}
+          alt={ui.clinicPhotoAlt}
           widths={[450, 600, 900]}
           sizes="27.75rem"
-          priority
+          ratio="4 / 5"
+          position={imageFocus['visitanos-consultorio']}
         />
       </div>
     </aside>

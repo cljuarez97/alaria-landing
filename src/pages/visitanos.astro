@@ -28,16 +28,7 @@ const mapsUrl = isPending(visit.mapsQuery)
       <p class="t-lead hero-in lg:col-span-6 lg:pb-2" style="--d:1">{visit.intro}</p>
     </header>
 
-    <FramedPicture
-      src={images['visitanos-entrada']}
-      alt=""
-      widths={[640, 960, 1280, 1600]}
-      sizes="(min-width: 1232px) 72rem, calc(100vw - 2.5rem - 8px)"
-      priority
-      class="mt-12 lg:mt-16"
-    />
-
-    <div class="mt-16 grid gap-14 lg:mt-24 lg:grid-cols-12">
+    <div class="mt-12 grid gap-14 lg:mt-16 lg:grid-cols-12">
       <div class="visit-card surface-rose on-rose grid content-start gap-10 p-6 sm:p-10 lg:col-span-5" data-reveal>
         <div>
           <h2 class="t-eyebrow">{ui.address}</h2>

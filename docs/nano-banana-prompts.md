@@ -22,9 +22,6 @@ Editorial still-life photograph, soft diffused late-afternoon window light from 
 | 3 | `toxina-botulinica` | Toxina botulínica | 3:4 (vertical) | **Ya hay foto** (`toxina-botulinica.webp`, 1024×1365): no generar. Foco `55% 30%`; rostro entre el 17 % y el 62 % del alto. |
 | 4 | `bioestimuladores` | Bioestimuladores | 4:5 (vertical) | **Ya hay foto** (`bioestimuladores.webp`, 1031×1280): no generar. Foco `50% 35%`; rostro entre el 15 % y el 75 % del alto. |
 | 5 | `calidad-de-piel` | Calidad de piel | 2:3 (vertical) | **Ya hay foto** (`calidad-de-piel.webp`, 1023×1537): no generar. Foco `50% 18%`; rostro y manos entre el 9 % y el 70 % del alto. |
-| 7 | `visitanos-entrada` | Visítanos | 16:9 | burgundy entrance door with brass handle, potted olive tree, leaf shadows on cream wall |
-| 8 | `agendar-escritorio` | Reservar | 4:5 | writing desk with blank cream appointment card, gold fountain pen, dried roses |
-| 9 | `resultados-cortina` | Cabecera de Resultados | 21:9 | burgundy velvet curtain slightly parted, warm light spilling across cream floor |
 | 10 | `splash-ventana` | Imagen para compartir (OG) y estados vacíos | 1:1 | arched window shadow cast on cream plaster wall, a few flecks of gold leaf |
 
 ## Portada con procedimiento (`hero-arch`)
