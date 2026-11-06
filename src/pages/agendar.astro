@@ -28,6 +28,9 @@ const messages = {
   slotTaken: f.slotTaken,
   rateLimited: f.rateLimited,
   offline: f.offline,
+  loading: p.loading,
+  loadError: p.loadError,
+  empty: p.empty,
 };
 ---
 <BaseLayout title={booking.title} description={booking.intro}>
@@ -49,11 +52,18 @@ const messages = {
         data-booking
         data-messages={JSON.stringify(messages)}
       >
-        <fieldset class="picker" data-picker data-state="loading">
+        <p id="slot-error" class="field-error slot-error" role="alert" hidden>
+          <Icon name="circle-alert" />
+          <span data-error-text></span>
+        </p>
+
+        <fieldset class="picker" data-picker data-state="loading" aria-describedby="slot-error">
           <legend class="t-h3">{p.dayLegend}</legend>
           <p class="t-small text-muted">{p.timezone}</p>
 
-          <p class="picker-note t-small text-muted" data-when="loading" role="status">{p.loading}</p>
+          <p class="sr-only" data-picker-live role="status"></p>
+          <noscript><p class="picker-note t-small text-muted">{p.noScript}</p></noscript>
+          <p class="picker-note t-small text-muted" data-when="loading">{p.loading}</p>
           <p class="picker-note t-small text-muted" data-when="empty">{p.empty}</p>
           <div class="picker-note" data-when="error">
             <p class="t-small text-muted">{p.loadError}</p>
@@ -80,15 +90,10 @@ const messages = {
           </div>
         </fieldset>
 
-        <fieldset class="picker" data-time-set hidden>
+        <fieldset class="picker" data-time-set aria-describedby="slot-error" hidden>
           <legend class="t-h3">{p.timeLegend}</legend>
           <div class="times" data-times></div>
         </fieldset>
-        <p id="slot-error" class="field-error" hidden>
-          <Icon name="circle-alert" />
-          <span data-error-text></span>
-        </p>
-
         <fieldset class="picker grid gap-6">
           <legend class="t-h3">{p.detailsLegend}</legend>
           <p class="summary" data-summary hidden>
@@ -211,6 +216,13 @@ const messages = {
   .picker[data-state='error'] [data-when='error'],
   .picker[data-state='ready'] [data-when='ready'] {
     display: block;
+  }
+  /* Sin JavaScript nunca termina de cargar: se muestra el aviso de <noscript>. */
+  :global(html:not(.js)) .picker [data-when='loading'] {
+    display: none;
+  }
+  .slot-error {
+    scroll-margin-top: 1rem;
   }
   .picker-note {
     margin-top: 1.25rem;
