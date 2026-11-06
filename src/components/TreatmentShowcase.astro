@@ -68,7 +68,7 @@ const featuredImg = featured ? treatmentImage(featured.slug) : undefined;
           <a href={href(`/tratamientos/${t.slug}/`)} class="row-link press group grid grid-cols-[auto_1fr_auto] items-start gap-x-4 py-6 no-underline sm:gap-x-6">
             <span class="row-num numeral pt-0.5 text-[2.25rem]" data-n={t.number} aria-hidden="true"></span>
             <div class="min-w-0">
-              <H class="t-h3 text-charcoal group-hover:text-wine">
+              <H class="t-h3 hyphens-auto text-charcoal group-hover:text-wine">
                 <span class="block" transition:name={`tx-title-${t.slug}`}>{t.name}</span>
               </H>
               <p class="t-small mt-2 text-muted">{t.short}</p>
