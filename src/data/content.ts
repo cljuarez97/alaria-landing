@@ -389,7 +389,7 @@ export const booking = {
   intro:
     'Elige el día y la hora que prefieras y déjanos tus datos. Revisamos tu solicitud y te confirmamos la cita.',
   // URL de la aplicación web de Apps Script (apps-script/). No es un secreto: identifica el servicio.
-  endpoint: '',
+  endpoint: 'https://script.google.com/macros/s/AKfycbxURul0kQ9DUgxU4hIKaVT8s7xh58jKRZF4tsDEtvEoTJlCv44wBCiIS-ebThtP3wHn/exec',
   picker: {
     dayLegend: 'Elige el día',
     timeLegend: 'Elige la hora',
