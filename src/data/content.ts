@@ -31,7 +31,6 @@ export const site = {
 export const nav = [
   { label: 'Inicio', short: 'Inicio', href: '/' },
   { label: 'Tratamientos', short: 'Tratamientos', href: '/tratamientos/' },
-  { label: 'Resultados', short: 'Resultados', href: '/resultados/' },
   { label: 'Visítanos', short: 'Visítanos', href: '/visitanos/' },
   { label: 'Reservar valoración', short: 'Reservar', href: '/agendar/' },
 ];

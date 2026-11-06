@@ -10,7 +10,6 @@ import { href, isActive, routeOf } from '../lib/url';
 const iconFor: Record<string, IconName> = {
   '/': 'house',
   '/tratamientos/': 'layers',
-  '/resultados/': 'images',
   '/visitanos/': 'map-pin',
   '/agendar/': 'calendar-check',
 };
@@ -25,7 +24,7 @@ const ctaHref = nav[nav.length - 1]!.href;
   transition:persist="bottom-nav"
   data-bottom-nav
 >
-  <div class="bn-track" style={`--i:${Math.max(activeIndex, 0)}`} data-has-active={activeIndex >= 0 ? 'true' : 'false'}>
+  <div class="bn-track" style={`--i:${Math.max(activeIndex, 0)};--n:${nav.length}`} data-has-active={activeIndex >= 0 ? 'true' : 'false'}>
     <span class="bn-pill" aria-hidden="true"></span>
     <ul class="bn-list">
       {
@@ -99,16 +98,16 @@ const ctaHref = nav[nav.length - 1]!.href;
   .bn-list {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
     height: 100%;
   }
-  /* Píldora activa: 1/5 del ancho útil, se desliza solo con transform. */
+  /* Píldora activa: una columna del ancho útil, se desliza solo con transform. */
   .bn-pill {
     position: absolute;
     top: 0.375rem;
     bottom: 0.375rem;
     left: var(--pad);
-    width: calc((100% - var(--pad) * 2) / 5);
+    width: calc((100% - var(--pad) * 2) / var(--n));
     border-radius: 0.875rem;
     background: var(--color-card);
     transform: translateX(calc(var(--i, 0) * 100%));

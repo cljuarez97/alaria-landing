@@ -8,7 +8,7 @@ export default defineConfig({
   site: 'https://cljuarez97.github.io',
   base: '/alaria-landing',
   trailingSlash: 'always',
-  integrations: [sitemap({ filter: (page) => !/\/(offline|404)\/?$/.test(page) }), cspIntegration()],
+  integrations: [sitemap({ filter: (page) => !/\/(offline|404|resultados)\/?$/.test(page) }), cspIntegration()],
   vite: {
     plugins: [tailwindcss()],
     // Scripts siempre en archivo: los inline cambiarían de hash en cada despliegue y una pestaña
