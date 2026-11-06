@@ -19,6 +19,7 @@ type Backend = {
   formatSlot(ms: number, cfg: unknown): string;
   buildIcs(uid: string, start: number, end: number, now: number, cfg: unknown): string;
   whatsappNotice(phone: string, text: string): string;
+  linesToHtml(lines: string[]): string;
 };
 
 const context = vm.createContext({});
@@ -151,6 +152,14 @@ describe('utilidades', () => {
     expect(ics).toContain('DTEND:20261109T153000Z');
     expect(ics).toContain('LOCATION:2a Calle 6-24\\, Zona 10');
     expect(ics.split('\r\n').at(-1)).toBe('END:VCALENDAR');
+  });
+
+  it('convierte las líneas en párrafos y los enlaces en texto clicable, escapando el resto', () => {
+    const html = gs.linesToHtml(['Hola, <Ana>', 'Teléfono: 1\nCorreo: x', 'Aceptar o rechazar: https://x.test/exec?a=1&b=2']);
+    expect(html).toContain('<p>Hola, &lt;Ana&gt;</p>');
+    expect(html).toContain('Teléfono: 1<br>Correo: x');
+    expect(html).toContain('<a href="https://x.test/exec?a=1&amp;b=2"');
+    expect(html).toContain('>Aceptar o rechazar</a>');
   });
 
   it('arma el aviso de WhatsApp con el prefijo de Guatemala', () => {

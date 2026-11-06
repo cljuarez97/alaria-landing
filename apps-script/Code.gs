@@ -186,7 +186,7 @@ function acceptRequest_(event) {
   return {
     ok: true,
     message: info.email ? 'Cita aceptada. Le enviamos la confirmación por correo.' : 'Cita aceptada. No dejó correo: avísale por WhatsApp.',
-    whatsapp: whatsappNotice(info.phone, 'Hola, ' + info.name + '. Confirmamos tu valoración en ' + CONFIG.CLINIC_NAME + ' el ' + when + '. Te esperamos en ' + CONFIG.CLINIC_ADDRESS + '.'),
+    whatsapp: whatsappNotice(info.phone, 'Hola, ' + info.name + '. Confirmamos tu valoración en ' + CONFIG.CLINIC_NAME + ' el ' + when + ' Te esperamos en ' + CONFIG.CLINIC_ADDRESS + '.'),
   };
 }
 
@@ -196,7 +196,7 @@ function dropRequest_(event, note, kind) {
   var when = formatSlot(info.startMs, CONFIG);
   var reason = oneLine(note).slice(0, 300);
   var lead = kind === 'reject' ? 'No podemos atender tu solicitud' : 'Tuvimos que cancelar tu cita';
-  var text = lead + ' del ' + when + '.';
+  var text = lead + ' del ' + when;
   if (reason) text += ' ' + reason;
   if (info.email) {
     sendMail_(info.email, 'Sobre tu valoración en ' + CONFIG.CLINIC_NAME, [
@@ -224,7 +224,7 @@ function cancelByPatient(id, sig) {
     if (!event) return { ok: false, message: 'Esta cita ya no está activa.' };
     var info = eventInfo_(event);
     sendMail_(CONFIG.CLINIC_EMAIL, (info.isTest ? '[PRUEBA] ' : '') + 'Cita cancelada: ' + info.name, [
-      info.name + ' canceló su cita del ' + formatSlot(info.startMs, CONFIG) + '.',
+      info.name + ' canceló su cita del ' + formatSlot(info.startMs, CONFIG),
       'Teléfono: ' + info.phone,
       'La hora quedó libre en el sitio.',
     ]);
@@ -250,7 +250,7 @@ function hourlyJob() {
     if (event.getTag('status') !== STATUS_CONFIRMED || !info.email || event.getTag('reminded')) return;
     sendMail_(info.email, 'Recordatorio: tu valoración en ' + CONFIG.CLINIC_NAME, [
       'Hola, ' + info.name + '.',
-      'Te esperamos el ' + formatSlot(info.startMs, CONFIG) + '.',
+      'Te esperamos el ' + formatSlot(info.startMs, CONFIG),
       'Dirección: ' + CONFIG.CLINIC_ADDRESS,
       'Si no puedes venir, cancela aquí: ' + signedUrl_('cancel', event.getId()),
     ]);
@@ -272,19 +272,21 @@ function notifyClinicOfRequest_(data, reviewUrl, isTest) {
 
 function sendConfirmation_(event, info, when) {
   var ics = buildIcs(event.getId(), info.startMs, event.getEndTime().getTime(), Date.now(), CONFIG);
+  var lines = [
+    'Hola, ' + info.name + '.',
+    'Confirmamos tu valoración el ' + when,
+    'Dirección: ' + CONFIG.CLINIC_ADDRESS,
+    'Adjuntamos un archivo para agregar la cita a tu calendario.',
+    'Si no puedes venir, cancela aquí: ' + signedUrl_('cancel', event.getId()),
+    'Dudas: ' + CONFIG.CLINIC_PHONE,
+  ];
   MailApp.sendEmail({
     to: info.email,
     subject: 'Tu valoración en ' + CONFIG.CLINIC_NAME + ' está confirmada',
     name: CONFIG.CLINIC_NAME,
     replyTo: CONFIG.CLINIC_EMAIL,
-    body: [
-      'Hola, ' + info.name + '.',
-      'Confirmamos tu valoración el ' + when + '.',
-      'Dirección: ' + CONFIG.CLINIC_ADDRESS,
-      'Adjuntamos un archivo para agregar la cita a tu calendario.',
-      'Si no puedes venir, cancela aquí: ' + signedUrl_('cancel', event.getId()),
-      'Dudas: ' + CONFIG.CLINIC_PHONE,
-    ].join('\n\n'),
+    body: lines.join('\n\n'),
+    htmlBody: linesToHtml(lines),
     attachments: [Utilities.newBlob(ics, 'text/calendar', 'cita-alaria.ics')],
   });
 }
@@ -296,6 +298,7 @@ function sendMail_(to, subject, lines, replyTo) {
     name: CONFIG.CLINIC_NAME,
     replyTo: replyTo || CONFIG.CLINIC_EMAIL,
     body: lines.join('\n\n'),
+    htmlBody: linesToHtml(lines),
   });
 }
 
@@ -322,7 +325,7 @@ function reviewPage_(id, sig) {
     'var id=' + scriptValue_(id) + ',sig=' + scriptValue_(sig) + ';' +
     'function done(r){document.getElementById("result").textContent=r.message;' +
     'if(r.whatsapp){var a=document.createElement("a");a.href=r.whatsapp;a.target="_blank";a.rel="noopener";a.textContent="Avisar por WhatsApp";document.getElementById("result").append(" ",a);}' +
-    'if(r.ok){document.querySelector(".actions").remove();}}' +
+    'if(r.ok){document.querySelector(".actions").remove();document.querySelector("label[for=note]").remove();document.getElementById("note").remove();document.querySelector(".tag").textContent="Atendida";}}' +
     'document.querySelectorAll("[data-decision]").forEach(function(b){b.addEventListener("click",function(){' +
     'document.querySelectorAll("[data-decision]").forEach(function(x){x.disabled=true;});document.getElementById("result").textContent="Procesando…";' +
     'google.script.run.withSuccessHandler(done).withFailureHandler(function(){done({ok:false,message:"No se pudo completar. Recarga la página e inténtalo de nuevo."});})' +
