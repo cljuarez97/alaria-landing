@@ -1,6 +1,6 @@
 # Citas con Google Calendar
 
-Sin Cal.com ni servidores propios: un backend de Google Apps Script corre con la cuenta de la clínica
+Sin servidores propios: un backend de Google Apps Script corre con la cuenta de la clínica
 (`alariaclinicaestetica@gmail.com`). El sitio no guarda claves ni pide inicio de sesión a las pacientes.
 Funciona igual desde GitHub Pages y desde local; lo enviado desde `localhost:4321` queda marcado `[PRUEBA]`.
 
