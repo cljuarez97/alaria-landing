@@ -12,6 +12,7 @@ export type AppointmentRequest = {
   email: string;
   treatment: string;
   message: string;
+  followup: boolean;
   slotStart: string;
   origin: string;
 };

@@ -120,6 +120,7 @@ function createRequest_(body) {
     event.setTag('phone', data.phone);
     event.setTag('email', data.email);
     event.setTag('test', isTest ? '1' : '');
+    event.setTag('followup', data.followup ? '1' : '');
     var reviewUrl = signedUrl_('review', event.getId());
     event.setDescription(eventDescription_(data) + '\n\nAceptar o rechazar: ' + reviewUrl);
     CacheService.getScriptCache().remove(SLOTS_CACHE_KEY);
@@ -238,13 +239,19 @@ function cancelByPatient(id, sig) {
 
 /* ---------- Tarea programada ---------- */
 
-/** Cada hora: libera solicitudes sin atender cuya hora ya pasó y envía recordatorios 24 h antes. */
+/** Cada hora: solicitudes sin atender, recordatorios 24 h antes y seguimiento tras la cita. */
 function hourlyJob() {
   var calendar = appointmentsCalendar_();
   var now = Date.now();
-  calendar.getEvents(new Date(now - 7 * DAY_MS), new Date(now)).forEach(function (event) {
-    if (event.getTag('status') === STATUS_PENDING) event.deleteEvent();
+  var horizon = new Date(now + (CONFIG.HORIZON_DAYS + 1) * DAY_MS);
+
+  calendar.getEvents(new Date(now - 7 * DAY_MS), horizon).forEach(function (event) {
+    if (event.getTag('status') !== STATUS_PENDING) return;
+    var action = pendingAction(event.getDateCreated().getTime(), event.getStartTime().getTime(), event.getTag('nudged'), now, CONFIG);
+    if (action === 'expire') expireRequest_(event, now);
+    if (action === 'nudge') nudgeClinic_(event);
   });
+
   calendar.getEvents(new Date(now + 23 * 60 * MINUTE_MS), new Date(now + 25 * 60 * MINUTE_MS)).forEach(function (event) {
     var info = eventInfo_(event);
     if (event.getTag('status') !== STATUS_CONFIRMED || !info.email || event.getTag('reminded')) return;
@@ -256,6 +263,49 @@ function hourlyJob() {
     ]);
     event.setTag('reminded', '1');
   });
+
+  var followupStart = new Date(now - (CONFIG.FOLLOWUP_DAYS + 1) * DAY_MS);
+  calendar.getEvents(followupStart, new Date(now - CONFIG.FOLLOWUP_DAYS * DAY_MS)).forEach(function (event) {
+    var info = eventInfo_(event);
+    if (event.getTag('status') !== STATUS_CONFIRMED || !info.email || event.getTag('followup') !== '1' || event.getTag('followupSent')) return;
+    sendMail_(info.email, '¿Cómo te fue en ' + CONFIG.CLINIC_NAME + '?', [
+      'Hola, ' + info.name + '.',
+      'Pasó una semana desde tu visita. Si tu plan incluye un control o tienes dudas, puedes solicitar tu próxima cita.',
+      'Solicitar cita: ' + CONFIG.SITE_URL,
+    ]);
+    event.setTag('followupSent', '1');
+  });
+}
+
+function nudgeClinic_(event) {
+  var info = eventInfo_(event);
+  sendMail_(CONFIG.CLINIC_EMAIL, (info.isTest ? '[PRUEBA] ' : '') + 'Solicitud sin responder: ' + info.name, [
+    info.name + ' sigue esperando respuesta para el ' + formatSlot(info.startMs, CONFIG),
+    'Teléfono: ' + info.phone,
+    'Aceptar o rechazar: ' + signedUrl_('review', event.getId()),
+  ]);
+  event.setTag('nudged', '1');
+}
+
+/** La hora vuelve a estar libre. Solo se avisa a la paciente si la cita aún no ha pasado. */
+function expireRequest_(event, now) {
+  var info = eventInfo_(event);
+  var when = formatSlot(info.startMs, CONFIG);
+  if (info.email && info.startMs > now) {
+    sendMail_(info.email, 'Sobre tu solicitud en ' + CONFIG.CLINIC_NAME, [
+      'Hola, ' + info.name + '.',
+      'No pudimos confirmar a tiempo tu solicitud del ' + when,
+      'Elige otra fecha o escríbenos al ' + CONFIG.CLINIC_PHONE + ' y te ayudamos.',
+      'Solicitar cita: ' + CONFIG.SITE_URL,
+    ]);
+  }
+  sendMail_(CONFIG.CLINIC_EMAIL, (info.isTest ? '[PRUEBA] ' : '') + 'Solicitud vencida: ' + info.name, [
+    'Se liberó la hora del ' + when + ' porque nadie respondió.',
+    'Teléfono: ' + info.phone,
+    info.email ? 'Le avisamos por correo.' : 'No dejó correo: conviene avisarle por WhatsApp.',
+  ]);
+  event.deleteEvent();
+  CacheService.getScriptCache().remove(SLOTS_CACHE_KEY);
 }
 
 /* ---------- Correos ---------- */
