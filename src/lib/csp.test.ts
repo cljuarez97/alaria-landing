@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { buildPolicy, injectPolicy, inlineScriptHashes } from './csp.mjs';
+import { analyticsOrigin, buildPolicy, injectPolicy, inlineScriptHashes } from './csp.mjs';
 
 const hashOf = (body: string) => `'sha256-${createHash('sha256').update(body, 'utf8').digest('base64')}'`;
 
@@ -47,5 +47,19 @@ describe('injectPolicy', () => {
   });
   it('falla el build en vez de publicar una página sin política', () => {
     expect(() => injectPolicy('<head></head>', 'x')).toThrow('CSP');
+  });
+});
+
+describe('analítica en la CSP', () => {
+  it('sin analítica no abre orígenes de más', () => {
+    expect(buildPolicy([])).not.toContain('umami');
+    expect(analyticsOrigin('<script src="/x.js"></script>')).toBeNull();
+  });
+  it('con analítica permite su origen para el script y las peticiones', () => {
+    const origin = analyticsOrigin('<script defer src="https://cloud.umami.is/script.js" data-website-id="abc"></script>');
+    expect(origin).toBe('https://cloud.umami.is');
+    const policy = buildPolicy([], origin);
+    expect(policy).toMatch(/script-src [^;]*https:\/\/cloud\.umami\.is/);
+    expect(policy).toMatch(/connect-src [^;]*https:\/\/cloud\.umami\.is/);
   });
 });
