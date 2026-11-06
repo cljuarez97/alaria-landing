@@ -5,7 +5,7 @@ import Rich from '../components/Rich.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Ornament from '../components/Ornament.astro';
-import { home, site, visit } from '../data/content';
+import { booking, home, site, visit } from '../data/content';
 import { images } from '../data/images';
 import { imageFocus } from '../data/focus';
 import { ui } from '../data/ui';
@@ -31,9 +31,9 @@ const maps = mapsUrl(visit.mapsQuery);
           <address class="mt-3 font-serif text-2xl leading-snug not-italic">
             {visit.address.map((line) => <span class="block">{line}</span>)}
           </address>
-          <a href={maps} target="_blank" rel="noopener" class="link mt-2">
+          <a href={maps} target="_blank" rel="noopener" class="btn btn-primary mt-5 w-full sm:w-fit">
             <Icon name="map-pin" />
-            Google Maps
+            {booking.confirmation.directions}
             <span class="sr-only">{ui.newTab}</span>
           </a>
         </div>
@@ -73,7 +73,7 @@ const maps = mapsUrl(visit.mapsQuery);
           </ul>
           <div class="flex flex-wrap gap-3">
             <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost w-fit">
-              <Icon name="message-circle" />
+              <Icon name="whatsapp" />
               {home.ctaSecondary}
               <span class="sr-only">{ui.newTab}</span>
             </a>
