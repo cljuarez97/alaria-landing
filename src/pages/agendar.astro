@@ -134,6 +134,14 @@ const messages = {
                   <Icon name="circle-alert" />
                   <span data-error-text />
                 </p>
+                {
+                  field.id === 'email' && (
+                    <label class="followup t-small mt-3">
+                      <input id="followup" name="followup" type="checkbox" />
+                      <span>{f.followup}</span>
+                    </label>
+                  )
+                }
               </div>
             ))
           }
@@ -245,6 +253,20 @@ const messages = {
 </script>
 
 <style>
+  .followup {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    min-height: 2.75rem;
+    cursor: pointer;
+  }
+  .followup input {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.125rem;
+    accent-color: var(--color-wine);
+  }
   .confirmation[hidden] {
     display: none;
   }

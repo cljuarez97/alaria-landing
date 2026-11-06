@@ -324,6 +324,7 @@ function setup(form: HTMLFormElement) {
       email: fields.email.trim(),
       treatment: fields.treatment,
       message: (fields.message ?? '').trim(),
+      followup: q<HTMLInputElement>('#followup').checked,
       slotStart: slotStart(selectedDate, selectedTime, availability.utcOffset),
       origin: location.origin,
     });
