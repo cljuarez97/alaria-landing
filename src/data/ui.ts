@@ -29,8 +29,6 @@ export const ui = {
   selectPlaceholder: 'Elige una opción',
   requiredMark: 'obligatorio',
   optional: 'opcional',
-  calendarRegion: 'Calendario de citas',
-  calendarLoading: 'Cargando horarios disponibles…',
   developedBy: 'Sitio desarrollado por Bichitech',
   notFound: {
     title: 'No encontramos esta página',

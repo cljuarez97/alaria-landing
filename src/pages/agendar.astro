@@ -7,54 +7,97 @@ import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
 import Ornament from '../components/Ornament.astro';
-import { calPublicUrl, parseCalLink } from '../lib/cal';
 
 const f = booking.form;
-const calLink = parseCalLink(booking.calendar.link);
+const p = booking.picker;
 const fields = [
   { id: 'name', label: f.name, type: 'text', autocomplete: 'name', required: true },
   { id: 'phone', label: f.phone, type: 'tel', autocomplete: 'tel', required: true, inputmode: 'tel' },
   { id: 'email', label: f.email, type: 'email', autocomplete: 'email', required: false },
 ] as const;
+const weekdays = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
 // Mensajes para el script del cliente (sin duplicar textos en el JS).
 const messages = {
+  endpoint: booking.endpoint,
   validation: booking.validation,
   submit: f.submit,
   sending: f.sending,
   success: f.success,
   error: f.error,
+  slotTaken: f.slotTaken,
+  rateLimited: f.rateLimited,
   offline: f.offline,
-  endpoint: booking.endpoint,
-  accessKey: booking.web3formsKey,
-  subject: `Solicitud de valoración · ${site.name}`,
 };
 ---
 <BaseLayout title={booking.title} description={booking.intro}>
-  <section
-    class:list={[
-      'container-x grid gap-x-16 gap-y-12 pt-8 lg:grid-cols-12 lg:pt-14',
-      calLink ? 'pb-12' : 'pb-[var(--section)]',
-    ]}
-  >
+  <section class="container-x grid gap-x-16 gap-y-12 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
     <div class="lg:col-span-7">
       <Ornament class="hero-in" />
       <h1 class="t-display mt-5">{booking.title}</h1>
-      <p class="t-lead hero-in mt-6" style="--d:1">{calLink ? booking.calendar.intro : booking.intro}</p>
+      <p class="t-lead hero-in mt-6" style="--d:1">{booking.intro}</p>
       <a href={whatsappUrl(site.whatsapp, site.whatsappMessage)} target="_blank" rel="noopener" class="link mt-4">
         <Icon name="message-circle" />
         {booking.whatsappAlt}
         <span class="sr-only">{ui.newTab}</span>
       </a>
 
-      {!calLink && (
-        <form
-          id="appointment-form"
-          class="booking mt-12 grid gap-6"
-          novalidate
-          data-booking
-          data-messages={JSON.stringify(messages)}
-        >
+      <form
+        id="appointment-form"
+        class="booking mt-12 grid gap-10"
+        novalidate
+        data-booking
+        data-messages={JSON.stringify(messages)}
+      >
+        <fieldset class="picker" data-picker data-state="loading">
+          <legend class="t-h3">{p.dayLegend}</legend>
+          <p class="t-small text-muted">{p.timezone}</p>
+
+          <p class="picker-note t-small text-muted" data-when="loading" role="status">{p.loading}</p>
+          <p class="picker-note t-small text-muted" data-when="empty">{p.empty}</p>
+          <div class="picker-note" data-when="error">
+            <p class="t-small text-muted">{p.loadError}</p>
+            <button type="button" class="btn btn-ghost mt-3" data-retry>
+              <Icon name="rotate-ccw" />
+              {p.retry}
+            </button>
+          </div>
+
+          <div class="calendar mt-5" data-when="ready">
+            <div class="calendar-head">
+              <button type="button" class="month-nav" data-month-prev aria-label={p.prevMonth}>
+                <Icon name="arrow-left" />
+              </button>
+              <p class="font-semibold first-letter:uppercase" data-month-label aria-live="polite"></p>
+              <button type="button" class="month-nav" data-month-next aria-label={p.nextMonth}>
+                <Icon name="arrow-right" />
+              </button>
+            </div>
+            <div class="week t-small text-muted" aria-hidden="true">
+              {weekdays.map((day) => <span>{day}</span>)}
+            </div>
+            <div class="days" data-days></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="picker" data-time-set hidden>
+          <legend class="t-h3">{p.timeLegend}</legend>
+          <div class="times" data-times></div>
+        </fieldset>
+        <p id="slot-error" class="field-error" hidden>
+          <Icon name="circle-alert" />
+          <span data-error-text></span>
+        </p>
+
+        <fieldset class="picker grid gap-6">
+          <legend class="t-h3">{p.detailsLegend}</legend>
+          <p class="summary" data-summary hidden>
+            <Icon name="calendar-check" class="text-wine" />
+            <span>
+              <strong>{p.selected}</strong> <span class="inline-block first-letter:uppercase" data-summary-text></span>
+              <span class="t-small block text-muted">{p.pendingNote}</span>
+            </span>
+          </p>
           {
             fields.map((field) => (
               <div>
@@ -74,9 +117,10 @@ const messages = {
                   autocomplete={field.autocomplete}
                   inputmode={'inputmode' in field ? field.inputmode : undefined}
                   aria-required={field.required ? 'true' : undefined}
-                  aria-describedby={`${field.id}-error`}
+                  aria-describedby={field.id === 'email' ? 'email-hint email-error' : `${field.id}-error`}
                   class="field"
                 />
+                {field.id === 'email' && <p id="email-hint" class="t-small mt-1.5 text-muted">{f.emailHint}</p>}
                 <p id={`${field.id}-error`} class="field-error" hidden>
                   <Icon name="circle-alert" />
                   <span data-error-text />
@@ -98,35 +142,35 @@ const messages = {
             <label for="message" class="field-label">{f.message}</label>
             <textarea id="message" name="message" rows="4" class="field"></textarea>
           </div>
+        </fieldset>
 
-          <!-- Honeypot: invisible y fuera del orden de tabulación. -->
-          <div class="honeypot" aria-hidden="true">
-            <label for="botcheck">No llenar</label>
-            <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
-          </div>
+        <!-- Honeypot: invisible y fuera del orden de tabulación. -->
+        <div class="honeypot" aria-hidden="true">
+          <label for="botcheck">No llenar</label>
+          <input id="botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off" />
+        </div>
 
-          <div class="grid gap-4 pt-2">
-            <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
-              <span class="submit-icon" aria-hidden="true">
-                <Icon name="loader-circle" class="spin" />
-              </span>
-              <span data-submit-label>{f.submit}</span>
-            </button>
-            <p class="t-small text-muted">
-              {f.privacy} <a href={href('/privacidad/')} class="underline underline-offset-4">{footer.privacyLink}</a>
-            </p>
-          </div>
-
-          <div role="status" aria-live="polite" class="status" data-status data-kind="none">
-            <span class="status-icon" aria-hidden="true">
-              <span data-icon="success"><Icon name="check" /></span>
-              <span data-icon="error"><Icon name="circle-alert" /></span>
-              <span data-icon="offline"><Icon name="wifi-off" /></span>
+        <div class="grid gap-4">
+          <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
+            <span class="submit-icon" aria-hidden="true">
+              <Icon name="loader-circle" class="spin" />
             </span>
-            <span data-status-text></span>
-          </div>
-        </form>
-      )}
+            <span data-submit-label>{f.submit}</span>
+          </button>
+          <p class="t-small text-muted">
+            {f.privacy} <a href={href('/privacidad/')} class="underline underline-offset-4">{footer.privacyLink}</a>
+          </p>
+        </div>
+
+        <div role="status" aria-live="polite" class="status" data-status data-kind="none">
+          <span class="status-icon" aria-hidden="true">
+            <span data-icon="success"><Icon name="check" /></span>
+            <span data-icon="error"><Icon name="circle-alert" /></span>
+            <span data-icon="offline"><Icon name="wifi-off" /></span>
+          </span>
+          <span data-status-text></span>
+        </div>
+      </form>
     </div>
 
     <aside class="hidden lg:col-span-5 lg:block">
@@ -141,221 +185,146 @@ const messages = {
       </div>
     </aside>
   </section>
-
-  {
-    calLink && (
-      <section class="container-x pb-[var(--section)]" aria-labelledby="calendar-title">
-        <h2 id="calendar-title" class="sr-only">{ui.calendarRegion}</h2>
-        <p class="t-small text-muted">{booking.calendar.timezone}</p>
-        <div class="cal-frame mt-4" data-cal={calLink} data-title={ui.calendarRegion} data-state="loading">
-          <p class="cal-loading t-small text-muted" role="status">{ui.calendarLoading}</p>
-          <div id="cal-inline" class="cal-inline"></div>
-        </div>
-        <a href={calPublicUrl(calLink)} target="_blank" rel="noopener" class="link mt-4">
-          <Icon name="calendar-check" />
-          {booking.calendar.fallback}
-          <span class="sr-only">{ui.newTab}</span>
-        </a>
-        <p class="t-small mt-6 text-muted">
-          {f.privacy} <a href={href('/privacidad/')} class="underline underline-offset-4">{footer.privacyLink}</a>
-        </p>
-      </section>
-    )
-  }
 </BaseLayout>
 
 <script>
-  import { CAL_ORIGIN, CAL_PREFILL, calCssVars, ensureCal } from '../lib/cal';
-  import { isBot, normalizePhone, submitBooking, validateBooking, type BookingFields, type FieldError } from '../scripts/booking';
-
-  type Messages = {
-    validation: Record<FieldError['code'], string>;
-    submit: string;
-    sending: string;
-    success: string;
-    error: string;
-    offline: string;
-    endpoint: string;
-    accessKey: string;
-    subject: string;
-  };
-
-  const VALIDATED = ['name', 'phone', 'email'] as const;
-
-  function setup(form: HTMLFormElement) {
-    if (form.dataset.ready) return;
-    form.dataset.ready = 'true';
-    const msg = JSON.parse(form.dataset.messages ?? '{}') as Messages;
-    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-    const label = button.querySelector<HTMLElement>('[data-submit-label]')!;
-    const status = form.querySelector<HTMLElement>('[data-status]')!;
-    const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
-    const touched = new Set<string>();
-
-    const read = (): BookingFields => {
-      const data = new FormData(form);
-      const get = (k: string) => String(data.get(k) ?? '');
-      return {
-        name: get('name'),
-        phone: get('phone'),
-        email: get('email'),
-        treatment: get('treatment'),
-        message: get('message'),
-        botcheck: get('botcheck'),
-      };
-    };
-
-    const showErrors = (errors: FieldError[], only?: Set<string>) => {
-      for (const field of VALIDATED) {
-        if (only && !only.has(field)) continue;
-        const input = form.elements.namedItem(field) as HTMLInputElement | null;
-        const box = form.querySelector<HTMLElement>(`#${field}-error`);
-        if (!input || !box) continue;
-        const err = errors.find((e) => e.field === field);
-        input.setAttribute('aria-invalid', err ? 'true' : 'false');
-        box.hidden = !err;
-        box.querySelector<HTMLElement>('[data-error-text]')!.textContent = err ? msg.validation[err.code] : '';
-      }
-    };
-
-    const setStatus = (kind: 'none' | 'success' | 'error' | 'offline', text = '') => {
-      status.dataset.kind = kind;
-      statusText.textContent = text;
-    };
-
-    // Valida al salir de un campo ya tocado, no a cada tecla.
-    for (const field of VALIDATED) {
-      const input = form.elements.namedItem(field) as HTMLInputElement | null;
-      input?.addEventListener('blur', () => {
-        if (!input.value.trim() && !touched.has(field)) return;
-        touched.add(field);
-        showErrors(validateBooking(read()), new Set([field]));
-      });
-      input?.addEventListener('input', () => {
-        if (input.getAttribute('aria-invalid') === 'true') showErrors(validateBooking(read()), new Set([field]));
-      });
-    }
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (button.dataset.state === 'sending') return;
-      setStatus('none');
-      const fields = read();
-
-      // Un bot recibe "éxito" y no se envía nada.
-      if (isBot(fields)) {
-        form.reset();
-        setStatus('success', msg.success);
-        return;
-      }
-
-      const errors = validateBooking(fields);
-      VALIDATED.forEach((f) => touched.add(f));
-      showErrors(errors);
-      if (errors.length) {
-        const first = VALIDATED.find((f) => errors.some((e) => e.field === f));
-        (form.elements.namedItem(first!) as HTMLInputElement).focus();
-        return;
-      }
-
-      button.dataset.state = 'sending';
-      button.disabled = true;
-      button.setAttribute('aria-busy', 'true');
-      label.textContent = msg.sending;
-
-      const result = await submitBooking(msg.endpoint, {
-        access_key: msg.accessKey,
-        subject: msg.subject,
-        from_name: fields.name.trim(),
-        name: fields.name.trim(),
-        phone: normalizePhone(fields.phone),
-        email: fields.email.trim(),
-        treatment: fields.treatment,
-        message: (fields.message ?? '').trim(),
-      });
-
-      button.disabled = false;
-      button.removeAttribute('aria-busy');
-      label.textContent = msg.submit;
-      button.dataset.state = result === 'success' ? 'success' : 'idle';
-
-      if (result === 'success') {
-        form.reset();
-        touched.clear();
-        showErrors([]);
-        setStatus('success', msg.success);
-        window.setTimeout(() => {
-          if (button.dataset.state === 'success') button.dataset.state = 'idle';
-        }, 2400);
-      } else {
-        setStatus(result, result === 'offline' ? msg.offline : msg.error);
-      }
-    });
-  }
-
-  const CAL_NS = 'alaria';
-
-  function setupCalendar(frame: HTMLElement) {
-    if (frame.dataset.ready) return;
-    frame.dataset.ready = 'true';
-    const root = getComputedStyle(document.documentElement);
-    const cal = ensureCal(window);
-    if (!cal.ns[CAL_NS]) cal('init', CAL_NS, { origin: CAL_ORIGIN });
-    const api = cal.ns[CAL_NS];
-    api('ui', {
-      theme: 'light',
-      hideEventTypeDetails: true,
-      cssVarsPerTheme: { light: calCssVars((token) => root.getPropertyValue(`--color-${token}`)) },
-    });
-    api('on', {
-      action: 'linkReady',
-      callback: () => {
-        frame.dataset.state = 'ready';
-        // Cal.com titula el iframe en inglés ("Book a call"); WCAG 4.1.2 pide un nombre comprensible.
-        frame.querySelector('iframe')?.setAttribute('title', frame.dataset.title ?? '');
-      },
-    });
-    // Tras confirmar, Cal.com muestra el resumen arriba del iframe mientras la página sigue
-    // desplazada donde estaba el botón: sin esto la persona no ve que la cita quedó hecha.
-    api('on', {
-      action: 'bookingSuccessfulV2',
-      callback: () => {
-        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        frame.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
-      },
-    });
-    api('on', {
-      action: 'linkFailed',
-      callback: () => {
-        frame.dataset.state = 'failed';
-      },
-    });
-    api('inline', {
-      elementOrSelector: frame.querySelector<HTMLElement>('.cal-inline'),
-      calLink: frame.dataset.cal,
-      config: { layout: 'month_view', theme: 'light', ...CAL_PREFILL },
-    });
-  }
-
-  document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll<HTMLFormElement>('form[data-booking]').forEach(setup);
-    document.querySelectorAll<HTMLElement>('[data-cal]').forEach(setupCalendar);
-  });
+  import '../scripts/booking-page';
 </script>
 
 <style>
-  .cal-frame {
-    position: relative;
-    /* Reserva el alto del calendario mientras carga para no mover el pie de página (CLS). */
-    min-height: 34rem;
-    scroll-margin-top: 1.5rem;
+  .picker {
+    min-width: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
   }
-  .cal-loading {
-    position: absolute;
-    inset: 0 auto auto 0;
+  .picker legend {
+    padding: 0;
+    margin-bottom: 0.75rem;
   }
-  .cal-frame:not([data-state='loading']) .cal-loading {
+  /* Solo se ve el bloque del estado actual: cargando, listo, sin horas o error. */
+  .picker [data-when] {
     display: none;
+  }
+  .picker[data-state='loading'] [data-when='loading'],
+  .picker[data-state='empty'] [data-when='empty'],
+  .picker[data-state='error'] [data-when='error'],
+  .picker[data-state='ready'] [data-when='ready'] {
+    display: block;
+  }
+  .picker-note {
+    margin-top: 1.25rem;
+  }
+  .calendar {
+    max-width: 26rem;
+  }
+  .calendar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .month-nav {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    color: var(--color-wine);
+    cursor: pointer;
+  }
+  .month-nav:disabled {
+    color: var(--color-line);
+    cursor: default;
+  }
+  .week,
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.25rem;
+    text-align: center;
+  }
+  .week {
+    margin-bottom: 0.25rem;
+  }
+  .times {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+  }
+  /* Radios nativos (teclado y lector de pantalla gratis) con apariencia de botón. */
+  .picker :global(.day),
+  .picker :global(.slot) {
+    position: relative;
+    display: block;
+  }
+  .picker :global(.day input),
+  .picker :global(.slot input) {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .picker :global(.day input:disabled) {
+    cursor: default;
+  }
+  .picker :global(.day span),
+  .picker :global(.slot span) {
+    display: grid;
+    place-items: center;
+    min-height: 2.75rem;
+    border-radius: 2px;
+    transition:
+      background-color 160ms,
+      color 160ms;
+  }
+  .picker :global(.day span) {
+    aspect-ratio: 1;
+    min-height: 0;
+    background: var(--color-card);
+    font-weight: 600;
+  }
+  .picker :global(.slot span) {
+    background: var(--color-card);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+    font-size: 0.9375rem;
+  }
+  .picker :global(.day input:disabled + span) {
+    background: none;
+    color: var(--color-muted);
+    font-weight: 400;
+    opacity: 0.55;
+  }
+  .picker :global(.day input:not(:disabled):hover + span),
+  .picker :global(.slot input:hover + span) {
+    box-shadow: inset 0 0 0 1px var(--color-wine);
+  }
+  .picker :global(.day input:checked + span),
+  .picker :global(.slot input:checked + span) {
+    background: var(--color-wine);
+    color: var(--color-paper);
+  }
+  .picker :global(.day input:focus-visible + span),
+  .picker :global(.slot input:focus-visible + span) {
+    outline: 2px solid var(--color-wine);
+    outline-offset: 2px;
+  }
+  .summary {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    padding: 1rem 1.125rem;
+    border-radius: 2px;
+    background: var(--color-card);
+  }
+  .summary[hidden] {
+    display: none;
+  }
+  .summary :global(.icon) {
+    margin-top: 0.15em;
+    flex-shrink: 0;
   }
   .honeypot {
     position: absolute;

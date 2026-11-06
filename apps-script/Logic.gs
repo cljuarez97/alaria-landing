@@ -207,3 +207,16 @@ function buildIcs(uid, startMs, endMs, nowMs, cfg) {
 function whatsappNotice(phone, text) {
   return 'https://wa.me/502' + phone + '?text=' + encodeURIComponent(text);
 }
+
+/** Cuerpo HTML de un correo: cada línea es un párrafo y "Texto: https://…" pasa a ser un enlace con ese texto. */
+function linesToHtml(lines) {
+  return lines
+    .map(function (line) {
+      var link = line.match(/^(.*?):\s*(https:\/\/\S+)$/);
+      if (link) {
+        return '<p><a href="' + escapeHtml(link[2]) + '" style="font-weight:600;color:#7a3b4c">' + escapeHtml(link[1]) + '</a></p>';
+      }
+      return '<p>' + escapeHtml(line).replace(/\n/g, '<br>') + '</p>';
+    })
+    .join('');
+}
