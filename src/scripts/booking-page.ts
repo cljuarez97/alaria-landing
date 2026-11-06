@@ -326,6 +326,14 @@ function setup(form: HTMLFormElement) {
     } else setStatus('error', msg.error);
   });
 
+  // Quien llega desde un tratamiento no tiene que volver a elegirlo.
+  const slug = new URLSearchParams(location.search).get('tratamiento');
+  const option = slug ? [...q<HTMLSelectElement>('#treatment').options].find((o) => o.dataset.slug === slug) : undefined;
+  if (option) {
+    option.selected = true;
+    q<HTMLDetailsElement>('[data-extras]').open = true;
+  }
+
   void load();
 }
 
