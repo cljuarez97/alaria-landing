@@ -7,7 +7,6 @@ import toxinaBotulinica from '../assets/ambient/toxina-botulinica.webp';
 import bioestimuladores from '../assets/ambient/bioestimuladores.webp';
 import calidadDePiel from '../assets/ambient/calidad-de-piel.webp';
 import visitanosConsultorio from '../assets/ambient/visitanos-consultorio.jpg';
-import splashVentana from '../assets/ambient/splash-ventana.jpg';
 
 export const images = {
   'hero-arch': heroArch,
@@ -17,7 +16,6 @@ export const images = {
   'calidad-de-piel': calidadDePiel,
   // Foto real del consultorio (no es de ambiente generada).
   'visitanos-consultorio': visitanosConsultorio,
-  'splash-ventana': splashVentana,
 } satisfies Record<string, ImageMetadata>;
 
 export type ImageSlug = keyof typeof images;

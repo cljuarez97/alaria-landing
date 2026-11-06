@@ -10,7 +10,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import BottomNav from '../components/BottomNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import WhatsAppFab from '../components/WhatsAppFab.astro';
-import { images } from '../data/images';
+import ogImage from '../assets/brand/og-alaria.jpg';
 import { site } from '../data/content';
 import { ui } from '../data/ui';
 import { pageTransition } from '../lib/transitions';
@@ -27,7 +27,7 @@ const { title, description = site.description, noindex = false, jsonLd } = Astro
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const og = await getImage({ src: images['splash-ventana'], width: 1200, height: 1200, format: 'jpg' });
+const og = await getImage({ src: ogImage, width: 1200, height: 630, format: 'jpg' });
 const ogUrl = new URL(og.src, Astro.site).href;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -68,9 +68,9 @@ const fontFaces = `
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={site.name} />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
 
