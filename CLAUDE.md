@@ -7,7 +7,7 @@ Sitio de Alaria Clínica Estética. El nombre de la médica no debe aparecer en 
 - Astro 7 (`output` estático), `base: '/alaria-landing'`, `trailingSlash: 'always'`, `@astrojs/sitemap` (excluye `offline` y `404`).
 - Tailwind CSS 4 vía `@tailwindcss/vite`. Tokens en `src/styles/global.css` (`@theme`): `wine`, `wine-deep`, `gold` (solo líneas/numerales grandes), `gold-ink` (texto dorado pequeño), `cream`, `card`, `paper`, `charcoal`, `muted`, `field`, `mist`, `line`, `danger`, `success`. Los colores por defecto de Tailwind están desactivados: usa solo tokens. Los contrastes calculados están documentados en la cabecera del CSS.
 - Tipografía self-hosted (fontsource, subset latin, `@font-face` generado en `BaseLayout`): Playfair Display (solo ≥24px, itálica como acento; precargada) + Plus Jakarta Sans. Clases: `.t-display`, `.t-h2`, `.t-h3`, `.t-lead`, `.t-body`, `.t-eyebrow` (máx. 1 por sección), `.numeral`.
-- Iconos: `lucide-static` importados con `?raw` en `src/components/icons/icons.ts` y pintados por `Icon.astro` (trazo 1.5, 20px). Para añadir uno, impórtalo en ese mapa. Sin JS de iconos.
+- Iconos: `lucide-static` (y los logos propios de `src/components/icons/`) importados con `?raw` en `src/components/icons/icons.ts` y pintados por `Icon.astro` (trazo 1.5, 20px). Para añadir uno, impórtalo en ese mapa. Sin JS de iconos.
 - Imágenes: `<Picture>` de `astro:assets` (AVIF/WebP). Todas salen de `src/data/images.ts`.
 - Tests: Vitest (`src/**/*.test.ts`). Type-check: `@astrojs/check` + TypeScript 6 (astro check no soporta TS 7).
 

@@ -23,6 +23,7 @@ import calendarClock from 'lucide-static/icons/calendar-clock.svg?raw';
 import phone from 'lucide-static/icons/phone.svg?raw';
 import mail from 'lucide-static/icons/mail.svg?raw';
 import instagram from './instagram.svg?raw';
+import whatsapp from './whatsapp.svg?raw';
 
 export const icons = {
   house,
@@ -49,6 +50,7 @@ export const icons = {
   phone,
   mail,
   instagram,
+  whatsapp,
 } as const;
 
 export type IconName = keyof typeof icons;
