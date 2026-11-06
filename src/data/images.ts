@@ -6,10 +6,7 @@ import armonizacionFacial from '../assets/ambient/armonizacion-facial.webp';
 import toxinaBotulinica from '../assets/ambient/toxina-botulinica.webp';
 import bioestimuladores from '../assets/ambient/bioestimuladores.webp';
 import calidadDePiel from '../assets/ambient/calidad-de-piel.webp';
-import visitanosEntrada from '../assets/ambient/visitanos-entrada.jpg';
 import visitanosConsultorio from '../assets/ambient/visitanos-consultorio.jpg';
-import agendarEscritorio from '../assets/ambient/agendar-escritorio.jpg';
-import resultadosCortina from '../assets/ambient/resultados-cortina.jpg';
 import splashVentana from '../assets/ambient/splash-ventana.jpg';
 
 export const images = {
@@ -18,11 +15,8 @@ export const images = {
   'toxina-botulinica': toxinaBotulinica,
   bioestimuladores,
   'calidad-de-piel': calidadDePiel,
-  'visitanos-entrada': visitanosEntrada,
   // Foto real del consultorio (no es de ambiente generada).
   'visitanos-consultorio': visitanosConsultorio,
-  'agendar-escritorio': agendarEscritorio,
-  'resultados-cortina': resultadosCortina,
   'splash-ventana': splashVentana,
 } satisfies Record<string, ImageMetadata>;
 

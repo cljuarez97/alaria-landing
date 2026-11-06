@@ -13,6 +13,7 @@ import { focusOf } from '../../data/focus';
 import { frameCropClass } from '../../lib/crop';
 import { ui } from '../../data/ui';
 import { href } from '../../lib/url';
+import { isPublishable } from '../../lib/pending';
 
 export const getStaticPaths = (() =>
   treatments.map((treatment, i) => ({
@@ -32,6 +33,7 @@ interface Props {
 
 const { treatment: t, prev, next } = Astro.props;
 const img = treatmentImage(t.slug);
+const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD));
 ---
 <BaseLayout title={t.name} description={t.metaDescription}>
   <article>
@@ -61,21 +63,23 @@ const img = treatmentImage(t.slug);
       />
     </header>
 
-    <!-- Datos clave -->
-    <div class="surface-dark on-dark">
-      <dl class="container-x grid divide-paper/15 sm:grid-cols-3 sm:divide-x max-sm:divide-y" data-reveal>
-        {
-          t.facts.map((f) => (
-            <div class="py-8 sm:px-8 sm:first:pl-0 sm:last:pr-0">
-              <dt class="t-eyebrow">{f.label}</dt>
-              <dd class="mt-2 text-cream">
-                <Rich text={f.value} />
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
+    <!-- Datos clave: sin ningún dato confirmado, la franja no se muestra. -->
+    {
+      facts.length > 0 && (
+        <div class="surface-dark on-dark">
+          <dl class="container-x grid divide-paper/15 sm:grid-cols-3 sm:divide-x max-sm:divide-y" data-reveal>
+            {facts.map((f) => (
+              <div class="py-8 sm:px-8 sm:first:pl-0 sm:last:pr-0">
+                <dt class="t-eyebrow">{f.label}</dt>
+                <dd class="mt-2 text-cream">
+                  <Rich text={f.value} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
 
     <!-- Para quién + Qué esperar -->
     <section class="section">

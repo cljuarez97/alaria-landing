@@ -97,7 +97,7 @@ export const home = {
   },
   doctorTeaser: {
     title: 'Quién te atiende',
-    text: 'Evaluamos primero y proponemos después. Conoce la formación de nuestro equipo médico y cómo trabajamos. [dato médico pendiente: años de experiencia]',
+    text: 'Evaluamos primero y proponemos después. Un equipo médico te acompaña desde la primera valoración hasta el seguimiento. [dato médico pendiente: años de experiencia]',
     cta: 'Leer más sobre el equipo',
   },
   treatmentsTeaser: {
@@ -434,8 +434,11 @@ export const booking = {
 export const footer = {
   note: 'Alaria Clínica Estética. Medicina estética con criterio médico.',
   legal: '© 2026 Alaria Clínica Estética.',
-  credentials:
-    'Médico responsable: colegiado activo n.º [pendiente: número de colegiado]. Licencia sanitaria MSPAS n.º [pendiente: número de licencia sanitaria].',
+  // Cada línea solo se publica completa: sin el número no dice nada.
+  credentials: [
+    'Médico responsable: colegiado activo n.º [pendiente: número de colegiado].',
+    'Licencia sanitaria MSPAS n.º [pendiente: número de licencia sanitaria].',
+  ],
   privacyLink: 'Aviso de privacidad',
 };
 
@@ -445,7 +448,7 @@ export const privacy = {
   title: 'Aviso de privacidad',
   intro:
     'Te explicamos qué datos pedimos, para qué los usamos y cómo puedes pedir que los corrijamos o los borremos.',
-  updated: 'Última actualización: octubre de 2026. [pendiente: revisión legal]',
+  updated: 'Última actualización: noviembre de 2026. [pendiente: revisión legal]',
   sections: [
     {
       title: 'Quién es responsable de tus datos',

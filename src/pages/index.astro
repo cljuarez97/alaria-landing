@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import Rich from '../components/Rich.astro';
 import FaqList from '../components/FaqList.astro';
-import PhotoPending from '../components/PhotoPending.astro';
+import FramedPicture from '../components/FramedPicture.astro';
 import TreatmentShowcase from '../components/TreatmentShowcase.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Ornament from '../components/Ornament.astro';
@@ -13,6 +13,8 @@ import { faq, home, site, treatments, visit } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
+import { isPublishable } from '../lib/pending';
+import { imageFocus } from '../data/focus';
 import type { IconName } from '../components/icons/icons';
 import butterfly from '../assets/brand/butterfly.svg?raw';
 
@@ -29,6 +31,10 @@ const [diffBefore, diffAfter] = home.difference.title.includes(diffAccent)
 const diffHasAccent = home.difference.title.includes(diffAccent);
 // Un icono por compromiso, en el orden de content.ts (valoración, presupuesto, producto, revisión, cita, dudas).
 const diffIcons: IconName[] = ['stethoscope', 'receipt-text', 'shield-check', 'history', 'calendar-clock', 'message-circle'];
+
+const isProd = import.meta.env.PROD;
+const bio = site.doctor.bioLong.filter((para) => isPublishable(para, isProd));
+const credentials = site.doctor.credentials.filter((c) => isPublishable(c, isProd));
 
 const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site).href;
 const jsonLd = {
@@ -208,7 +214,14 @@ const jsonLd = {
   <section id="equipo" class="section doctor surface-dark on-dark relative isolate overflow-clip" aria-labelledby="doctor-title">
     <div class="container-x grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
       <div class="mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none" data-reveal>
-        <PhotoPending label={ui.doctorPhotoPending} />
+        <FramedPicture
+          src={images['visitanos-consultorio']}
+          alt={ui.clinicPhotoAlt}
+          widths={[480, 720, 900]}
+          sizes="(min-width: 1024px) 28rem, 22rem"
+          class="frame-tall"
+          position={imageFocus['visitanos-consultorio']}
+        />
       </div>
       <div class="lg:col-span-7 lg:pt-6" data-reveal style="--d:1">
         <p class="t-eyebrow">{site.doctor.title}</p>
@@ -216,36 +229,45 @@ const jsonLd = {
         <h2 id="doctor-title" class="t-h2 mt-5">{home.doctorTeaser.title}</h2>
         <p class="t-lead mt-6 text-cream"><Rich text={home.doctorTeaser.text} /></p>
 
-        <details class="more details-reveal mt-8">
-          <summary class="link">
-            {home.doctorTeaser.cta}
-            <Icon name="plus" class="more-icon" />
-          </summary>
-          <div class="more-body details-reveal-body">
-            <div class="grid gap-4 pt-4 text-cream">
-              {
-                site.doctor.bioLong.map((para) => (
-                  <p class="t-body">
-                    <Rich text={para} />
-                  </p>
-                ))
-              }
-              <h3 class="t-h3 mt-6 text-paper">{ui.credentials}</h3>
-              <ul class="grid gap-2" role="list">
+        {/* Sin credenciales confirmadas no hay nada que ampliar. */}
+        {
+          credentials.length > 0 && (
+          <details class="more details-reveal mt-8">
+            <summary class="link">
+              {home.doctorTeaser.cta}
+              <Icon name="plus" class="more-icon" />
+            </summary>
+            <div class="more-body details-reveal-body">
+              <div class="grid gap-4 pt-4 text-cream">
                 {
-                  site.doctor.credentials.map((c) => (
-                    <li class="flex gap-3">
-                      <span class="mt-[0.7em] h-px w-4 flex-none bg-gold" aria-hidden="true" />
-                      <span>
-                        <Rich text={c} />
-                      </span>
-                    </li>
+                  bio.map((para) => (
+                    <p class="t-body">
+                      <Rich text={para} />
+                    </p>
                   ))
                 }
-              </ul>
+                {
+                  credentials.length > 0 && (
+                    <Fragment>
+                      <h3 class="t-h3 mt-6 text-paper">{ui.credentials}</h3>
+                      <ul class="grid gap-2" role="list">
+                        {credentials.map((c) => (
+                          <li class="flex gap-3">
+                            <span class="mt-[0.7em] h-px w-4 flex-none bg-gold" aria-hidden="true" />
+                            <span>
+                              <Rich text={c} />
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </Fragment>
+                  )
+                }
+              </div>
             </div>
-          </div>
-        </details>
+          </details>
+          )
+        }
 
         <a href={href('/agendar/')} class="btn btn-light btn-signature mt-10 w-full sm:w-fit">
           {home.ctaPrimary}

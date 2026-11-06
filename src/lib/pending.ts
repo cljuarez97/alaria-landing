@@ -26,3 +26,17 @@ export function isPending(text: string): boolean {
 export function stripPending(text: string): string {
   return text.replace(PENDING_RE, '').replace(/\s{2,}/g, ' ').trim();
 }
+
+/** ¿Contiene algún dato sin confirmar? Sirve para frases que no se sostienen sin ese dato. */
+export function hasPending(text: string): boolean {
+  return splitPending(text).some((segment) => segment.pending);
+}
+
+/**
+ * ¿Se muestra este texto? En desarrollo sí, para ver lo que falta. En producción, solo si queda algo
+ * que leer sin los tramos pendientes o, con `whole`, si no le falta ningún dato.
+ */
+export function isPublishable(text: string, isProd: boolean, whole = false): boolean {
+  if (!isProd) return true;
+  return whole ? !hasPending(text) : stripPending(text).length > 0;
+}
