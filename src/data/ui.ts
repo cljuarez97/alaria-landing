@@ -22,7 +22,6 @@ export const ui = {
   after: 'Después',
   compareLabel: 'Comparar antes y después',
   compareHint: 'Desliza o usa las flechas del teclado para comparar.',
-  examplePlaceholder: 'Imagen de ejemplo',
   hours: 'Horario',
   address: 'Dirección',
   generalAssessment: 'Valoración general',
