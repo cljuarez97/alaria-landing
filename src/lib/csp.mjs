@@ -28,21 +28,34 @@ export function inlineScriptHashes(html) {
 }
 
 /**
+ * Origen del script de analítica, si la página lo incluye.
+ * @param {string} html
+ * @returns {string | null}
+ */
+export function analyticsOrigin(html) {
+  const tag = html.match(/<script\b[^>]*data-website-id[^>]*>/i)?.[0];
+  const src = tag?.match(/\ssrc=["']([^"']+)["']/i)?.[1];
+  return src ? new URL(src).origin : null;
+}
+
+/**
  * `style-src` lleva 'unsafe-inline': el sitio usa `style="--d:1"` y el ClientRouter inserta estilos.
  * `connect-src`: Apps Script responde desde script.google.com y redirige a script.googleusercontent.com.
  * `frame-ancestors` no se puede poner aquí: se ignora en <meta>.
  * @param {string[]} hashes
+ * @param {string | null} [analytics] origen de la analítica
  * @returns {string}
  */
-export function buildPolicy(hashes) {
+export function buildPolicy(hashes, analytics = null) {
   const scripts = [...new Set(hashes)].sort();
+  const extra = analytics ? [analytics] : [];
   return [
     "default-src 'self'",
-    `script-src ${["'self'", ...scripts].join(' ')}`,
+    `script-src ${["'self'", ...scripts, ...extra].join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
-    "connect-src 'self' https://script.google.com https://script.googleusercontent.com",
+    `connect-src ${["'self'", 'https://script.google.com', 'https://script.googleusercontent.com', ...extra].join(' ')}`,
     "frame-src 'none'",
     "manifest-src 'self'",
     "worker-src 'self'",
@@ -73,7 +86,8 @@ export function cspIntegration() {
         const entries = await readdir(root, { recursive: true });
         const files = entries.filter((f) => f.endsWith('.html')).map((f) => join(root, f));
         const pages = await Promise.all(files.map(async (file) => ({ file, html: await readFile(file, 'utf8') })));
-        const policy = buildPolicy(pages.flatMap(({ html }) => inlineScriptHashes(html)));
+        const analytics = pages.map(({ html }) => analyticsOrigin(html)).find(Boolean) ?? null;
+        const policy = buildPolicy(pages.flatMap(({ html }) => inlineScriptHashes(html)), analytics);
         await Promise.all(pages.map(({ file, html }) => writeFile(file, injectPolicy(html, policy))));
         logger.info(`política aplicada a ${pages.length} páginas`);
       },

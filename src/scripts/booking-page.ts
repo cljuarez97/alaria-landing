@@ -11,6 +11,7 @@ import {
   slotStart,
   type Availability,
 } from '../lib/appointments';
+import { track } from '../lib/analytics';
 import { whatsappUrl } from '../lib/url';
 import { isBot, normalizePhone, validateBooking, type BookingFields, type FieldError } from './booking';
 
@@ -107,6 +108,7 @@ function setup(form: HTMLFormElement) {
         input.addEventListener('change', () => {
           selectedTime = time;
           renderSummary();
+          track('hora-elegida');
           reveal(detailsSet);
         });
         const text = document.createElement('span');
@@ -148,6 +150,7 @@ function setup(form: HTMLFormElement) {
           selectedDate = date;
           selectedTime = '';
           renderTimes();
+          track('dia-elegido');
           reveal(timeSet);
         });
         const text = document.createElement('span');
@@ -334,6 +337,7 @@ function setup(form: HTMLFormElement) {
     button.dataset.state = 'idle';
     label.textContent = msg.submit;
 
+    track(result.ok ? 'solicitud-enviada' : `solicitud-error-${result.error}`);
     if (result.ok) {
       form.reset();
       touched.clear();

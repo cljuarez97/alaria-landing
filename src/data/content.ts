@@ -5,6 +5,9 @@ export const site = {
   tagline: 'Realza tu belleza con respaldo médico.',
   description:
     'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Solicita tu cita.',
+  // Analítica sin cookies: copia ambos valores de Umami (Tracking code). Vacíos = sin script ni peticiones.
+  // Al activarla, el aviso de privacidad y la CSP se ajustan solos.
+  analytics: { src: '', websiteId: '' },
   whatsapp: '50231045178',
   whatsappMessage: 'Hola, quisiera información sobre una valoración en Alaria Clínica Estética.',
   instagram: 'https://www.instagram.com/alaria_gt/',
@@ -477,7 +480,9 @@ export const privacy = {
       title: 'Qué datos pedimos',
       paragraphs: [
         'Al reservar tu valoración te pedimos nombre, teléfono o WhatsApp y, si quieres, correo electrónico, el tratamiento que te interesa y un comentario. Te recomendamos no escribir información médica detallada en el formulario: la revisamos contigo en consulta.',
-        'Este sitio no usa herramientas de analítica ni cookies publicitarias.',
+        site.analytics.websiteId
+          ? 'Contamos visitas y clics con Umami, sin cookies y sin identificarte. Este sitio no usa cookies publicitarias.'
+          : 'Este sitio no usa herramientas de analítica ni cookies publicitarias.',
       ],
     },
     {
