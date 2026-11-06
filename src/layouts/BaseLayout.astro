@@ -78,6 +78,7 @@ const fontFaces = `
 
     {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
 
+    {site.analytics.websiteId && <script is:inline defer src={site.analytics.src} data-website-id={site.analytics.websiteId}></script>}
     <ClientRouter />
   </head>
   <body>
@@ -122,6 +123,15 @@ const fontFaces = `
         if (!target) return;
         if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
         target.focus({ preventScroll: true });
+      });
+    </script>
+    <script>
+      import { eventForHref, track } from '../lib/analytics';
+
+      document.addEventListener('click', (event) => {
+        const link = (event.target as Element).closest?.('a');
+        const name = link && eventForHref(link.href);
+        if (name) track(name);
       });
     </script>
   </body>
