@@ -11,7 +11,7 @@ export const GET: APIRoute = ({ site: origin }) => {
     `> ${site.description}`,
     '',
     `Dirección: ${visit.address.join(', ')}.`,
-    `Horario: ${visit.hours.map((h) => `${h.day}, ${h.time}`).join('; ')}. Atención con cita previa.`,
+    `Horario: ${visit.hours.map((h) => `${h.day}, ${h.time}`).join('; ')} Atención con cita previa.`,
     `Teléfono y WhatsApp: ${visit.phone}. Correo: ${visit.email}. Instagram: ${site.instagram}`,
     '',
     '## Tratamientos',
