@@ -42,7 +42,12 @@ export function clinicNode(root: string, image: string): Node {
       closes: h.closes,
     })),
     areaServed: { '@type': 'City', name: 'Ciudad de Guatemala' },
-    availableService: treatments.map((t) => ({ '@id': id(absolute(root, `tratamientos/${t.slug}/`), 'tratamiento') })),
+    availableService: treatments.map((t) => ({
+      '@type': 'MedicalProcedure',
+      '@id': id(absolute(root, `tratamientos/${t.slug}/`), 'tratamiento'),
+      name: t.name,
+      url: absolute(root, `tratamientos/${t.slug}/`),
+    })),
   };
 }
 
