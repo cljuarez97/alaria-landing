@@ -38,7 +38,7 @@ const messages = {
   contactPhone: c.contactPhone,
 };
 ---
-<BaseLayout title={booking.seoTitle} description={booking.metaDescription}>
+<BaseLayout title={booking.seoTitle} description={booking.metaDescription} crumbs={[{ name: booking.title, path: '/agendar/' }]}>
   <section class="container-x grid gap-x-16 gap-y-12 pt-8 pb-[var(--section)] lg:grid-cols-12 lg:pt-14">
     <div class="lg:col-span-7">
       <Ornament class="hero-in" />

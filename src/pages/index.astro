@@ -9,11 +9,12 @@ import TreatmentShowcase from '../components/TreatmentShowcase.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Ornament from '../components/Ornament.astro';
 import Seal from '../components/Seal.astro';
-import { faq, home, site, treatments, visit } from '../data/content';
+import { faq, home, site } from '../data/content';
 import { images } from '../data/images';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
-import { isPublishable, stripPending } from '../lib/pending';
+import { isPublishable } from '../lib/pending';
+import { faqNode, treatmentListNode } from '../lib/schema';
 import { imageFocus } from '../data/focus';
 import type { IconName } from '../components/icons/icons';
 import butterfly from '../assets/brand/butterfly.svg?raw';
@@ -36,52 +37,8 @@ const isProd = import.meta.env.PROD;
 const bio = site.doctor.bioLong.filter((para) => isPublishable(para, isProd));
 const credentials = site.doctor.credentials.filter((c) => isPublishable(c, isProd));
 
-const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site).href;
-const clinicLd = {
-  '@type': 'MedicalClinic',
-  name: site.name,
-  description: site.description,
-  url: siteUrl,
-  logo: new URL('icon-512.png', siteUrl).href,
-  image: new URL('icon-512.png', siteUrl).href,
-  telephone: `+${site.whatsapp}`,
-  sameAs: [site.instagram],
-  email: visit.email,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: visit.address.slice(0, 3).join(', '),
-    addressLocality: 'Ciudad de Guatemala',
-    addressCountry: 'GT',
-  },
-  openingHoursSpecification: visit.hours.map((h) => ({
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: h.days,
-    opens: h.opens,
-    closes: h.closes,
-  })),
-  areaServed: { '@type': 'Country', name: 'Guatemala' },
-  availableService: treatments.map((t) => ({
-    '@type': 'MedicalProcedure',
-    name: t.name,
-    url: new URL(`tratamientos/${t.slug}/`, siteUrl).href,
-  })),
-};
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    clinicLd,
-    {
-      '@type': 'FAQPage',
-      mainEntity: faq.map((item) => ({
-        '@type': 'Question',
-        name: item.q,
-        acceptedAnswer: { '@type': 'Answer', text: stripPending(item.a) },
-      })),
-    },
-  ],
-};
 ---
-<BaseLayout jsonLd={jsonLd}>
+<BaseLayout schema={({ root, url }) => [faqNode(url), treatmentListNode(root, url)]}>
   <!-- Hero: texto a la izquierda, ventana en arco sobre un panel rosa a la derecha. -->
   <section class="hero relative isolate overflow-clip">
     <div class="container-x grid items-center gap-x-12 gap-y-12 pt-4 pb-[var(--section)] lg:grid-cols-12 lg:pt-8">
