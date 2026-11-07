@@ -4,7 +4,7 @@ import Rich from '../components/Rich.astro';
 import Ornament from '../components/Ornament.astro';
 import { privacy, site } from '../data/content';
 ---
-<BaseLayout title={privacy.title} description={`${privacy.intro} ${site.name}.`}>
+<BaseLayout title={privacy.title} description={`${privacy.intro} ${site.name}.`} crumbs={[{ name: privacy.title, path: '/privacidad/' }]}>
   <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
     <header class="max-w-[48rem]">
       <Ornament class="hero-in" />

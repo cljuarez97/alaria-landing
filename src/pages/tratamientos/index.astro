@@ -4,9 +4,16 @@ import TreatmentShowcase from '../../components/TreatmentShowcase.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Ornament from '../../components/Ornament.astro';
 import { home } from '../../data/content';
+import { treatmentListNode } from '../../lib/schema';
 
 ---
-<BaseLayout title={home.treatmentsTeaser.seoTitle} description={home.treatmentsTeaser.metaDescription}>
+<BaseLayout
+  title={home.treatmentsTeaser.seoTitle}
+  description={home.treatmentsTeaser.metaDescription}
+  pageType="CollectionPage"
+  crumbs={[{ name: home.treatmentsTeaser.title, path: '/tratamientos/' }]}
+  schema={({ root, url }) => [treatmentListNode(root, url)]}
+>
   <section class="page-head surface-rose on-rose">
     <header class="container-x pt-8 pb-14 lg:pt-14 lg:pb-20">
       <div class="max-w-3xl">
