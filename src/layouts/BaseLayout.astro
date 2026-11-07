@@ -70,6 +70,8 @@ const fontFaces = `
     {!noindex && <link rel="canonical" href={canonical} />}
     {!noindex && <meta name="robots" content="max-image-preview:large" />}
     <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
+    <link rel="alternate" type="text/plain" title="Resumen para asistentes de IA" href={`${base}/llms.txt`} />
+    <meta name="google-site-verification" content="GkNPHto6n6ID5Ct0FMDtgUKFaBlfPLLKPyCXX2skZWw" />
     {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Solo la fuente del h1 (LCP móvil); la itálica es acento y carga con swap. -->
