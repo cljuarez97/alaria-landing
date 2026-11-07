@@ -35,7 +35,7 @@ const { treatment: t, prev, next } = Astro.props;
 const img = treatmentImage(t.slug);
 const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD));
 ---
-<BaseLayout title={t.name} description={t.metaDescription}>
+<BaseLayout title={t.seoTitle} description={t.metaDescription}>
   <article>
     <!-- Hero del tratamiento -->
     <header class="container-x grid gap-x-12 gap-y-10 pt-6 pb-16 lg:grid-cols-12 lg:items-end lg:pt-10 lg:pb-24">
@@ -57,7 +57,7 @@ const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD)
       </div>
       <FramedPicture
         src={img}
-        alt=""
+        alt={t.imageAlt}
         widths={[480, 720, 960, 1100]}
         sizes="(min-width: 1024px) 34rem, calc(100vw - 2.5rem - 8px)"
         priority

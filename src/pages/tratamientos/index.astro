@@ -3,11 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TreatmentShowcase from '../../components/TreatmentShowcase.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Ornament from '../../components/Ornament.astro';
-import { home, treatments } from '../../data/content';
+import { home } from '../../data/content';
 
-const description = `${home.treatmentsTeaser.intro} ${treatments.map((t) => t.name).join(', ')}.`;
 ---
-<BaseLayout title={home.treatmentsTeaser.title} description={description}>
+<BaseLayout title={home.treatmentsTeaser.seoTitle} description={home.treatmentsTeaser.metaDescription}>
   <section class="page-head surface-rose on-rose">
     <header class="container-x pt-8 pb-14 lg:pt-14 lg:pb-20">
       <div class="max-w-3xl">

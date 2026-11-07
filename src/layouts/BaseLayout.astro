@@ -16,7 +16,7 @@ import { ui } from '../data/ui';
 import { pageTransition } from '../lib/transitions';
 
 interface Props {
-  /** Título de la página; se completa con el nombre de la clínica. */
+  /** Título para Google (máx. 50 caracteres); se completa con la marca. */
   title?: string;
   description?: string;
   noindex?: boolean;
@@ -25,7 +25,7 @@ interface Props {
 
 const { title, description = site.description, noindex = false, jsonLd } = Astro.props;
 
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const fullTitle = `${title ?? site.seoTitle} · ${site.shortName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const og = await getImage({ src: ogImage, width: 1200, height: 630, format: 'jpg' });
 const ogUrl = new URL(og.src, Astro.site).href;
@@ -44,13 +44,15 @@ const fontFaces = `
 @font-face{font-family:'Plus Jakarta Sans Variable';font-style:normal;font-display:swap;font-weight:200 800;src:url(${jakartaNormal}) format('woff2-variations');unicode-range:${latin}}`;
 ---
 <!doctype html>
-<html lang="es" transition:animate="none">
+<html lang="es-GT" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {!noindex && <link rel="canonical" href={canonical} />}
+    {!noindex && <meta name="robots" content="max-image-preview:large" />}
+    <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
     {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Solo la fuente del h1 (LCP móvil); la itálica es acento y carga con swap. -->
