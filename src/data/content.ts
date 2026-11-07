@@ -2,9 +2,12 @@
 
 export const site = {
   name: 'Alaria Clínica Estética',
+  shortName: 'Alaria',
   tagline: 'Realza tu belleza con respaldo médico.',
+  // Título y descripción de la portada: lo que se ve en Google y al compartir.
+  seoTitle: 'Clínica de medicina estética en Guatemala',
   description:
-    'Medicina estética con criterio médico en Guatemala. Primero una valoración médica y después, si tiene sentido, un tratamiento. Solicita tu cita.',
+    'Medicina estética con valoración médica en Zona 10, Guatemala: armonización facial, toxina botulínica, bioestimuladores y calidad de piel.',
   // Analítica sin cookies: copia ambos valores de Umami (Tracking code). Vacíos = sin script ni peticiones.
   // Al activarla, el aviso de privacidad y la CSP se ajustan solos.
   analytics: { src: '', websiteId: '' },
@@ -104,6 +107,9 @@ export const home = {
     cta: 'Leer más sobre el equipo',
   },
   treatmentsTeaser: {
+    seoTitle: 'Tratamientos de medicina estética en Guatemala',
+    metaDescription:
+      'Armonización facial, toxina botulínica, bioestimuladores de colágeno y calidad de piel en Zona 10, Guatemala. Todos empiezan con una valoración médica.',
     title: 'Tratamientos',
     intro: 'Cuatro líneas de trabajo. Todas empiezan con la misma valoración.',
   },
@@ -117,7 +123,9 @@ export type Treatment = {
   number: string;
   name: string;
   short: string;
+  seoTitle: string;
   metaDescription: string;
+  imageAlt: string;
   intro: string;
   forWho: string[];
   whatToExpect: { step: string; text: string }[];
@@ -139,8 +147,10 @@ export const treatments: Treatment[] = [
     number: '01',
     name: 'Armonización facial',
     short: 'Evaluamos proporciones del rostro y definimos qué zonas tienen sentido trabajar.',
+    seoTitle: 'Armonización facial en Guatemala',
     metaDescription:
-      'Armonización facial en Guatemala con valoración médica previa. Conoce para quién es, qué esperar y qué confirmar antes de decidir contigo.',
+      'Armonización facial en Zona 10, Guatemala, con valoración médica previa. Conoce para quién es, qué esperar y cómo solicitar tu cita.',
+    imageAlt: 'Profesional con guantes sostiene el rostro de una paciente, con líneas que marcan el contorno facial',
     intro:
       'La armonización facial busca un rostro más equilibrado según tus rasgos. Primero revisamos tus proporciones y tus objetivos; el plan se define después.',
     forWho: [
@@ -186,8 +196,10 @@ export const treatments: Treatment[] = [
     number: '02',
     name: 'Toxina botulínica',
     short: 'Trabajamos líneas de expresión solo si tu valoración lo indica.',
+    seoTitle: 'Toxina botulínica en Guatemala',
     metaDescription:
-      'Toxina botulínica en Guatemala con valoración médica previa. Conoce para quién es, cómo se planifica y qué confirmar antes de decidir.',
+      'Toxina botulínica en Zona 10, Guatemala, con valoración médica previa. Para qué sirve, cuánto dura en general y cómo solicitar tu cita.',
+    imageAlt: 'Profesional con guantes revisa la frente de una paciente',
     intro:
       'La toxina botulínica se usa en líneas de expresión dinámicas. Antes de proponerla, evaluamos si es la opción adecuada para ti.',
     forWho: [
@@ -233,8 +245,10 @@ export const treatments: Treatment[] = [
     number: '03',
     name: 'Bioestimuladores de colágeno',
     short: 'Pueden apoyar la producción de colágeno de forma gradual.',
+    seoTitle: 'Bioestimuladores de colágeno en Guatemala',
     metaDescription:
-      'Bioestimuladores de colágeno en Guatemala con valoración médica previa. Conoce para quién son, qué esperar y qué confirmar antes de decidir.',
+      'Bioestimuladores de colágeno en Zona 10, Guatemala, con valoración médica previa. Cómo actúan, qué esperar y cómo solicitar tu cita.',
+    imageAlt: 'Mujer madura de cabello claro con los ojos cerrados y líneas que marcan la mejilla',
     intro:
       'Los bioestimuladores se usan para apoyar la firmeza de la piel de forma gradual. El producto y el número de sesiones dependen de tu valoración.',
     forWho: [
@@ -280,8 +294,10 @@ export const treatments: Treatment[] = [
     number: '04',
     name: 'Calidad de piel',
     short: 'Tratamientos para textura, hidratación y luminosidad, según tu tipo de piel.',
+    seoTitle: 'Calidad de la piel en Guatemala',
     metaDescription:
-      'Tratamientos para calidad de piel en Guatemala con valoración médica previa. Conoce las opciones según tu tipo de piel antes de decidir.',
+      'Tratamientos para textura, hidratación y luminosidad de la piel en Zona 10, Guatemala, con valoración médica previa. Solicita tu cita.',
+    imageAlt: 'Mujer sonriente con las manos en el rostro y la piel luminosa',
     intro:
       'Trabajamos la textura, la hidratación y el aspecto general de la piel. Primero identificamos tu tipo de piel y tus necesidades.',
     forWho: [
@@ -373,6 +389,9 @@ export const results = {
 
 export const visit = {
   title: 'Visítanos',
+  seoTitle: 'Dirección y horario en Zona 10, Guatemala',
+  metaDescription:
+    'Alaria Clínica Estética: Edificio Renovati, Torre 2, clínica 508, Zona 10, Ciudad de Guatemala. Lunes a viernes de 9 a 17 h y sábado de 9 a 13 h.',
   intro: 'Te esperamos con cita previa. Confirma tu horario antes de llegar.',
   // Una línea por renglón en la tarjeta de Visítanos.
   address: ['2a Calle 6-24, Zona 10', 'Edificio Renovati, Torre 2', '5.º nivel, clínica 508', 'Ciudad de Guatemala'],
@@ -388,6 +407,9 @@ export const visit = {
 
 export const booking = {
   title: 'Solicita tu cita',
+  seoTitle: 'Solicita tu cita de valoración en Guatemala',
+  metaDescription:
+    'Elige día y hora para tu valoración en Alaria Clínica Estética, Zona 10, Guatemala. La clínica revisa tu solicitud y te confirma la cita.',
   intro:
     'Elige el día y la hora que prefieras y déjanos tus datos. Revisamos tu solicitud y te confirmamos la cita.',
   // URL de la aplicación web de Apps Script (apps-script/). No es un secreto: identifica el servicio.

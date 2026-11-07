@@ -15,6 +15,7 @@ export const ui = {
   whatToExpect: 'Qué esperar',
   treatmentFaq: 'Preguntas sobre este tratamiento',
   readMore: 'Ver tratamiento',
+  heroAlt: 'Profesional con guantes revisa el rostro de una paciente recostada en un sillón de tratamiento',
   clinicPhotoAlt: 'Consultorio de Alaria: sillón de tratamiento blanco, lavamanos y repisa sobre una pared de mármol iluminada',
   credentials: 'Formación',
   before: 'Antes',
