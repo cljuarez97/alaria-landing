@@ -14,22 +14,39 @@ import ogImage from '../assets/brand/og-alaria.jpg';
 import { site } from '../data/content';
 import { ui } from '../data/ui';
 import { pageTransition } from '../lib/transitions';
+import { breadcrumbNode, clinicNode, webPageNode, websiteNode, type Crumb } from '../lib/schema';
 
 interface Props {
   /** Título para Google (máx. 50 caracteres); se completa con la marca. */
   title?: string;
   description?: string;
   noindex?: boolean;
-  jsonLd?: Record<string, unknown>;
+  /** Migas de pan, sin la página de inicio. Tipo de página y nodos extra para los datos estructurados. */
+  crumbs?: Crumb[];
+  pageType?: string;
+  schema?: (context: { root: string; url: string; image: string }) => Record<string, unknown>[];
 }
 
-const { title, description = site.description, noindex = false, jsonLd } = Astro.props;
+const { title, description = site.description, noindex = false, crumbs = [], pageType, schema } = Astro.props;
 
 const fullTitle = `${title ?? site.seoTitle} · ${site.shortName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const og = await getImage({ src: ogImage, width: 1200, height: 630, format: 'jpg' });
 const ogUrl = new URL(og.src, Astro.site).href;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const root = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const jsonLd = noindex
+  ? null
+  : {
+      '@context': 'https://schema.org',
+      '@graph': [
+        clinicNode(root, ogUrl),
+        websiteNode(root),
+        webPageNode(root, canonical, fullTitle, description, pageType),
+        ...(crumbs.length ? [breadcrumbNode(root, canonical, [{ name: ui.home, path: '/' }, ...crumbs])] : []),
+        ...(schema?.({ root, url: canonical, image: ogUrl }) ?? []),
+      ],
+    };
 
 // Solo subset latin (cubre español). Rango igual al de fontsource.
 const latin =

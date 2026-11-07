@@ -14,7 +14,7 @@ import { mapsUrl, whatsappUrl } from '../lib/url';
 const telHref = `tel:${visit.phone.replace(/[^\d+]/g, '')}`;
 const maps = mapsUrl(visit.mapsQuery);
 ---
-<BaseLayout title={visit.seoTitle} description={visit.metaDescription}>
+<BaseLayout title={visit.seoTitle} description={visit.metaDescription} pageType="ContactPage" crumbs={[{ name: visit.title, path: '/visitanos/' }]}>
   <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
     <header class="grid gap-6 lg:grid-cols-12 lg:items-end">
       <div class="lg:col-span-6">

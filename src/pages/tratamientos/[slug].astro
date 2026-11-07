@@ -14,6 +14,7 @@ import { frameCropClass } from '../../lib/crop';
 import { ui } from '../../data/ui';
 import { href } from '../../lib/url';
 import { isPublishable } from '../../lib/pending';
+import { faqNode, procedureNode } from '../../lib/schema';
 
 export const getStaticPaths = (() =>
   treatments.map((treatment, i) => ({
@@ -35,7 +36,12 @@ const { treatment: t, prev, next } = Astro.props;
 const img = treatmentImage(t.slug);
 const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD));
 ---
-<BaseLayout title={t.seoTitle} description={t.metaDescription}>
+<BaseLayout
+  title={t.seoTitle}
+  description={t.metaDescription}
+  crumbs={[{ name: home.treatmentsTeaser.title, path: '/tratamientos/' }, { name: t.name, path: `/tratamientos/${t.slug}/` }]}
+  schema={({ url, image }) => [procedureNode(url, t, image), faqNode(url, t.faq)]}
+>
   <article>
     <!-- Hero del tratamiento -->
     <header class="container-x grid gap-x-12 gap-y-10 pt-6 pb-16 lg:grid-cols-12 lg:items-end lg:pt-10 lg:pb-24">

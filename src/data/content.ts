@@ -401,6 +401,9 @@ export const visit = {
     { day: 'Sábado', time: '9:00 a. m. – 1:00 p. m.', opens: '09:00', closes: '13:00', days: ['Saturday'] },
   ],
   contactNote: 'Para cambios de cita, escríbenos por WhatsApp, llámanos o envíanos un correo.',
+  // Código postal y coordenadas del Edificio Renovati según Google Maps.
+  postalCode: '01009',
+  geo: { latitude: 14.6115718, longitude: -90.5099459 },
   phone: '+502 3104 5178',
   email: 'alariaclinicaestetica@gmail.com',
 };

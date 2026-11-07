@@ -1,5 +1,6 @@
 // Microcopy de interfaz que no está en content.ts (etiquetas, nombres accesibles, páginas de sistema).
 export const ui = {
+  home: 'Inicio',
   skipLink: 'Saltar al contenido',
   mainNav: 'Navegación principal',
   bottomNav: 'Secciones',
