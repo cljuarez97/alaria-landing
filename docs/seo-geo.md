@@ -29,8 +29,14 @@ Actualiza `CONTENT_UPDATED` en `src/lib/schema.ts` y `lastmod` en `astro.config.
 
 El posicionamiento local depende sobre todo de:
 
-1. **Perfil de Empresa de Google**: hoy Alaria no aparece en Maps. Es lo primero para búsquedas como "clínica
-   estética zona 10". Usa exactamente el mismo nombre, dirección y teléfono del sitio.
+1. **Perfil de Empresa de Google**: creado el 7 de noviembre de 2026 en la cuenta de la clínica, **sin verificar**
+   y por eso aún no es público. Datos: categoría principal "Spa médico" (Google no tiene "medicina estética") y
+   secundaria "Clínica del cuidado de la piel"; la misma dirección, horario, teléfono y web del sitio; WhatsApp;
+   los cuatro tratamientos como servicios, y la foto del consultorio. Falta:
+   - **Verificarlo con un video** grabado en la clínica: la placa o el rótulo, el interior y una prueba de que la
+     administran (por ejemplo, la llave o el sistema de citas). Se hace desde business.google.com, en "Verificar".
+   - Subir una foto del exterior o de la entrada del edificio, y el logo.
+   - Al verificarlo, añadir el enlace del perfil a `sameAs` en `src/lib/schema.ts`.
 2. **Reseñas reales en Google**: pídelas a pacientes, sin pagar ni incentivar.
 3. **Enlaces y menciones externas**: Instagram, directorios locales, prensa, el edificio Renovati.
 4. **Autoría médica visible**: colegiado y credenciales. Google exige más confianza en temas de salud.
