@@ -2,7 +2,7 @@
 import Wordmark from './Wordmark.astro';
 import Rich from './Rich.astro';
 import Icon from './Icon.astro';
-import { footer, nav, site, home } from '../data/content';
+import { footer, nav, site, home, visit } from '../data/content';
 import { ui } from '../data/ui';
 import { href, whatsappUrl } from '../lib/url';
 import { isPublishable } from '../lib/pending';
@@ -16,6 +16,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="grid content-start gap-3">
         <Wordmark tone="light" />
         <p class="t-small max-w-[32ch] text-mist">{footer.note}</p>
+        <address class="t-small max-w-[36ch] text-mist not-italic">
+          {visit.address.join(', ')}.
+          <span class="mt-1 block">{footer.hours}</span>
+          <a href={`tel:${visit.phone.replace(/\s/g, '')}`} class="mt-1 inline-flex min-h-11 items-center text-paper underline underline-offset-4">{visit.phone}</a>
+        </address>
       </div>
 
       <div class="grid gap-6 lg:justify-items-end">

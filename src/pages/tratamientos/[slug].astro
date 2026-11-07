@@ -91,6 +91,35 @@ const facts = t.facts.filter((f) => isPublishable(f.value, import.meta.env.PROD)
       )
     }
 
+    <!-- Qué es: información general con fuentes, para pacientes y para quien cite esta página. -->
+    <section class="section pb-0" aria-labelledby="about-title">
+      <div class="container-x grid gap-8 lg:grid-cols-12" data-reveal>
+        <div class="lg:col-span-5">
+          <Ornament reveal />
+          <h2 id="about-title" class="t-h2 mt-5">{t.about.title}</h2>
+        </div>
+        <div class="grid gap-4 lg:col-span-7">
+          {t.about.paragraphs.map((para) => <p class="t-body">{para}</p>)}
+          <p class="t-small text-muted">{ui.educationalNote} {ui.updatedOn}</p>
+          <div>
+            <h3 class="t-small font-semibold">{ui.sources}</h3>
+            <ul class="t-small mt-1 grid gap-1" role="list">
+              {
+                t.about.sources.map((source) => (
+                  <li>
+                    <a href={source.url} target="_blank" rel="noopener" class="underline underline-offset-4">
+                      {source.label}
+                      <span class="sr-only">{ui.newTab}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Para quién + Qué esperar -->
     <section class="section">
       <div class="container-x grid gap-16 lg:grid-cols-12">

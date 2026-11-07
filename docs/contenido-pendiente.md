@@ -5,6 +5,7 @@ El sitio no muestra estos datos mientras falten. Al completarlos en `src/data/co
 
 ## Antes de promocionar
 
+- [ ] **La doctora debe revisar y aprobar** la sección "Qué es" de cada tratamiento y sus fuentes (`about` en `content.ts`). Es información general; la revisión sobre bioestimuladores declara que sus autoras asesoran a un fabricante, y conviene sumar otra fuente.
 - [ ] Colegiado del médico responsable y licencia sanitaria MSPAS (pie de página)
 - [ ] Costo de la valoración o si es gratuita (preguntas frecuentes)
 - [ ] Tiempo de respuesta que la clínica puede prometer
