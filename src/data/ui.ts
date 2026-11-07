@@ -1,6 +1,9 @@
 // Microcopy de interfaz que no está en content.ts (etiquetas, nombres accesibles, páginas de sistema).
 export const ui = {
   home: 'Inicio',
+  sources: 'Fuentes',
+  educationalNote: 'Información general con fines educativos. No sustituye una valoración médica.',
+  updatedOn: 'Actualizado en noviembre de 2026.',
   skipLink: 'Saltar al contenido',
   mainNav: 'Navegación principal',
   bottomNav: 'Secciones',

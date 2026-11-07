@@ -48,6 +48,8 @@ export const home = {
   ctaPrimary: 'Solicitar mi cita',
   ctaSecondary: 'Escribir por WhatsApp',
   ctaTertiary: 'Ver tratamientos',
+  location: 'Zona 10, Ciudad de Guatemala · Atención con cita previa',
+  h1Treatments: 'Tratamientos de medicina estética',
   approach: {
     title: 'Cómo trabajamos',
     intro: 'Cuatro principios guían cada consulta en Alaria.',
@@ -126,6 +128,8 @@ export type Treatment = {
   seoTitle: string;
   metaDescription: string;
   imageAlt: string;
+  /** Información general con fuentes: es lo que Google y los buscadores con IA pueden citar. */
+  about: { title: string; paragraphs: string[]; sources: { label: string; url: string }[] };
   intro: string;
   forWho: string[];
   whatToExpect: { step: string; text: string }[];
@@ -151,6 +155,17 @@ export const treatments: Treatment[] = [
     metaDescription:
       'Armonización facial en Zona 10, Guatemala, con valoración médica previa. Conoce para quién es, qué esperar y cómo solicitar tu cita.',
     imageAlt: 'Profesional con guantes sostiene el rostro de una paciente, con líneas que marcan el contorno facial',
+    about: {
+      title: 'Qué es la armonización facial',
+      paragraphs: [
+        'Es un plan para equilibrar las proporciones del rostro respetando tus rasgos. No es un solo procedimiento: según el caso puede combinar opciones como rellenos dérmicos o toxina botulínica, y a veces lo indicado es no hacer nada.',
+        'Los rellenos dérmicos son dispositivos médicos implantables. La FDA señala que su riesgo más serio es la inyección accidental en un vaso sanguíneo, que puede dañar la piel, afectar la visión o causar un derrame cerebral. Por eso no deben comprarse en línea ni aplicarse sin un profesional.',
+        'Busca atención médica de inmediato si después de una aplicación tienes dolor inusual, cambios en la visión o la piel se ve blanca, gris o azulada.',
+      ],
+      sources: [
+        { label: 'FDA: rellenos dérmicos', url: 'https://www.fda.gov/medical-devices/aesthetic-cosmetic-devices/dermal-fillers-soft-tissue-fillers' },
+      ],
+    },
     intro:
       'La armonización facial busca un rostro más equilibrado según tus rasgos. Primero revisamos tus proporciones y tus objetivos; el plan se define después.',
     forWho: [
@@ -200,6 +215,18 @@ export const treatments: Treatment[] = [
     metaDescription:
       'Toxina botulínica en Zona 10, Guatemala, con valoración médica previa. Para qué sirve, cuánto dura en general y cómo solicitar tu cita.',
     imageAlt: 'Profesional con guantes revisa la frente de una paciente',
+    about: {
+      title: 'Qué es la toxina botulínica',
+      paragraphs: [
+        'Es un medicamento inyectable que relaja temporalmente los músculos que forman las líneas de expresión, como las del entrecejo y las patas de gallo.',
+        'Según la Academia Americana de Dermatología, la mayoría de las personas nota el resultado entre 3 y 7 días, y este dura cerca de 3 a 4 meses, a veces más. Casi siempre se puede volver a la mayoría de las actividades de inmediato.',
+        'Puede causar hinchazón, dolor o moretones donde se aplica y, con menos frecuencia, caída temporal del párpado. En raras ocasiones se extiende más allá de la zona y causa problemas para tragar o respirar, lo que requiere atención urgente.',
+      ],
+      sources: [
+        { label: 'Academia Americana de Dermatología: toxina botulínica', url: 'https://www.aad.org/public/cosmetic/wrinkles/botulinum-toxin-overview' },
+        { label: 'Kaiser Permanente: toxina botulínica', url: 'https://healthy.kaiserpermanente.org/health-wellness/health-encyclopedia/he.tf6217' },
+      ],
+    },
     intro:
       'La toxina botulínica se usa en líneas de expresión dinámicas. Antes de proponerla, evaluamos si es la opción adecuada para ti.',
     forWho: [
@@ -227,7 +254,7 @@ export const treatments: Treatment[] = [
     faq: [
       {
         q: '¿Cuánto tarda en notarse el efecto?',
-        a: 'Varía según la zona y la persona. [dato médico pendiente: tiempo estimado de efecto]',
+        a: 'En general, la mayoría de las personas nota el resultado entre 3 y 7 días. Varía según la zona y la persona. [dato médico pendiente: tiempo estimado de efecto]',
       },
       {
         q: '¿Duele?',
@@ -235,7 +262,7 @@ export const treatments: Treatment[] = [
       },
       {
         q: '¿Se pierde el efecto?',
-        a: 'El efecto no es permanente. Te explicamos la frecuencia recomendada según tu plan. [dato médico pendiente: duración del efecto]',
+        a: 'Sí. En general dura cerca de 3 a 4 meses, a veces más. Te explicamos la frecuencia recomendada según tu plan. [dato médico pendiente: duración del efecto]',
       },
     ],
     beforeDeciding,
@@ -249,6 +276,17 @@ export const treatments: Treatment[] = [
     metaDescription:
       'Bioestimuladores de colágeno en Zona 10, Guatemala, con valoración médica previa. Cómo actúan, qué esperar y cómo solicitar tu cita.',
     imageAlt: 'Mujer madura de cabello claro con los ojos cerrados y líneas que marcan la mejilla',
+    about: {
+      title: 'Qué son los bioestimuladores de colágeno',
+      paragraphs: [
+        'Son sustancias inyectables, como el ácido poli-L-láctico y la hidroxiapatita de calcio, que estimulan al cuerpo a producir colágeno propio.',
+        'Su efecto se construye poco a poco: el producto se degrada de forma gradual mientras se forma colágeno nuevo. Por eso conviene evaluarlos con expectativas de mediano plazo, no como un cambio inmediato.',
+        'Cada sustancia actúa de manera distinta y no todas sirven para lo mismo. En tu valoración revisamos si este tipo de tratamiento tiene sentido para ti y cuál sería el adecuado.',
+      ],
+      sources: [
+        { label: 'Corduff y Goldie, Plastic and Reconstructive Surgery Global Open, 2025', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12323983/' },
+      ],
+    },
     intro:
       'Los bioestimuladores se usan para apoyar la firmeza de la piel de forma gradual. El producto y el número de sesiones dependen de tu valoración.',
     forWho: [
@@ -298,6 +336,19 @@ export const treatments: Treatment[] = [
     metaDescription:
       'Tratamientos para textura, hidratación y luminosidad de la piel en Zona 10, Guatemala, con valoración médica previa. Solicita tu cita.',
     imageAlt: 'Mujer sonriente con las manos en el rostro y la piel luminosa',
+    about: {
+      title: 'Qué significa mejorar la calidad de la piel',
+      paragraphs: [
+        'Es trabajar la textura, los poros, las manchas, la hidratación y la luminosidad. Hay varias opciones y la adecuada depende de tu piel. Estas son dos de las más conocidas; en tu valoración te decimos cuál aplica y cuáles ofrecemos.',
+        'Peeling químico: su recuperación depende de la profundidad. Según la Academia Americana de Dermatología, toma de 1 a 7 días en uno superficial, de 7 a 14 en uno medio y de 14 a 21 en uno profundo.',
+        'Microneedling: estimula al cuerpo a producir colágeno y se usa en poros, textura irregular, manchas y cicatrices de acné. El resultado aparece gradualmente y el enrojecimiento suele irse entre unos días y una semana.',
+        'En ambos casos, proteger la piel del sol es parte del tratamiento: usa protector solar todos los días una vez que la piel sane.',
+      ],
+      sources: [
+        { label: 'Academia Americana de Dermatología: peelings químicos', url: 'https://www.aad.org/public/cosmetic/younger-looking/chemical-peels-faqs' },
+        { label: 'Academia Americana de Dermatología: microneedling', url: 'https://www.aad.org/public/cosmetic/scars-stretch-marks/microneedling-fade-scars' },
+      ],
+    },
     intro:
       'Trabajamos la textura, la hidratación y el aspecto general de la piel. Primero identificamos tu tipo de piel y tus necesidades.',
     forWho: [
@@ -368,6 +419,18 @@ export const faq = [
     q: '¿Cuál es el precio de cada tratamiento?',
     a: 'El costo depende del tratamiento indicado, las áreas a tratar y las necesidades individuales de cada paciente. Después de tu valoración, te proporcionaremos un presupuesto personalizado y transparente. [pendiente: costo de la valoración o si es gratuita]',
   },
+  {
+    q: '¿Dónde está Alaria Clínica Estética?',
+    a: 'En el Edificio Renovati, Torre 2, 5.º nivel, clínica 508, en la 2a Calle 6-24 de la Zona 10, Ciudad de Guatemala. Atendemos con cita previa.',
+  },
+  {
+    q: '¿Cuál es el horario de atención?',
+    a: 'De lunes a viernes de 9:00 a. m. a 5:00 p. m., y los sábados de 9:00 a. m. a 1:00 p. m.',
+  },
+  {
+    q: '¿Qué tratamientos ofrecen?',
+    a: 'Armonización facial, toxina botulínica, bioestimuladores de colágeno y tratamientos para la calidad de la piel. Todos empiezan con una valoración médica.',
+  },
 ];
 
 export const results = {
@@ -392,7 +455,7 @@ export const visit = {
   seoTitle: 'Dirección y horario en Zona 10, Guatemala',
   metaDescription:
     'Alaria Clínica Estética: Edificio Renovati, Torre 2, clínica 508, Zona 10, Ciudad de Guatemala. Lunes a viernes de 9 a 17 h y sábado de 9 a 13 h.',
-  intro: 'Te esperamos con cita previa. Confirma tu horario antes de llegar.',
+  intro: 'Te esperamos con cita previa en el Edificio Renovati, Zona 10. Confirma tu horario antes de llegar.',
   // Una línea por renglón en la tarjeta de Visítanos.
   address: ['2a Calle 6-24, Zona 10', 'Edificio Renovati, Torre 2', '5.º nivel, clínica 508', 'Ciudad de Guatemala'],
   mapsQuery: '2a Calle 6-24, Zona 10, Edificio Renovati, Ciudad de Guatemala',
@@ -477,6 +540,7 @@ export const booking = {
 };
 
 export const footer = {
+  hours: 'Lunes a viernes, 9:00 a. m. a 5:00 p. m. · Sábado, 9:00 a. m. a 1:00 p. m.',
   note: 'Alaria Clínica Estética. Medicina estética con criterio médico.',
   legal: '© 2026 Alaria Clínica Estética.',
   // Cada línea solo se publica completa: sin el número no dice nada.
