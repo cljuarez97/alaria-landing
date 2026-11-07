@@ -113,7 +113,7 @@ export const home = {
     metaDescription:
       'Armonización facial, toxina botulínica, bioestimuladores de colágeno y calidad de piel en Zona 10, Guatemala. Todos empiezan con una valoración médica.',
     title: 'Tratamientos',
-    intro: 'Cuatro líneas de trabajo. Todo tratamiento empieza con una valoración.',
+    intro: 'Todo tratamiento empieza con una valoración.',
   },
   faqTeaser: {
     title: 'Preguntas frecuentes',
