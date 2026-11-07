@@ -35,4 +35,4 @@ y fechas de control. Los debe escribir o aprobar la doctora.
 
 - [ ] Umami: crear la cuenta y pegar `src` y `websiteId` en `site.analytics`
 - [ ] Organización gratuita de GitHub para quitar `/alaria-landing` de la dirección
-- [ ] Google Business y Search Console
+- [ ] Perfil de Empresa de Google (Search Console ya está configurado)
