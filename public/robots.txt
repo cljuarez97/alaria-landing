@@ -1,0 +1,6 @@
+# Solo tiene efecto en la raíz del dominio: en github.io/alaria-landing/ los buscadores no lo leen.
+# Queda listo para cuando el sitio se publique en una dirección propia (ajusta entonces el Sitemap).
+User-agent: *
+Allow: /
+
+Sitemap: https://cljuarez97.github.io/alaria-landing/sitemap-index.xml
