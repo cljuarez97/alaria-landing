@@ -14,7 +14,7 @@ import { mapsUrl, whatsappUrl } from '../lib/url';
 const telHref = `tel:${visit.phone.replace(/[^\d+]/g, '')}`;
 const maps = mapsUrl(visit.mapsQuery);
 ---
-<BaseLayout title={visit.title} description={`${visit.intro} ${site.name}.`}>
+<BaseLayout title={visit.seoTitle} description={visit.metaDescription}>
   <section class="container-x pt-8 pb-[var(--section)] lg:pt-14">
     <header class="grid gap-6 lg:grid-cols-12 lg:items-end">
       <div class="lg:col-span-6">
