@@ -1,8 +1,14 @@
-// Cliente del backend de citas (apps-script/). Todas las fechas y horas son las de la clínica:
-// se muestran tal cual llegan, sin convertirlas a la zona horaria del navegador.
+// Cliente del backend de citas. Hay dos: Bichitech (la plataforma de gestión de la clínica) y el
+// Apps Script anterior (apps-script/), que sigue activo mientras dura la migración. Todas las fechas y
+// horas son las de la clínica: se muestran tal cual llegan, sin convertirlas a la zona del navegador.
+
+export type Backend =
+  | { kind: 'apps-script'; endpoint: string }
+  | { kind: 'bichitech'; api: string; serviceId: number };
 
 export type AvailableDay = { date: string; slots: string[] };
-export type Availability = { utcOffset: string; days: AvailableDay[] };
+/** `starts`: instante exacto de cada hora, con clave `fecha hora` (`2026-11-09 09:00`). */
+export type Availability = { days: AvailableDay[]; starts: Record<string, string> };
 export type RequestError = 'invalid' | 'slot_taken' | 'rate_limited' | 'busy' | 'server' | 'offline';
 export type RequestResult = { ok: true } | { ok: false; error: RequestError };
 
@@ -19,41 +25,88 @@ export type AppointmentRequest = {
 
 const WEEKDAYS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-
-/** Horas libres. Lanza un error si el servicio no responde, para que la página ofrezca reintentar. */
-export async function fetchAvailability(endpoint: string, fetchImpl: typeof fetch = fetch): Promise<Availability> {
-  const res = await fetchImpl(`${endpoint}?action=slots`);
-  const data = (await res.json()) as { ok?: boolean; utcOffset?: string; days?: AvailableDay[] };
-  if (!res.ok || !data.ok || !data.utcOffset || !Array.isArray(data.days)) throw new Error('availability');
-  return { utcOffset: data.utcOffset, days: data.days };
-}
+const KNOWN_ERRORS: RequestError[] = ['invalid', 'slot_taken', 'rate_limited', 'busy'];
 
 /**
- * Envía la solicitud. `text/plain` evita la petición previa de CORS, que Apps Script no responde;
- * el cuerpo sigue siendo JSON.
+ * Backend según el entorno del build: con `PUBLIC_BOOKING_API` y `PUBLIC_BOOKING_SERVICE` se usa
+ * Bichitech; sin ellas, el Apps Script de siempre.
  */
+export function bookingBackend(env: { api?: string; serviceId?: string }, appsScriptEndpoint: string): Backend {
+  const serviceId = Number(env.serviceId);
+  return env.api && Number.isInteger(serviceId) && serviceId > 0
+    ? { kind: 'bichitech', api: env.api.replace(/\/+$/, ''), serviceId }
+    : { kind: 'apps-script', endpoint: appsScriptEndpoint };
+}
+
+/** Horas libres. Lanza un error si el servicio no responde, para que la página ofrezca reintentar. */
+export async function fetchAvailability(backend: Backend, fetchImpl: typeof fetch = fetch): Promise<Availability> {
+  if (backend.kind === 'bichitech') {
+    const res = await fetchImpl(`${backend.api}/availability?service=${backend.serviceId}`, { headers: { Accept: 'application/json' } });
+    const data = (await res.json()) as { ok?: boolean; days?: { date: string; slots: { time: string; start: string }[] }[] };
+    if (!res.ok || !data.ok || !Array.isArray(data.days)) throw new Error('availability');
+    const starts: Record<string, string> = {};
+    const days = data.days.map((day) => ({
+      date: day.date,
+      slots: day.slots.map((slot) => {
+        starts[`${day.date} ${slot.time}`] = slot.start;
+        return slot.time;
+      }),
+    }));
+    return { days, starts };
+  }
+
+  const res = await fetchImpl(`${backend.endpoint}?action=slots`);
+  const data = (await res.json()) as { ok?: boolean; utcOffset?: string; days?: AvailableDay[] };
+  if (!res.ok || !data.ok || !data.utcOffset || !Array.isArray(data.days)) throw new Error('availability');
+  const offset = data.utcOffset;
+  const starts = Object.fromEntries(
+    data.days.flatMap((day) => day.slots.map((time) => [`${day.date} ${time}`, `${day.date}T${time}:00${offset}`])),
+  );
+  return { days: data.days, starts };
+}
+
+/** Envía la solicitud y traduce la respuesta de cualquiera de los dos backends al mismo resultado. */
 export async function requestAppointment(
-  endpoint: string,
+  backend: Backend,
   payload: AppointmentRequest,
   fetchImpl: typeof fetch = fetch,
 ): Promise<RequestResult> {
   if (typeof navigator !== 'undefined' && navigator.onLine === false) return { ok: false, error: 'offline' };
   try {
-    const res = await fetchImpl(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-    });
-    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: RequestError };
+    const res =
+      backend.kind === 'bichitech'
+        ? await fetchImpl(`${backend.api}/appointments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
+              service_id: backend.serviceId,
+              start: payload.slotStart,
+              name: payload.name,
+              phone: payload.phone,
+              email: payload.email || null,
+              treatment: payload.treatment || null,
+              message: payload.message || null,
+              followup: payload.followup,
+            }),
+          })
+        : // `text/plain` evita la petición previa de CORS, que Apps Script no responde; el cuerpo sigue siendo JSON.
+          await fetchImpl(backend.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          });
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
     if (res.ok && data.ok) return { ok: true };
-    return { ok: false, error: data.error ?? 'server' };
+    const error = KNOWN_ERRORS.find((code) => code === data.error) ?? 'server';
+    return { ok: false, error };
   } catch {
     return { ok: false, error: 'offline' };
   }
 }
 
-export function slotStart(date: string, time: string, utcOffset: string): string {
-  return `${date}T${time}:00${utcOffset}`;
+/** Instante exacto de la hora elegida, tal como lo dio el backend. */
+export function slotStart(availability: Availability, date: string, time: string): string {
+  return availability.starts[`${date} ${time}`] ?? '';
 }
 
 /** Celdas de un mes con la semana empezando en domingo. `null` = hueco antes del día 1. */

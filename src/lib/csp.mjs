@@ -44,9 +44,10 @@ export function analyticsOrigin(html) {
  * `frame-ancestors` no se puede poner aquí: se ignora en <meta>.
  * @param {string[]} hashes
  * @param {string | null} [analytics] origen de la analítica
+ * @param {string[]} [connect] orígenes extra a los que la página puede llamar (API de reservas)
  * @returns {string}
  */
-export function buildPolicy(hashes, analytics = null) {
+export function buildPolicy(hashes, analytics = null, connect = []) {
   const scripts = [...new Set(hashes)].sort();
   const extra = analytics ? [analytics] : [];
   return [
@@ -55,7 +56,7 @@ export function buildPolicy(hashes, analytics = null) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
-    `connect-src ${["'self'", 'https://script.google.com', 'https://script.googleusercontent.com', ...extra].join(' ')}`,
+    `connect-src ${["'self'", 'https://script.google.com', 'https://script.googleusercontent.com', ...connect, ...extra].join(' ')}`,
     "frame-src 'none'",
     "manifest-src 'self'",
     "worker-src 'self'",
@@ -76,8 +77,11 @@ export function injectPolicy(html, policy) {
   return html.replace(CHARSET_META, () => `${CHARSET_META}<meta http-equiv="content-security-policy" content="${policy}">`);
 }
 
-/** @returns {import('astro').AstroIntegration} */
-export function cspIntegration() {
+/**
+ * @param {{ connect?: string[] }} [options] `connect`: orígenes extra para connect-src
+ * @returns {import('astro').AstroIntegration}
+ */
+export function cspIntegration({ connect = [] } = {}) {
   return {
     name: 'alaria-csp',
     hooks: {
@@ -87,7 +91,7 @@ export function cspIntegration() {
         const files = entries.filter((f) => f.endsWith('.html')).map((f) => join(root, f));
         const pages = await Promise.all(files.map(async (file) => ({ file, html: await readFile(file, 'utf8') })));
         const analytics = pages.map(({ html }) => analyticsOrigin(html)).find(Boolean) ?? null;
-        const policy = buildPolicy(pages.flatMap(({ html }) => inlineScriptHashes(html)), analytics);
+        const policy = buildPolicy(pages.flatMap(({ html }) => inlineScriptHashes(html)), analytics, connect);
         await Promise.all(pages.map(({ file, html }) => writeFile(file, injectPolicy(html, policy))));
         logger.info(`política aplicada a ${pages.length} páginas`);
       },

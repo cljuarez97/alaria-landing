@@ -63,3 +63,11 @@ describe('analítica en la CSP', () => {
     expect(policy).toMatch(/connect-src [^;]*https:\/\/cloud\.umami\.is/);
   });
 });
+
+describe('API de reservas en la CSP', () => {
+  it('permite llamar al origen de la API configurada y a nada más', () => {
+    const policy = buildPolicy([], null, ['https://app.bichitech.test']);
+    expect(policy).toMatch(/connect-src [^;]*https:\/\/app\.bichitech\.test/);
+    expect(buildPolicy([])).not.toContain('bichitech');
+  });
+});

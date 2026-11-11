@@ -10,13 +10,14 @@ import {
   requestAppointment,
   slotStart,
   type Availability,
+  type Backend,
 } from '../lib/appointments';
 import { track } from '../lib/analytics';
 import { whatsappUrl } from '../lib/url';
 import { isBot, normalizePhone, validateBooking, type BookingFields, type FieldError } from './booking';
 
 type Messages = {
-  endpoint: string;
+  backend: Backend;
   validation: Record<FieldError['code'] | 'slot', string>;
   submit: string;
   sending: string;
@@ -75,7 +76,7 @@ function setup(form: HTMLFormElement) {
     target.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
   };
 
-  let availability: Availability = { utcOffset: '', days: [] };
+  let availability: Availability = { days: [], starts: {} };
   let months: { year: number; month: number }[] = [];
   let monthIndex = 0;
   let selectedDate = '';
@@ -168,7 +169,7 @@ function setup(form: HTMLFormElement) {
   const load = async () => {
     setPickerState('loading');
     try {
-      availability = await fetchAvailability(msg.endpoint);
+      availability = await fetchAvailability(msg.backend);
     } catch {
       setPickerState('error');
       return;
@@ -334,14 +335,14 @@ function setup(form: HTMLFormElement) {
     button.setAttribute('aria-busy', 'true');
     label.textContent = msg.sending;
 
-    const result = await requestAppointment(msg.endpoint, {
+    const result = await requestAppointment(msg.backend, {
       name: fields.name.trim(),
       phone: normalizePhone(fields.phone),
       email: fields.email.trim(),
       treatment: fields.treatment,
       message: (fields.message ?? '').trim(),
       followup: q<HTMLInputElement>('#followup').checked,
-      slotStart: slotStart(selectedDate, selectedTime, availability.utcOffset),
+      slotStart: slotStart(availability, selectedDate, selectedTime),
       origin: location.origin,
     });
 

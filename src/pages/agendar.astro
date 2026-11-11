@@ -7,6 +7,7 @@ import { images } from '../data/images';
 import { imageFocus } from '../data/focus';
 import { ui } from '../data/ui';
 import { href, mapsUrl, whatsappUrl } from '../lib/url';
+import { bookingBackend } from '../lib/appointments';
 import Ornament from '../components/Ornament.astro';
 
 const f = booking.form;
@@ -21,7 +22,11 @@ const weekdays = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
 // Mensajes para el script del cliente (sin duplicar textos en el JS).
 const messages = {
-  endpoint: booking.endpoint,
+  // Bichitech si el build trae PUBLIC_BOOKING_API y PUBLIC_BOOKING_SERVICE; si no, Apps Script.
+  backend: bookingBackend(
+    { api: import.meta.env.PUBLIC_BOOKING_API, serviceId: import.meta.env.PUBLIC_BOOKING_SERVICE },
+    booking.endpoint,
+  ),
   validation: booking.validation,
   submit: f.submit,
   sending: f.sending,
