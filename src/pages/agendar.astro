@@ -34,6 +34,15 @@ const messages = {
   slotTaken: f.slotTaken,
   rateLimited: f.rateLimited,
   offline: f.offline,
+  verify: {
+    sent: f.verifySent,
+    submit: f.verifySubmit,
+    checking: f.verifyChecking,
+    resent: f.verifyResent,
+    wrong: f.verifyWrong,
+    format: f.verifyFormat,
+    sendFailed: f.verifySendFailed,
+  },
   loading: p.loading,
   loadError: p.loadError,
   empty: p.empty,
@@ -194,7 +203,33 @@ const messages = {
           <span data-status-text></span>
         </div>
 
-        <div class="grid gap-4">
+        <!-- Solo si la clínica pide confirmar el teléfono: aparece tras pulsar «Solicitar mi cita». -->
+        <div class="verify" data-verify role="group" aria-labelledby="verify-title" hidden>
+          <p class="font-medium" id="verify-title">{f.verifyTitle}</p>
+          <p class="text-muted" data-verify-text></p>
+          <label for="verify-code" class="field-label">{f.verifyLabel}</label>
+          <input
+            id="verify-code"
+            name="verify-code"
+            class="field verify-code"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            aria-describedby="verify-error"
+          />
+          <p id="verify-error" class="field-error" data-verify-error role="alert" hidden>
+            <Icon name="circle-alert" />
+            <span data-verify-error-text></span>
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <button type="button" class="btn btn-primary" data-verify-submit>{f.verifySubmit}</button>
+            <button type="button" class="link" data-verify-resend>{f.verifyResend}</button>
+          </div>
+        </div>
+
+        <div class="grid gap-4" data-submit-area>
           <button type="submit" class="btn btn-primary submit w-full sm:w-fit" data-state="idle">
             <span class="submit-icon" aria-hidden="true">
               <Icon name="loader-circle" class="spin" />
@@ -532,6 +567,23 @@ const messages = {
     to {
       transform: rotate(360deg);
     }
+  }
+  .verify {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: 2px;
+    background: var(--color-paper);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+  .verify[hidden] {
+    display: none;
+  }
+  .verify-code {
+    max-width: 12rem;
+    font-size: 1.375rem;
+    letter-spacing: 0.3em;
+    font-variant-numeric: tabular-nums;
   }
   .status {
     display: flex;

@@ -1,5 +1,6 @@
 // Página /agendar/: calendario de horas libres y formulario de solicitud.
 import {
+  confirmCode,
   fetchAvailability,
   formatDate,
   formatMonth,
@@ -8,7 +9,9 @@ import {
   monthsWithSlots,
   padCells,
   requestAppointment,
+  requestCode,
   slotStart,
+  type AppointmentRequest,
   type Availability,
   type Backend,
 } from '../lib/appointments';
@@ -25,6 +28,7 @@ type Messages = {
   slotTaken: string;
   rateLimited: string;
   offline: string;
+  verify: { sent: string; submit: string; checking: string; resent: string; wrong: string; format: string; sendFailed: string };
   loading: string;
   loadError: string;
   empty: string;
@@ -330,35 +334,125 @@ function setup(form: HTMLFormElement) {
       return;
     }
 
-    button.dataset.state = 'sending';
-    button.disabled = true;
-    button.setAttribute('aria-busy', 'true');
-    label.textContent = msg.sending;
+    pending = {
+      payload: {
+        name: fields.name.trim(),
+        phone: normalizePhone(fields.phone),
+        email: fields.email.trim(),
+        treatment: fields.treatment,
+        message: (fields.message ?? '').trim(),
+        followup: q<HTMLInputElement>('#followup').checked,
+        slotStart: slotStart(availability, selectedDate, selectedTime),
+        origin: location.origin,
+      },
+      fields,
+      when,
+    };
+    await send();
+  });
 
-    const result = await requestAppointment(msg.backend, {
-      name: fields.name.trim(),
-      phone: normalizePhone(fields.phone),
-      email: fields.email.trim(),
-      treatment: fields.treatment,
-      message: (fields.message ?? '').trim(),
-      followup: q<HTMLInputElement>('#followup').checked,
-      slotStart: slotStart(availability, selectedDate, selectedTime),
-      origin: location.origin,
-    });
+  // --- Confirmación del teléfono por WhatsApp (solo si la clínica la pide) ---
+  const verifyBox = q('[data-verify]');
+  const verifyText = q('[data-verify-text]');
+  const verifyInput = q<HTMLInputElement>('#verify-code');
+  const verifyError = q('[data-verify-error]');
+  const verifyErrorText = q('[data-verify-error-text]');
+  const verifySubmit = q<HTMLButtonElement>('[data-verify-submit]');
+  const verifyResend = q<HTMLButtonElement>('[data-verify-resend]');
+  const submitArea = q('[data-submit-area]');
+  let pending: { payload: AppointmentRequest; fields: BookingFields; when: string } | null = null;
 
-    button.disabled = false;
-    button.removeAttribute('aria-busy');
-    button.dataset.state = 'idle';
-    label.textContent = msg.submit;
+  const setVerifyError = (text: string) => {
+    verifyErrorText.textContent = text;
+    verifyError.hidden = text === '';
+    verifyInput.setAttribute('aria-invalid', text === '' ? 'false' : 'true');
+  };
+  const closeVerify = () => {
+    verifyBox.hidden = true;
+    submitArea.hidden = false;
+    verifyInput.value = '';
+    setVerifyError('');
+  };
+  const busy = (on: boolean, text: string) => {
+    button.dataset.state = on ? 'sending' : 'idle';
+    button.disabled = on;
+    button.toggleAttribute('aria-busy', on);
+    label.textContent = text;
+  };
+
+  const startVerification = async (again = false) => {
+    if (!pending) return;
+    const sent = await requestCode(msg.backend, pending.payload.phone);
+    if (!sent.ok) {
+      closeVerify();
+      setStatus(
+        sent.error === 'offline' ? 'offline' : 'error',
+        sent.error === 'offline' ? msg.offline : sent.error === 'rate_limited' ? msg.rateLimited : msg.verify.sendFailed,
+      );
+      status.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    verifyText.textContent = `${again ? `${msg.verify.resent} ` : ''}${msg.verify.sent.replace('{phone}', pending.payload.phone.replace(/^(\d{4})(\d{4})$/, '$1 $2'))}`;
+    submitArea.hidden = true;
+    verifyBox.hidden = false;
+    setVerifyError('');
+    setStatus('none');
+    verifyInput.focus();
+    verifyBox.scrollIntoView({ block: 'nearest' });
+    track(again ? 'codigo-reenviado' : 'codigo-enviado');
+  };
+
+  verifySubmit.addEventListener('click', async () => {
+    if (!pending) return;
+    const code = verifyInput.value.replace(/\D/g, '');
+    if (code.length !== 6) {
+      setVerifyError(msg.verify.format);
+      verifyInput.focus();
+      return;
+    }
+    verifySubmit.disabled = true;
+    verifySubmit.textContent = msg.verify.checking;
+    const confirmed = await confirmCode(msg.backend, pending.payload.phone, code);
+    verifySubmit.disabled = false;
+    verifySubmit.textContent = msg.verify.submit;
+    if (!confirmed.ok) {
+      setVerifyError(confirmed.error === 'offline' ? msg.offline : msg.verify.wrong);
+      verifyInput.focus();
+      return;
+    }
+    pending.payload.verification = confirmed.token;
+    closeVerify();
+    await send();
+  });
+  verifyInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      verifySubmit.click();
+    }
+  });
+  verifyResend.addEventListener('click', () => void startVerification(true));
+
+  async function send() {
+    if (!pending) return;
+    busy(true, msg.sending);
+    const result = await requestAppointment(msg.backend, pending.payload);
+    busy(false, msg.submit);
 
     track(result.ok ? 'solicitud-enviada' : `solicitud-error-${result.error}`);
     if (result.ok) {
+      const { fields, when } = pending;
+      pending = null;
       form.reset();
       touched.clear();
       clearSelection();
       showErrors([]);
       showConfirmation(fields, when);
       void load();
+      return;
+    }
+    if (result.error === 'verification_required') {
+      pending.payload.verification = undefined;
+      await startVerification();
       return;
     }
     if (result.error === 'slot_taken') {
@@ -374,7 +468,7 @@ function setup(form: HTMLFormElement) {
     // El botón estuvo deshabilitado y perdió el foco: vuelve a él, con el aviso a la vista.
     button.focus({ preventScroll: true });
     status.scrollIntoView({ block: 'nearest' });
-  });
+  }
 
   // Quien llega desde un tratamiento no tiene que volver a elegirlo.
   const slug = new URLSearchParams(location.search).get('tratamiento');

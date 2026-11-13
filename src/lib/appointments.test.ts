@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   bookingBackend,
+  confirmCode,
   fetchAvailability,
   formatDate,
   formatMonth,
@@ -9,6 +10,7 @@ import {
   monthsWithSlots,
   padCells,
   requestAppointment,
+  requestCode,
   slotStart,
 } from './appointments';
 
@@ -90,6 +92,7 @@ describe('requestAppointment', () => {
       treatment: null,
       message: null,
       followup: false,
+      verification: null,
     });
 
     const rejected = (async () => json({ ok: false, error: 'rate_limited' }, false)) as unknown as typeof fetch;
@@ -103,6 +106,50 @@ describe('requestAppointment', () => {
       throw new Error('red');
     }) as unknown as typeof fetch;
     expect(await requestAppointment(appsScript, payload, fetchImpl)).toEqual({ ok: false, error: 'offline' });
+  });
+});
+
+describe('confirmación del teléfono por WhatsApp', () => {
+  const bichitech = { kind: 'bichitech', api: 'https://app.test/api/public/alaria', serviceId: 1 } as const;
+
+  it('pide el código a Bichitech', async () => {
+    const fetchImpl = vi.fn(async () => json({ ok: true, expires_in: 600 }));
+    expect(await requestCode(bichitech, '55551234', fetchImpl)).toEqual({ ok: true });
+    const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe('https://app.test/api/public/alaria/verifications');
+    expect(JSON.parse(String(init.body))).toEqual({ phone: '55551234' });
+  });
+
+  it('cambia el código por el comprobante y lo manda con la solicitud', async () => {
+    const confirm = vi.fn(async () => json({ ok: true, token: 'comprobante' }));
+    const result = await confirmCode(bichitech, '55551234', ' 123456 ', confirm);
+    expect(result).toEqual({ ok: true, token: 'comprobante' });
+    expect(JSON.parse(String((confirm.mock.calls[0] as unknown as [string, RequestInit])[1].body))).toEqual({ phone: '55551234', code: '123456' });
+
+    const send = vi.fn(async () => json({ ok: true }));
+    await requestAppointment(bichitech, { ...payload, verification: 'comprobante' }, send);
+    expect(JSON.parse(String((send.mock.calls[0] as unknown as [string, RequestInit])[1].body)).verification).toBe('comprobante');
+  });
+
+  it('reconoce cuándo la clínica pide código y cuándo el código está mal', async () => {
+    expect(await requestAppointment(bichitech, payload, async () => json({ ok: false, error: 'verification_required' }, false))).toEqual({
+      ok: false,
+      error: 'verification_required',
+    });
+    expect(await confirmCode(bichitech, '55551234', '000000', async () => json({ ok: false, error: 'invalid_code' }, false))).toEqual({
+      ok: false,
+      error: 'invalid_code',
+    });
+    expect(await requestCode(bichitech, '55551234', async () => json({ ok: false, error: 'send_failed' }, false))).toEqual({
+      ok: false,
+      error: 'send_failed',
+    });
+  });
+
+  it('con Apps Script no hay códigos', async () => {
+    const fetchImpl = vi.fn();
+    expect(await requestCode({ kind: 'apps-script', endpoint: 'https://script.test' }, '55551234', fetchImpl)).toEqual({ ok: false, error: 'server' });
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 });
 

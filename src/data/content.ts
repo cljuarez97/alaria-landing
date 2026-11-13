@@ -513,6 +513,16 @@ export const booking = {
     offline:
       'Sin conexión. Tu solicitud no se envió. Intenta de nuevo cuando vuelvas a estar en línea o escríbenos por WhatsApp.',
     privacy: 'Usamos tus datos solo para agendar y preparar tu valoración.',
+    verifyTitle: 'Confirma tu teléfono',
+    verifySent: 'Te enviamos un código de 6 dígitos por WhatsApp al {phone}. Escríbelo aquí para enviar tu solicitud.',
+    verifyLabel: 'Código de WhatsApp',
+    verifySubmit: 'Confirmar y enviar solicitud',
+    verifyChecking: 'Confirmando…',
+    verifyResend: 'Enviar otro código',
+    verifyResent: 'Te enviamos un código nuevo.',
+    verifyWrong: 'El código no coincide o ya venció. Revísalo o pide otro.',
+    verifyFormat: 'Escribe los 6 dígitos del código.',
+    verifySendFailed: 'No pudimos enviarte el código por WhatsApp. Escríbenos por WhatsApp y te ayudamos.',
   },
   confirmation: {
     title: 'Recibimos tu solicitud',

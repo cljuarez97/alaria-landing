@@ -9,7 +9,16 @@ export type Backend =
 export type AvailableDay = { date: string; slots: string[] };
 /** `starts`: instante exacto de cada hora, con clave `fecha hora` (`2026-11-09 09:00`). */
 export type Availability = { days: AvailableDay[]; starts: Record<string, string> };
-export type RequestError = 'invalid' | 'slot_taken' | 'rate_limited' | 'busy' | 'server' | 'offline';
+export type RequestError =
+  | 'invalid'
+  | 'slot_taken'
+  | 'rate_limited'
+  | 'busy'
+  | 'server'
+  | 'offline'
+  | 'verification_required'
+  | 'invalid_code'
+  | 'send_failed';
 export type RequestResult = { ok: true } | { ok: false; error: RequestError };
 
 export type AppointmentRequest = {
@@ -21,11 +30,13 @@ export type AppointmentRequest = {
   followup: boolean;
   slotStart: string;
   origin: string;
+  /** Comprobante del teléfono (Bichitech, si la clínica pide código por WhatsApp). */
+  verification?: string;
 };
 
 const WEEKDAYS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-const KNOWN_ERRORS: RequestError[] = ['invalid', 'slot_taken', 'rate_limited', 'busy'];
+const KNOWN_ERRORS: RequestError[] = ['invalid', 'slot_taken', 'rate_limited', 'busy', 'verification_required', 'invalid_code', 'send_failed'];
 
 /**
  * Backend según el entorno del build: con `PUBLIC_BOOKING_API` y `PUBLIC_BOOKING_SERVICE` se usa
@@ -87,6 +98,7 @@ export async function requestAppointment(
               treatment: payload.treatment || null,
               message: payload.message || null,
               followup: payload.followup,
+              verification: payload.verification ?? null,
             }),
           })
         : // `text/plain` evita la petición previa de CORS, que Apps Script no responde; el cuerpo sigue siendo JSON.
@@ -102,6 +114,43 @@ export async function requestAppointment(
   } catch {
     return { ok: false, error: 'offline' };
   }
+}
+
+/** POST a Bichitech con la misma traducción de errores que las solicitudes. */
+async function postJson(url: string, body: unknown, fetchImpl: typeof fetch): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: RequestError }> {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return { ok: false, error: 'offline' };
+  try {
+    const res = await fetchImpl(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string } & Record<string, unknown>;
+    if (res.ok && data.ok) return { ok: true, data };
+    return { ok: false, error: KNOWN_ERRORS.find((code) => code === data.error) ?? 'server' };
+  } catch {
+    return { ok: false, error: 'offline' };
+  }
+}
+
+/** Pide a Bichitech que envíe un código por WhatsApp al teléfono. */
+export async function requestCode(backend: Backend, phone: string, fetchImpl: typeof fetch = fetch): Promise<RequestResult> {
+  if (backend.kind !== 'bichitech') return { ok: false, error: 'server' };
+  const result = await postJson(`${backend.api}/verifications`, { phone }, fetchImpl);
+  return result.ok ? { ok: true } : result;
+}
+
+/** Cambia el código por el comprobante que acompaña a la solicitud. */
+export async function confirmCode(
+  backend: Backend,
+  phone: string,
+  code: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<{ ok: true; token: string } | { ok: false; error: RequestError }> {
+  if (backend.kind !== 'bichitech') return { ok: false, error: 'server' };
+  const result = await postJson(`${backend.api}/verifications/confirm`, { phone, code: code.trim() }, fetchImpl);
+  if (!result.ok) return result;
+  return typeof result.data.token === 'string' ? { ok: true, token: result.data.token } : { ok: false, error: 'server' };
 }
 
 /** Instante exacto de la hora elegida, tal como lo dio el backend. */
